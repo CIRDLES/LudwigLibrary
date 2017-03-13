@@ -40,3 +40,20 @@ if (!hasProperty('mainClass')) {
             url "https://maven.repository.redhat.com/ga/"
         }
     }
+    
+    javadoc {
+        options.tags = [
+            'pre:a:Precondition:',
+            'post:a:Postcondition:',
+            'imports:a:Imports libraries:',
+            'author:a:Author:'
+        ]
+    }
+    
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+    }

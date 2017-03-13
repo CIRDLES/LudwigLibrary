@@ -29,7 +29,7 @@ import static org.cirdles.ludwig.utilities.SquidConstants.SQUID_TINY_VALUE;
  */
 public final class TukeyBiweight {
 
-    public static BigDecimal[] biweightMean(double tuningConstant, double[] values) {
+    public static BigDecimal[] biweightMean(double[] values, double tuningConstant) {
         // guarantee termination
         BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);
         int iterationMax = 100;
