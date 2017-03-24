@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwigBigDecimal;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import static org.cirdles.ludwig.utilities.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
-import static org.cirdles.ludwig.utilities.SquidConstants.SQUID_TINY_VALUE;
+import org.cirdles.utilities.Median;
+import static org.cirdles.ludwigBigDecimal.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
 
 /**
  * From Ken Ludwig's Squid VBA code for use with Shrimp prawn files data
  * reduction. Note code extracted by Simon Bodorkos in emails to bowring
- * Feb.2016
+ * Feb.2016.
+ *
+ * @see
+ * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
+ * @see
+ * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
  *
  * @author James F. Bowring
  */
-public final class TukeyBiweight {
+public final class TukeysBiweight {
 
-    public static BigDecimal[] biweightMean(double[] values, double tuningConstant) {
+    public static BigDecimal[][] tukeysBiweight(double[] values, double tuningConstant) {
         // guarantee termination
         BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);
         int iterationMax = 100;
@@ -44,7 +50,7 @@ public final class TukeyBiweight {
         for (int i = 0; i < values.length; i++) {
             deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
         }
-        BigDecimal sigma = new BigDecimal(Median.median(deviations)).max( BigDecimal.valueOf(SQUID_TINY_VALUE));
+        BigDecimal sigma = new BigDecimal(Median.median(deviations)).max(BigDecimal.valueOf(SQUID_TINY_VALUE));
 
         BigDecimal previousMean;
         BigDecimal previousSigma;
@@ -85,7 +91,35 @@ public final class TukeyBiweight {
                 || mean.subtract(previousMean).abs().divide(mean, MathContext.DECIMAL128).compareTo(epsilon) > 0)//
                 && (iterationCounter <= iterationMax));
 
-        return new BigDecimal[]{mean, sigma};
+        if (sigma.compareTo(BigDecimal.valueOf(SQUID_TINY_VALUE)) <= 0) {
+            sigma = BigDecimal.ZERO;
+        }
+
+        BigDecimal t;
+        BigDecimal w = BigDecimal.ONE;
+        switch (n) {
+            case 1:
+                t = BigDecimal.ZERO;
+                break;
+            case 2:
+            case 3:
+                t = BigDecimal.valueOf(47.2);
+                break;
+            case 4:
+                t = BigDecimal.valueOf(4.736);
+                break;
+            default:
+                w = BigDecimal.valueOf(n).subtract(BigDecimal.valueOf(4.358));
+                t = BigDecimal.valueOf(1.96)//
+                        .add(BigDecimal.valueOf(0.401)//
+                                .divide(bigDecimalSqrtBabylonian(w), MathContext.DECIMAL128))//
+                        .add(BigDecimal.valueOf(1.17).divide(w, MathContext.DECIMAL128))//
+                        .add(BigDecimal.valueOf(0.0185).divide(w.multiply(w), MathContext.DECIMAL128));
+        }
+
+        BigDecimal err95 = t.multiply(sigma).divide(bigDecimalSqrtBabylonian(BigDecimal.valueOf(n)), MathContext.DECIMAL128);
+
+        return new BigDecimal[][]{{mean, sigma, err95}};
     }
 
 }

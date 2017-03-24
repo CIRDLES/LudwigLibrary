@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.cirdles.ludwig;
+package org.cirdles.utilities;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
