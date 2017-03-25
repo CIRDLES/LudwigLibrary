@@ -17,14 +17,14 @@ package org.cirdles.ludwigBigDecimal;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import org.cirdles.utilities.Median;
-import static org.cirdles.ludwigBigDecimal.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import static org.cirdles.ludwigBigDecimal.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
 import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
+import org.cirdles.utilities.Utilities;
 
 /**
- * From Ken Ludwig's Squid VBA code for use with Shrimp prawn files data
- * reduction. Note code extracted by Simon Bodorkos in emails to bowring
- * Feb.2016.
+ * BigDecimal implementations of Ken Ludwig's Squid VBA code for use with Shrimp
+ * prawn files data reduction. Each function returns a two dimensional array of
+ * BigDecimal.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
@@ -33,9 +33,30 @@ import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
  *
  * @author James F. Bowring
  */
-public final class TukeysBiweight {
+public final class SquidMathUtils {
 
-    public static BigDecimal[][] tukeysBiweight(double[] values, double tuningConstant) {
+    /**
+     * Ludwig specifies: Calculates Tukey's biweight estimator of location &
+     * scale. Mean is a very robust estimator of "mean", Sigma is the robust
+     * estimator of "sigma". These estimators converge to the true mean & true
+     * sigma for Gaussian distributions, but are very resistant to outliers. The
+     * lower the "Tuning" constant is, the more the tails of the distribution '
+     * are effectively "trimmed" (& the more robust the estimators are against
+     * outliers), with the price that more "good" data is disregarded. Data that
+     * deviate from the "mean" greater that "Tuning" times the "standard
+     * deviation" are assigned a weight of zero ('rejected'). Err95 is the 95%
+     * confidence limit on Mean. Adapted & inferred from Hoaglin, Mosteller, &
+     * Tukey, 1983, Understanding Robust & Exploratory Data Analysis: John Wiley
+     * & Sons, pp. 341, 367, 376-378, 385-387, 423,& 425-427.
+     *
+     * @param values double[] array of values
+     * @param tuningConstant integer 0 to 9
+     * @return BigDecimal[1][3] containing mean, 1-sigma absolute, 95%
+     * confidence
+     * @throws ArithmeticException
+     */
+    public static BigDecimal[][] tukeysBiweight(double[] values, double tuningConstant)
+            throws ArithmeticException {
         // guarantee termination
         BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);
         int iterationMax = 100;
@@ -43,14 +64,14 @@ public final class TukeysBiweight {
 
         int n = values.length;
         // initial mean is median
-        BigDecimal mean = new BigDecimal(Median.median(values));
+        BigDecimal mean = new BigDecimal(Utilities.median(values));
 
         // initial sigma is median absolute deviation from mean = median (MAD)
         double deviations[] = new double[n];
         for (int i = 0; i < values.length; i++) {
             deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
         }
-        BigDecimal sigma = new BigDecimal(Median.median(deviations)).max(BigDecimal.valueOf(SQUID_TINY_VALUE));
+        BigDecimal sigma = new BigDecimal(Utilities.median(deviations)).max(BigDecimal.valueOf(SQUID_TINY_VALUE));
 
         BigDecimal previousMean;
         BigDecimal previousSigma;
@@ -96,7 +117,7 @@ public final class TukeysBiweight {
         }
 
         BigDecimal t;
-        BigDecimal w = BigDecimal.ONE;
+        BigDecimal w;
         switch (n) {
             case 1:
                 t = BigDecimal.ZERO;
@@ -117,7 +138,8 @@ public final class TukeysBiweight {
                         .add(BigDecimal.valueOf(0.0185).divide(w.multiply(w), MathContext.DECIMAL128));
         }
 
-        BigDecimal err95 = t.multiply(sigma).divide(bigDecimalSqrtBabylonian(BigDecimal.valueOf(n)), MathContext.DECIMAL128);
+        BigDecimal err95 = t.multiply(sigma)
+                .divide(bigDecimalSqrtBabylonian(BigDecimal.valueOf(n)), MathContext.DECIMAL128);
 
         return new BigDecimal[][]{{mean, sigma, err95}};
     }

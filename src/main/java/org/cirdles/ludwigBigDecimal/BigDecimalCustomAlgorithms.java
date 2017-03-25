@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwigBigDecimal.algorithms;
+package org.cirdles.ludwigBigDecimal;
 
 
 import java.math.BigDecimal;
