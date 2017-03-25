@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.cirdles.ludwig;
+package org.cirdles.utilities;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
- *
+ * Provides utility functions to support LudwigLibrary.
  * @author James F. Bowring
  */
-public class Median {
+public class Utilities {
 
     /**
      * Calculates arithmetic median of array of doubles.
      *
-     * @param values
-     * @return
-     * @pre values has one element
+     * @param values a double[] array of values
+     * @return median as double
+     * @pre values has at least one element
      */
     public static double median(double[] values) {
         double median;

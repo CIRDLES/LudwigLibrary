@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig.utilities;
+package org.cirdles.squid;
 
+/**
+ * Defines constants used throughout Ludwig's Squid VBA code.
+ * @author James F. Bowring
+ */
 public final class SquidConstants {
 
     public static final double SQUID_TINY_VALUE = 1e-30;
