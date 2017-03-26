@@ -15,17 +15,18 @@
  */
 package org.cirdles.ludwig;
 
+import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.utilities.Utilities;
 
 /**
- * double implementations of Ken Ludwig's Squid VBA code for use with Shrimp
- * prawn files data reduction. Each function returns a two dimensional array of
- * BigDecimal.
+ * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with Shrimp
+ * prawn files data reduction. Each public function returns a two dimensional array of
+ * double.
  *
- * @see VBA
+ * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
- * @see also
+ * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
  *
  * @author James F. Bowring
@@ -53,8 +54,7 @@ public final class SquidMathUtils {
      */
     public static double[][] tukeysBiweight(double[] values, double tuningConstant)
             throws ArithmeticException {
-        // guarantee termination
-        double epsilon = 1e-10;
+
         int iterationMax = 100;
         int iterationCounter = 0;
 
@@ -106,8 +106,8 @@ public final class SquidMathUtils {
 
         } // both tests against epsilon must pass OR iterations top out
         // april 2016 Simon B discovered we need 101 iterations possible, hence the "<=" below
-        while (((Math.abs(sigma - previousSigma) / sigma > epsilon)//
-                || (Math.abs(mean - previousMean) / mean > epsilon))//
+        while (((Math.abs(sigma - previousSigma) / sigma > SQUID_EPSILON)//
+                || (Math.abs(mean - previousMean) / mean > SQUID_EPSILON))//
                 && (iterationCounter <= iterationMax));
 
         if (sigma <= SQUID_TINY_VALUE) {

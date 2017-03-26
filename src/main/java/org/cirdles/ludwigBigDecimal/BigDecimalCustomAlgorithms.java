@@ -25,7 +25,7 @@ import java.math.MathContext;
  */
 public class BigDecimalCustomAlgorithms {
 
-    public static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
+    protected static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
         
         BigDecimal guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
         
