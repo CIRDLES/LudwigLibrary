@@ -18,6 +18,7 @@ package org.cirdles.ludwigBigDecimal;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import static org.cirdles.ludwigBigDecimal.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.utilities.Utilities;
 
@@ -57,8 +58,7 @@ public final class SquidMathUtils {
      */
     public static BigDecimal[][] tukeysBiweight(double[] values, double tuningConstant)
             throws ArithmeticException {
-        // guarantee termination
-        BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);
+
         int iterationMax = 100;
         int iterationCounter = 0;
 
@@ -108,8 +108,8 @@ public final class SquidMathUtils {
 
         } // both tests against epsilon must pass OR iterations top out
         // april 2016 Simon B discovered we need 101 iterations possible, hence the "<=" below
-        while (((sigma.subtract(previousSigma).abs().divide(sigma, MathContext.DECIMAL128).compareTo(epsilon) > 0)//
-                || mean.subtract(previousMean).abs().divide(mean, MathContext.DECIMAL128).compareTo(epsilon) > 0)//
+        while (((sigma.subtract(previousSigma).abs().divide(sigma, MathContext.DECIMAL128).compareTo(BigDecimal.valueOf(SQUID_EPSILON)) > 0)//
+                || mean.subtract(previousMean).abs().divide(mean, MathContext.DECIMAL128).compareTo(BigDecimal.valueOf(SQUID_EPSILON)) > 0)//
                 && (iterationCounter <= iterationMax));
 
         if (sigma.compareTo(BigDecimal.valueOf(SQUID_TINY_VALUE)) <= 0) {

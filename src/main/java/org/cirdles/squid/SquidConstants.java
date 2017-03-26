@@ -22,6 +22,7 @@ package org.cirdles.squid;
 public final class SquidConstants {
 
     public static final double SQUID_TINY_VALUE = 1e-30;
+    public static final double SQUID_EPSILON = 1e-10;
     public static final double SQUID_ERROR_VALUE = -9.87654321012346;
 
 }
