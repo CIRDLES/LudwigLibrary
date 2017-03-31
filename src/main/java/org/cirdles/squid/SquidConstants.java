@@ -24,5 +24,16 @@ public final class SquidConstants {
     public static final double SQUID_TINY_VALUE = 1e-30;
     public static final double SQUID_EPSILON = 1e-10;
     public static final double SQUID_ERROR_VALUE = -9.87654321012346;
+    public static final double MAXEXP = 709;
 
+    
+    // March 2017 place holders until constants models are implemented
+    public static final double lambda238 = 1.55125e-10; // Ludwig uses e-4 for MA
+    public static final double lambda235 = 0.00000000098485;
+    public static final double uRatio = 137.88;
+    public static final double badAge = -1.23456789; // Ludwig calls it BadT
+
+ 
+    
+    
 }
