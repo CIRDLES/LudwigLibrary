@@ -31,7 +31,8 @@ import org.cirdles.utilities.Utilities;
 public class IsoplotRobustReg {
 
     /**
-     * TODO: note no outlier rejection etc.
+     * Calculates slope and intercepts for a set of points.  Does not implement
+     * Ludwig's outlier rejection.
      *
      * @param xValues
      * @param yValues
@@ -67,7 +68,6 @@ public class IsoplotRobustReg {
 
                     vs += (0.5 - random.nextDouble()) * SQUID_EPSILON;
                     slp[k] = vs;
-                    yInter[k] = vy;
 
                     vy = yValues[i] - vs * xValues[i] + (0.5 - random.nextDouble()) * SQUID_EPSILON;
                     yInter[k] = vy;
@@ -91,6 +91,8 @@ public class IsoplotRobustReg {
      * Geosci. 12, 807-818), derived from Vugorinovich (1981, J. Math. Geol. 13,
      * 443-454).
      *
+     * @param nPts
+     * @param nMedians
      * @return
      */
     protected static double[][] conf95(int nPts, int nMedians) {
@@ -101,11 +103,10 @@ public class IsoplotRobustReg {
         if (nPts > 4) {
             int star95;
             if (nPts < 14) {
-                // inserted an additional 0 at beginning to maintain 1-based array math 
-                String c$ = "0081012141719222528";
+                String c$ = "081012141719222528";
                 star95 = Integer.parseInt(c$.substring(2 * nPts - 9, 2 * nPts - 7));
             } else {
-                double x = Math.sqrt(nPts * (nPts - 1) * (2 * nPts + 5) / 18);
+                double x = Math.sqrt(nPts * (nPts - 1.0) * (2.0 * nPts + 5.0) / 18.0);
                 star95 = (int) (1.96 * x);
             }
             lowInd = (nMedians - star95) / 2;

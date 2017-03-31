@@ -35,8 +35,8 @@ public class IsoplotPub {
      * Analysis, John Wiley & Sons, 1983, p. 160, with errors from code in Rock
      * & Duffy, 1986 (Comp. Geosci. 12, 807-818), derived from Vugrinovich
      * (1981), J. Math. Geol. 13, 443-454). Has simple, rapid solution for
-     * errors.  Ludwig used flags and our approach is to do all the math and return
-     * all possible values available as if those flags were true.
+     * errors. Ludwig used flags and our approach is to do all the math and
+     * return all possible values available as if those flags were true.
      *
      * @param xValues double [] array length n
      * @param yValues double [] array length n
@@ -64,9 +64,10 @@ public class IsoplotPub {
             Arrays.sort(xInter);
 
             double[][] conf95Calcs = IsoplotRobustReg.conf95(n, slp.length);
-            // reduce indices by 1 to zero-based
-            int lwrInd = (int) conf95Calcs[0][0] - 1;
-            int upprInd = (int) conf95Calcs[0][1] - 1;
+            // reduce indices by 1 to zero-based - this did not work but keeping them did
+            // TODO: understand why - probably integer division related
+            int lwrInd = (int) conf95Calcs[0][0] - 0;
+            int upprInd = (int) conf95Calcs[0][1] - 0;
 
             double lSlope = slp[lwrInd];
             double uSlope = slp[upprInd];
@@ -82,4 +83,5 @@ public class IsoplotPub {
 
         return retVal;
     }
+
 }
