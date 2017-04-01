@@ -15,9 +15,8 @@
  */
 package org.cirdles.ludwig;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
+import org.cirdles.utilities.Utilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -30,22 +29,22 @@ import org.junit.Test;
  * @author James F. Bowring
  */
 public class IsoplotUPbTest {
-    
+
     public IsoplotUPbTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -57,14 +56,15 @@ public class IsoplotUPbTest {
     public void testPbPbAge() {
         System.out.println("pbPbAge");
         double pb76Rad = 0.055251870652859;
-        double expResult = 422429481.678253;
-        double result = IsoplotUPb.pbPbAge(pb76Rad)[0][0];
-        
-        // force to 15 digits to match excel and vba
-        BigDecimal resultBD = new BigDecimal(result);
-        int newScale = 15 - (resultBD.precision() - resultBD.scale());
-        result = Double.parseDouble(resultBD.setScale(newScale, RoundingMode.HALF_UP).toPlainString());
-        assertEquals(expResult, result, SQUID_EPSILON);
+        double expResultAge = 422429481.678253;
+
+        double pb76RadErr = 1.96293438298184 * pb76Rad / 100;// convert from % err
+        double expResultAgeErr = 43809508.176617 / 2.0; // 1 sigma abs
+
+        double[][] result = IsoplotUPb.pbPbAge(pb76Rad, pb76RadErr);
+
+        assertEquals(Utilities.roundedToSize(expResultAge, 10), Utilities.roundedToSize(result[0][0], 10), SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResultAgeErr, 10), Utilities.roundedToSize(result[0][1], 10), SQUID_EPSILON);
     }
-    
+
 }

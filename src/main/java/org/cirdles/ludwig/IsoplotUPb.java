@@ -90,13 +90,17 @@ Exit Function
 PbFail: PbPbAge = BadT
 End Function
      */
-    public static double[][] pbPbAge(double pb76Rad)
+    public static double[][] pbPbAge(double pb76Rad, double pb76RadErr)
             throws ArithmeticException {
-        // mad toler smaller by factor of 10 from Ludwig
+        // made toler smaller by factor of 10 from Ludwig
         double toler = 0.000001;
         double delta = 0.0;
         double t1 = 0.0;
         double t;
+        
+        // adding an iteration counter to prevent thrashing
+        int iterationMax = 100;
+        int iterations = 0;
 
         // Ludwig has a dual-use for this method: either age OR uncertainty
         // age only for now
@@ -111,7 +115,11 @@ End Function
         double exp235t1 = Math.exp(test235);
         double exp238t1 = Math.exp(test238);
 
+        double deriv = 0.0;
+        
         do {
+            iterations++;
+            
             test235 = lambda235 * t;
             test238 = lambda238 * t;
             if ((Math.abs(test235) > MAXEXP) || (Math.abs(test238) > MAXEXP)) {
@@ -129,18 +137,19 @@ End Function
             double func = numer / denom / uRatio;
             double term1 = -lambda235 * exp235;
             double term2 = lambda238 * exp238 * numer / denom;
-            double deriv = (term1 + term2) / denom / uRatio;
+            deriv = (term1 + term2) / denom / uRatio;
             if (deriv == 0) {
                 throw new ArithmeticException();
             }
+            
+            System.out.println("deriv   " + deriv);
 
             delta = (pb76Rad - func) / deriv;
             t += delta;
-            
-            System.out.println (t + "   " + delta);
 
-        } while (Math.abs(delta) >= toler);
+        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
 
-        return new double[][]{{t, 0.0}};
+        // math from Ludwig appears to produce 2 sigma absolute
+        return new double[][]{{t, Math.abs(pb76RadErr / deriv / 2.0)}};
     }
 }
