@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.utilities;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
  * Provides utility functions to support LudwigLibrary.
+ *
  * @author James F. Bowring
  */
 public class Utilities {
@@ -47,4 +49,16 @@ public class Utilities {
         return median;
     }
 
+    /**
+     * Performs excel-style rounding to a given number of significant figures
+     * @param value
+     * @param sigFigs
+     * @return 
+     */
+    public static double roundedToSize(double value, int sigFigs) {
+        BigDecimal valueBD = new BigDecimal(value);
+        int newScale = sigFigs - (valueBD.precision() - valueBD.scale());
+        BigDecimal valueBDtoSize = valueBD.setScale(newScale, RoundingMode.HALF_UP);
+        return valueBDtoSize.doubleValue();
+    }
 }
