@@ -21,111 +21,63 @@ import static org.cirdles.squid.SquidConstants.lambda238;
 import static org.cirdles.squid.SquidConstants.uRatio;
 
 /**
+ * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use
+ * with Shrimp prawn files data reduction. Each public function returns a two
+ * dimensional array of double.
  *
+ * @see
+ * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
  * @author James F. Bowring
  */
 public class IsoplotUPb {
 
-    /*
-    Function PbPbAge(ByVal Pb#, Optional t1 = 0, Optional iAge, _
-  Optional Err76, Optional WithLambdaErrs = False) As Double
-' Calculates age in Ma from radiogenic Pb-207/206 to t1 (=0 if not passed);
-'  but if 2 more params (iAge & Err76) are passed, param Pb is the
-'  7/6 ratio, iAge the age for that ratio, & Err76 is the absolute
-'  error in the 7/6 ratio.  Uses Newton's method.
-' If WithLambdaErrs=TRUE, include decay-constant errors (at global sigma-level)
-'  in the age error.
-Dim Exp5#, Exp8#, Numer#, Denom#, Func#
-Dim T#, term1#, term2#, Deriv#, Delta#
-Dim Pb76#, BadSqrt As Boolean, Exp5t1#, Exp8t1#
-Dim CalcErr As Boolean, Test5#, Test8#, test#, P#
-Const Toler = 0.00001
-ViM t1, 0
-ViM WithLambdaErrs, False
-If NIM(Err76) And NIM(iAge) Then CalcErr = True
-Pb76 = Pb
-GetConsts
-If CalcErr Then
-  T = iAge
-ElseIf Pb76 > (Lambda235 / Lambda238 / Uratio) Then ' 7/6 @t=0
-  T = 1000
-Else
-  T = -4000 ' Need a trial age to start
-End If
-Test5 = Lambda235 * t1: Test8 = Lambda238 * t1
-If Abs(Test5) > MAXEXP Or Abs(Test8) > MAXEXP Then GoTo PbFail
-Exp5t1 = Exp(Test5): Exp8t1 = Exp(Test8)
-Do
-  Test5 = Lambda235 * T: Test8 = Lambda238 * T
-  If Abs(Test5) > MAXEXP Or Abs(Test8) > MAXEXP Then GoTo PbFail
-  Exp5 = Exp(Test5):  Exp8 = Exp(Test8)
-  Numer = Exp5t1 - Exp5: Denom = Exp8t1 - Exp8
-  If Denom = 0 Then GoTo PbFail
-  Func = Numer / Denom / Uratio
-  term1 = -Lambda235 * Exp5
-  term2 = Lambda238 * Exp8 * Numer / Denom
-  Deriv = (term1 + term2) / Denom / Uratio
-  If Deriv = 0 Then GoTo PbFail
-  If CalcErr Then
-    If WithLambdaErrs And t1 = 0 Then
-      Numer = SQ((Exp8 - 1) * Err76) + SQ(T * Exp5 * SigLev * Lambda235err / Uratio) + _
-       SQ(Pb76 * T * Exp8 * SigLev * Lambda238err)
-      Denom = SQ(Pb76 * Lambda238 * Exp8 - Lambda235 * Exp5 / Uratio)
-      If Denom = 0 Then GoTo PbFail
-      TestSqrt Numer / Denom, P, BadSqrt
-      If BadSqrt Then GoTo PbFail
-      PbPbAge = P
-    Else
-      PbPbAge = Abs(Err76 / Deriv)
-    End If
-    Exit Function
-  ElseIf Deriv = 0 Then
-    GoTo PbFail
-  End If
-  Delta = (Pb76 - Func) / Deriv
-  T = T + Delta
-Loop Until Abs(Delta) < Toler
-PbPbAge = T
-Exit Function
-PbFail: PbPbAge = BadT
-End Function
+    /**
+     * Calculates age in annum from radiogenic Pb-207/206 and the absolute
+     * 1-sigma uncertainty in the 7/6 ratio. Uses Newton's method. Does not
+     * handle Ludwig's case of lambda uncertainties.
+     *
+     * @param r207_206r
+     * @param r207_206r_1sigmaAbs is 1-sigma absolute
+     * @return double[1][2] where [0][0] = age in annum and [0][1] = 1 sigma
+     * uncertainty
+     * @throws ArithmeticException
      */
-    public static double[][] pbPbAge(double pb76Rad, double pb76RadErr)
+    public static double[][] pbPbAge(double r207_206r, double r207_206r_1sigmaAbs)
             throws ArithmeticException {
         // made toler smaller by factor of 10 from Ludwig
         double toler = 0.000001;
         double delta = 0.0;
         double t1 = 0.0;
         double t;
-        
+
         // adding an iteration counter to prevent thrashing
         int iterationMax = 100;
         int iterations = 0;
 
-        // Ludwig has a dual-use for this method: either age OR uncertainty
-        // age only for now
-        if (pb76Rad > (lambda235 / lambda238 / uRatio)) { // 7/6 @t=0
+        // Need a trial age to start
+        if (r207_206r > (lambda235 / lambda238 / uRatio)) {
             t = 1000000000.0;
         } else {
-            t = -4000000000.0; // Need a trial age to start
+            t = -4000000000.0;
         }
 
+        // intialize Newton's method
         double test235 = lambda235 * t1;
         double test238 = lambda238 * t1;
         double exp235t1 = Math.exp(test235);
         double exp238t1 = Math.exp(test238);
 
         double deriv = 0.0;
-        
+
         do {
             iterations++;
-            
+
             test235 = lambda235 * t;
             test238 = lambda238 * t;
             if ((Math.abs(test235) > MAXEXP) || (Math.abs(test238) > MAXEXP)) {
                 throw new ArithmeticException();
             }
-            
+
             double exp235 = Math.exp(test235);
             double exp238 = Math.exp(test238);
             double numer = exp235t1 - exp235;
@@ -141,15 +93,12 @@ End Function
             if (deriv == 0) {
                 throw new ArithmeticException();
             }
-            
-            System.out.println("deriv   " + deriv);
 
-            delta = (pb76Rad - func) / deriv;
+            delta = (r207_206r - func) / deriv;
             t += delta;
 
         } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
 
-        // math from Ludwig appears to produce 2 sigma absolute
-        return new double[][]{{t, Math.abs(pb76RadErr / deriv / 2.0)}};
+        return new double[][]{{t, Math.abs(r207_206r_1sigmaAbs / deriv)}};
     }
 }

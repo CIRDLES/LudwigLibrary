@@ -58,8 +58,8 @@ public class IsoplotUPbTest {
         double pb76Rad = 0.055251870652859;
         double expResultAge = 422429481.678253;
 
-        double pb76RadErr = 1.96293438298184 * pb76Rad / 100;// convert from % err
-        double expResultAgeErr = 43809508.176617 / 2.0; // 1 sigma abs
+        double pb76RadErr = 1.96293438298184 * pb76Rad / 100.0;// convert from % err
+        double expResultAgeErr = 43809508.176617; // 1 sigma abs
 
         double[][] result = IsoplotUPb.pbPbAge(pb76Rad, pb76RadErr);
 
