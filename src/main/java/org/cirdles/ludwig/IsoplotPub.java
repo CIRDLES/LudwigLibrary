@@ -29,6 +29,9 @@ import java.util.Arrays;
  */
 public class IsoplotPub {
 
+    private IsoplotPub() {
+    }
+
     /**
      * Robust linear regression using median of all pairwise slopes/intercepts,
      * after Hoaglin, Mosteller & Tukey, Understanding Robust & Exploratory Data

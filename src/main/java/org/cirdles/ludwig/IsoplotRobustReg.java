@@ -30,8 +30,11 @@ import org.cirdles.utilities.Utilities;
  */
 public class IsoplotRobustReg {
 
+    private IsoplotRobustReg() {
+    }
+
     /**
-     * Calculates slope and intercepts for a set of points.  Does not implement
+     * Calculates slope and intercepts for a set of points. Does not implement
      * Ludwig's outlier rejection.
      *
      * @param xValues

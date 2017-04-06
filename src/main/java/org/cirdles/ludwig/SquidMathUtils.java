@@ -20,9 +20,9 @@ import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.utilities.Utilities;
 
 /**
- * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with Shrimp
- * prawn files data reduction. Each public function returns a two dimensional array of
- * double.
+ * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with
+ * Shrimp prawn files data reduction. Each public function returns a two
+ * dimensional array of double.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
@@ -32,6 +32,9 @@ import org.cirdles.utilities.Utilities;
  * @author James F. Bowring
  */
 public final class SquidMathUtils {
+
+    private SquidMathUtils() {
+    }
 
     /**
      * Ludwig specifies: Calculates Tukey's biweight estimator of location &

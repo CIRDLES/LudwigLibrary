@@ -21,8 +21,8 @@ import static org.cirdles.squid.SquidConstants.lambda238;
 import static org.cirdles.squid.SquidConstants.uRatio;
 
 /**
- * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use
- * with Shrimp prawn files data reduction. Each public function returns a two
+ * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use with
+ * Shrimp prawn files data reduction. Each public function returns a two
  * dimensional array of double.
  *
  * @see
@@ -30,6 +30,9 @@ import static org.cirdles.squid.SquidConstants.uRatio;
  * @author James F. Bowring
  */
 public class IsoplotUPb {
+
+    private IsoplotUPb() {
+    }
 
     /**
      * Calculates age in annum from radiogenic Pb-207/206 and the absolute
