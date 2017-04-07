@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
 import java.util.Arrays;
 
@@ -27,9 +27,9 @@ import java.util.Arrays;
  *
  * @author James F. Bowring
  */
-public class IsoplotPub {
+public class Pub {
 
-    private IsoplotPub() {
+    private Pub() {
     }
 
     /**
@@ -54,7 +54,7 @@ public class IsoplotPub {
         int n = xValues.length;
         if ((n == yValues.length) && n > 2) {
             // proceed
-            double[][] slopeCalcs = IsoplotRobustReg.getRobSlope(xValues, yValues);
+            double[][] slopeCalcs = RobustReg.getRobSlope(xValues, yValues);
             double slope = slopeCalcs[0][0];
             double yInt = slopeCalcs[0][1];
             double xInt = slopeCalcs[0][2];
@@ -66,7 +66,7 @@ public class IsoplotPub {
             double[] xInter = slopeCalcs[3];
             Arrays.sort(xInter);
 
-            double[][] conf95Calcs = IsoplotRobustReg.conf95(n, slp.length);
+            double[][] conf95Calcs = RobustReg.conf95(n, slp.length);
             // reduce indices by 1 to zero-based - this did not work but keeping them did
             // TODO: understand why - probably integer division related
             int lwrInd = (int) conf95Calcs[0][0] - 0;

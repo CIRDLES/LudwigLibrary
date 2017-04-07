@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
-import java.util.Arrays;
+import org.apache.commons.math3.distribution.FDistribution;
+import org.apache.commons.math3.distribution.TDistribution;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.Pub VBA code for use with
@@ -27,9 +28,9 @@ import java.util.Arrays;
  *
  * @author James F. Bowring
  */
-public class IsoplotMeans {
+public class Means {
 
-    private IsoplotMeans() {
+    private Means() {
     }
 
 
@@ -194,6 +195,11 @@ Next i
 nU = Nn - 1 ' Deg. freedom
 t68 = StudentsT(nU, 68.26)
 t95 = StudentsT(nU, 95)
+    
+    new org.apache.commons.math3.distribution.TDistribution(deg_freedom).
+inverseCumulativeProbability(probability)
+    
+    
 IntMean = SumWtdRatios / Weight  ' "Internal" error of wtd average
 ww.IntMean = IntMean             ' Use double-prec. var.in calcs!
 'Sums = q - Weight * Sq(IntMean) ' Sums of squares of weighted deviates
@@ -222,6 +228,9 @@ With ww
     IntErr68 = IntSigmaMean * IIf(.Probability >= 0.3, 0.9998, StudentsT(nU, 68.26) * Sqr(.MSWD))
   End If
 End With
+    
+    
+    
 If ww.Probability < MinProb And ww.MSWD > 1 Then
   'Find the MLE constant external variance
   Nn = 0
@@ -260,6 +269,8 @@ If ww.Probability < MinProb And ww.MSWD > 1 Then
     .ExtMeanErr68 = t68 / t95 * .ExtMeanErr95
   End With
 End If
+    
+    
 If CanReject And ww.Probability < MinProb Then GoSub Reject
 If CanTukeys Then
   For i = 1 To Npts: tbx(i) = InpDat(i, 1): Next i
@@ -302,6 +313,11 @@ Exit Sub
                 }
             }
 
+            int nU = nPts - 1;// ' Deg. freedom
+            TDistribution studentsT = new TDistribution(nU);
+            double t68 = studentsT.inverseCumulativeProbability(68.26);
+            double t95 = studentsT.inverseCumulativeProbability(95.0);
+
             double intMean = sumWtdRatios / weight;//  ' "Internal" error of wtd average
 
             double sums = 0.0;
@@ -315,19 +331,20 @@ Exit Sub
             }
             sums = Math.max(sums, 0.0);
 
-            /*
-            With ww
-            .MSWD = Sums / nU  ' Mean square of weighted deviates
-            IntSigmaMean = Sqr(1 / Weight)
-            .IntMeanErr2sigma = 2 * IntSigmaMean
-            TotSigmaMean = IntSigmaMean * Sqr(.MSWD)
-            .Probability = ChiSquare(.MSWD, (nU))
-            .IntMeanErr95 = IntSigmaMean * IIf(.Probability >= 0.3, 1.96, t95 * Sqr(.MSWD))
-            If OneSigOut Then
-              IntErr68 = IntSigmaMean * IIf(.Probability >= 0.3, 0.9998, StudentsT(nU, 68.26) * Sqr(.MSWD))
-            End If
-          End With
-             */
+            double MSWD = sums / nU;//  ' Mean square of weighted deviates
+            double intSigmaMean = Math.sqrt(1.0 / weight);
+            double intMeanErr2sigma = 2.0 * intSigmaMean;
+            double totSigmaMean = intSigmaMean * Math.sqrt(MSWD);
+
+            // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html
+            FDistribution fdist = new FDistribution(nU, 1E9);
+            double probability = 1.0 - fdist.cumulativeProbability(MSWD);//     ChiSquare(.MSWD, (nU))
+            double intMeanErr95 = intSigmaMean * (double)(probability >= 0.3 ? 1.96 
+                    : t95 * Math.sqrt(MSWD));
+            double intErr68 = intSigmaMean * (double)(probability >= 0.3 ? 0.9998 
+                    : studentsT.inverseCumulativeProbability(68.26) * Math.sqrt(MSWD));
+
+
         }
 
         return retVal;

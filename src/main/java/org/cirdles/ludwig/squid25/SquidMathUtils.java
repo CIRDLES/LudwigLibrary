@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.squid25;
 
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;

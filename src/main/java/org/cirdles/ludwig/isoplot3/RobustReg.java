@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
 import java.util.Random;
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
@@ -28,9 +28,9 @@ import org.cirdles.utilities.Utilities;
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/RobustReg.bas
  * @author James F. Bowring
  */
-public class IsoplotRobustReg {
+public class RobustReg {
 
-    private IsoplotRobustReg() {
+    private RobustReg() {
     }
 
     /**

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
+import org.cirdles.ludwig.isoplot3.RobustReg;
 import org.cirdles.squid.SquidConstants;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -49,7 +50,7 @@ public class IsoplotRobustRegTest {
     }
 
     /**
-     * Test of getRobSlope method, of class IsoplotRobustReg.
+     * Test of getRobSlope method, of class RobustReg.
      */
     @Test
     public void testGetRobSlope() {
@@ -59,7 +60,7 @@ public class IsoplotRobustRegTest {
         double[] yValues = new double[]{1.,2.,3.};
         double[] expResult = new double[]{1.,1.,-1.};
         // just test the slope and intercepts
-        double[] result = IsoplotRobustReg.getRobSlope(xValues, yValues)[0];
+        double[] result = RobustReg.getRobSlope(xValues, yValues)[0];
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
     }
     
