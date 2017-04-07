@@ -21,8 +21,8 @@ import org.cirdles.utilities.Utilities;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.RobustReg VBA code for use
- * with Shrimp prawn files data reduction. Each public function returns a two
- * dimensional array of double.
+ * with Shrimp prawn files data reduction. Each public function returns an array
+ * of double.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/RobustReg.bas
@@ -37,8 +37,8 @@ public class RobustReg {
      * Calculates slope and intercepts for a set of points. Does not implement
      * Ludwig's outlier rejection.
      *
-     * @param xValues
-     * @param yValues
+     * @param xValues double [] array length n
+     * @param yValues double [] array length n
      * @return double[4][] with row 0 containing slope, y-intercept,
      * x-intercept, row 1 containing slope array, row 2 containing y-intercept
      * array, and row 3 containing x-intercept array.
@@ -94,11 +94,12 @@ public class RobustReg {
      * Geosci. 12, 807-818), derived from Vugorinovich (1981, J. Math. Geol. 13,
      * 443-454).
      *
-     * @param nPts
-     * @param nMedians
-     * @return
+     * @param nPts number of points
+     * @param nMedians number of medians
+     * @return double[2] containing lower index and upper index of 95%
+     * confidence interval
      */
-    protected static double[][] conf95(int nPts, int nMedians) {
+    protected static double[] conf95(int nPts, int nMedians) {
 
         int lowInd = 1;
         int upprInd = nPts;
@@ -116,6 +117,6 @@ public class RobustReg {
             upprInd = (nMedians + star95) / 2;
         }
 
-        return new double[][]{{lowInd, upprInd}};
+        return new double[]{lowInd, upprInd};
     }
 }

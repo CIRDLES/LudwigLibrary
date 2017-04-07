@@ -20,8 +20,7 @@ import org.apache.commons.math3.distribution.TDistribution;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.Pub VBA code for use with
- * Shrimp prawn files data reduction. Each function returns a two dimensional
- * array of double.
+ * Shrimp prawn files data reduction. Each function returns an array of double.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -158,7 +157,7 @@ If CanReject And UBound(W, 1) >= j Then
 End If
 End Sub
      */
-    public static double[][] weightedAv(double[] values, double[] errors) {
+    public static double[] weightedAv(double[] values, double[] errors) {
         return null;
     }
 
@@ -283,9 +282,9 @@ If CanTukeys Then
 End If
 Exit Sub
      */
-    public static double[][] weightedAverage(double[] values, double[] errors) {
+    public static double[] weightedAverage(double[] values, double[] errors) {
 
-        double[][] retVal = new double[][]{{0, 0, 0}};
+        double[] retVal = new double[]{0, 0, 0};
 
         // check precondition of same size xValues and yValues and at least 3 points
         int nPts = values.length;
@@ -339,11 +338,10 @@ Exit Sub
             // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html
             FDistribution fdist = new FDistribution(nU, 1E9);
             double probability = 1.0 - fdist.cumulativeProbability(MSWD);//     ChiSquare(.MSWD, (nU))
-            double intMeanErr95 = intSigmaMean * (double)(probability >= 0.3 ? 1.96 
+            double intMeanErr95 = intSigmaMean * (double) (probability >= 0.3 ? 1.96
                     : t95 * Math.sqrt(MSWD));
-            double intErr68 = intSigmaMean * (double)(probability >= 0.3 ? 0.9998 
+            double intErr68 = intSigmaMean * (double) (probability >= 0.3 ? 0.9998
                     : studentsT.inverseCumulativeProbability(68.26) * Math.sqrt(MSWD));
-
 
         }
 

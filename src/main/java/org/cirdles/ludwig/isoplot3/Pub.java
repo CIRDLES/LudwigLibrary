@@ -19,8 +19,7 @@ import java.util.Arrays;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.Pub VBA code for use with
- * Shrimp prawn files data reduction. Each function returns a two dimensional
- * array of double.
+ * Shrimp prawn files data reduction. Each function returns an array of double.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -43,12 +42,12 @@ public class Pub {
      *
      * @param xValues double [] array length n
      * @param yValues double [] array length n
-     * @return double[1][9] containing slope, lSlope, uSlope, yInt, xInt, lYint,
+     * @return double [9] containing slope, lSlope, uSlope, yInt, xInt, lYint,
      * uYint, lXint, uXint
      */
-    public static double[][] robustReg2(double[] xValues, double[] yValues) {
+    public static double[] robustReg2(double[] xValues, double[] yValues) {
 
-        double[][] retVal = new double[][]{{0, 0, 0}};
+        double[] retVal = new double[]{0, 0, 0};
 
         // check precondition of same size xValues and yValues and at least 3 points
         int n = xValues.length;
@@ -66,11 +65,11 @@ public class Pub {
             double[] xInter = slopeCalcs[3];
             Arrays.sort(xInter);
 
-            double[][] conf95Calcs = RobustReg.conf95(n, slp.length);
+            double[] conf95Calcs = RobustReg.conf95(n, slp.length);
             // reduce indices by 1 to zero-based - this did not work but keeping them did
             // TODO: understand why - probably integer division related
-            int lwrInd = (int) conf95Calcs[0][0] - 0;
-            int upprInd = (int) conf95Calcs[0][1] - 0;
+            int lwrInd = (int) conf95Calcs[0] - 0;
+            int upprInd = (int) conf95Calcs[1] - 0;
 
             double lSlope = slp[lwrInd];
             double uSlope = slp[upprInd];
@@ -81,7 +80,7 @@ public class Pub {
             double lXint = xInter[lwrInd];
             double uXint = xInter[upprInd];
 
-            retVal = new double[][]{{slope, lSlope, uSlope, yInt, xInt, lYint, uYint, lXint, uXint}};
+            retVal = new double[]{slope, lSlope, uSlope, yInt, xInt, lYint, uYint, lXint, uXint};
         }
 
         return retVal;
@@ -138,8 +137,7 @@ WtdAv = W
 SigLev = SL0
 End Function
      */
-    
-    public static double[][] wtdAv (double [] values, double[] errors){
+    public static double[] wtdAv(double[] values, double[] errors) {
         return null;
     }
 }

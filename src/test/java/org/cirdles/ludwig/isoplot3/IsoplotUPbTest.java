@@ -62,10 +62,10 @@ public class IsoplotUPbTest {
         double pb76RadErr = 1.96293438298184 * pb76Rad / 100.0;// convert from % err
         double expResultAgeErr = 43809508.176617; // 1 sigma abs
 
-        double[][] result = UPb.pbPbAge(pb76Rad, pb76RadErr);
+        double[] result = UPb.pbPbAge(pb76Rad, pb76RadErr);
 
-        assertEquals(Utilities.roundedToSize(expResultAge, 10), Utilities.roundedToSize(result[0][0], 10), SQUID_EPSILON);
-        assertEquals(Utilities.roundedToSize(expResultAgeErr, 10), Utilities.roundedToSize(result[0][1], 10), SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResultAge, 10), Utilities.roundedToSize(result[0], 10), SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResultAgeErr, 10), Utilities.roundedToSize(result[1], 10), SQUID_EPSILON);
     }
 
 }
