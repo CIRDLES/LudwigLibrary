@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
+import org.cirdles.ludwig.isoplot3.UPb;
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import org.cirdles.utilities.Utilities;
 import org.junit.After;
@@ -50,7 +51,7 @@ public class IsoplotUPbTest {
     }
 
     /**
-     * Test of pbPbAge method, of class IsoplotUPb.
+     * Test of pbPbAge method, of class UPb.
      */
     @Test
     public void testPbPbAge() {
@@ -61,10 +62,10 @@ public class IsoplotUPbTest {
         double pb76RadErr = 1.96293438298184 * pb76Rad / 100.0;// convert from % err
         double expResultAgeErr = 43809508.176617; // 1 sigma abs
 
-        double[][] result = IsoplotUPb.pbPbAge(pb76Rad, pb76RadErr);
+        double[] result = UPb.pbPbAge(pb76Rad, pb76RadErr);
 
-        assertEquals(Utilities.roundedToSize(expResultAge, 10), Utilities.roundedToSize(result[0][0], 10), SQUID_EPSILON);
-        assertEquals(Utilities.roundedToSize(expResultAgeErr, 10), Utilities.roundedToSize(result[0][1], 10), SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResultAge, 10), Utilities.roundedToSize(result[0], 10), SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResultAgeErr, 10), Utilities.roundedToSize(result[1], 10), SQUID_EPSILON);
     }
 
 }

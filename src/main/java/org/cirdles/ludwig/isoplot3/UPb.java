@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwig;
+package org.cirdles.ludwig.isoplot3;
 
 import static org.cirdles.squid.SquidConstants.MAXEXP;
 import static org.cirdles.squid.SquidConstants.lambda235;
@@ -21,15 +21,18 @@ import static org.cirdles.squid.SquidConstants.lambda238;
 import static org.cirdles.squid.SquidConstants.uRatio;
 
 /**
- * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use
- * with Shrimp prawn files data reduction. Each public function returns a two
- * dimensional array of double.
+ * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use with
+ * Shrimp prawn files data reduction. Each public function returns an array of
+ * double.
  *
  * @see
  * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
  * @author James F. Bowring
  */
-public class IsoplotUPb {
+public class UPb {
+
+    private UPb() {
+    }
 
     /**
      * Calculates age in annum from radiogenic Pb-207/206 and the absolute
@@ -38,11 +41,11 @@ public class IsoplotUPb {
      *
      * @param r207_206r
      * @param r207_206r_1sigmaAbs is 1-sigma absolute
-     * @return double[1][2] where [0][0] = age in annum and [0][1] = 1 sigma
+     * @return double[2] where [0] = age in annum and [1] = 1 sigma
      * uncertainty
      * @throws ArithmeticException
      */
-    public static double[][] pbPbAge(double r207_206r, double r207_206r_1sigmaAbs)
+    public static double[] pbPbAge(double r207_206r, double r207_206r_1sigmaAbs)
             throws ArithmeticException {
         // made toler smaller by factor of 10 from Ludwig
         double toler = 0.000001;
@@ -99,6 +102,6 @@ public class IsoplotUPb {
 
         } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
 
-        return new double[][]{{t, Math.abs(r207_206r_1sigmaAbs / deriv)}};
+        return new double[]{t, Math.abs(r207_206r_1sigmaAbs / deriv)};
     }
 }

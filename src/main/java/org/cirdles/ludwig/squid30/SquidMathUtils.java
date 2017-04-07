@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.ludwigBigDecimal;
+package org.cirdles.ludwig.squid30;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import static org.cirdles.ludwigBigDecimal.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import static org.cirdles.ludwig.squid30.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.utilities.Utilities;

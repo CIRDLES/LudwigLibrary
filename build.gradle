@@ -15,9 +15,9 @@ if (!hasProperty('mainClass')) {
 }
 
     group = "org.cirdles"
-    version = "1.0.2"
+    version = "1.0.3"
 
-    description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot"
+    description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
