@@ -46,7 +46,8 @@ if (!hasProperty('mainClass')) {
             'pre:a:Precondition:',
             'post:a:Postcondition:',
             'imports:a:Imports libraries:',
-            'author:a:Author:'
+            'author:a:Author:',
+            'see:a:Visual Basic Code:'
         ]
     }
     

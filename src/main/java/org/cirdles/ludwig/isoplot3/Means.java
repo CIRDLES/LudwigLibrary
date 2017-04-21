@@ -23,7 +23,7 @@ import org.apache.commons.math3.distribution.TDistribution;
  * Shrimp prawn files data reduction. Each function returns an array of double.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas" target="_blank">Isoplot.Pub</a>
  *
  * @author James F. Bowring
  */
@@ -38,11 +38,12 @@ public class Means {
      *
      * @param values as double[] with length nPts
      * @param errors as double[] with length nPts
-     * @return double[]{MSWD, intSigmaMean, intErr68, intMeanErr95, probability}
+     * @return double[]{intMean, intSigmaMean, MSWD, probability, intErr68,
+     * intMeanErr95}
      */
     public static double[] weightedAverage(double[] values, double[] errors) {
 
-        double[] retVal = new double[]{0, 0, 0};
+        double[] retVal = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
         // check precondition of same size xValues and yValues and at least 3 points
         int nPts = values.length;
@@ -52,7 +53,7 @@ public class Means {
             double[] wtdResid = new double[nPts];
 
             for (int i = 0; i < nPts; i++) {
-                inverseVar[i] = Math.pow(errors[i], 2);
+                inverseVar[i] = 1.0 / Math.pow(errors[i], 2);
             }
 
             double weight = 0.0;
@@ -69,7 +70,7 @@ public class Means {
 
             int nU = nPts - 1;// ' Deg. freedom
             TDistribution studentsT = new TDistribution(nU);
-            double t95 = studentsT.inverseCumulativeProbability(95.0);
+            double t95 = studentsT.inverseCumulativeProbability(0.95);
 
             double intMean = sumWtdRatios / weight;//  ' "Internal" error of wtd average
 
@@ -98,13 +99,15 @@ public class Means {
             //TODO: (VBA line 508) Resolve how to specify minProb for next two sections of code
             // at this point we have the basic weighted mean info
             // referenced using: ww As wWtdAver
+            // intMean = weighted mean
+            // intSigmaMean = weighted mean 1 sigma abs
             // MSWD            
-            // IntMeanErr2sigma >> we supply intSigmaMean as 1 sigma abs
             // Probability
+            // intErr68
             // IntMeanErr95
             // -------
             // modifying to return this array:
-            retVal = new double[]{MSWD, intSigmaMean, intErr68, intMeanErr95, probability};
+            retVal = new double[]{intMean, intSigmaMean, MSWD, probability, intErr68, intMeanErr95};
 
             // Ext2Sigma
             // IntMean

@@ -15,7 +15,6 @@
  */
 package org.cirdles.ludwig.squid30;
 
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -25,26 +24,30 @@ import java.math.MathContext;
  */
 public class BigDecimalCustomAlgorithms {
 
-    protected static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
-        
-        BigDecimal guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
-        
+    /**
+     *
+     * @param value BigDecimal to find square root
+     * @return BigDecimal square root of value
+     */
+    protected static BigDecimal bigDecimalSqrtBabylonian(BigDecimal value) {
+
+        BigDecimal guess = new BigDecimal(StrictMath.sqrt(value.doubleValue()));
+
         if (guess.compareTo(BigDecimal.ZERO) > 0) {
-            
+
             BigDecimal precision = BigDecimal.ONE.movePointLeft(34);
             BigDecimal theError = BigDecimal.ONE;
             while (theError.compareTo(precision) > 0) {
-                BigDecimal nextGuess = BigDecimal.ZERO;
+                BigDecimal nextGuess;
                 try {
-                    nextGuess = guess.add(S.divide(guess, MathContext.DECIMAL128)).divide(new BigDecimal(2.0), MathContext.DECIMAL128);
+                    nextGuess = guess.add(value.divide(guess, MathContext.DECIMAL128)).divide(new BigDecimal(2.0), MathContext.DECIMAL128);
+                    theError = guess.subtract(nextGuess, MathContext.DECIMAL128).abs();
+                    guess = nextGuess;
                 } catch (java.lang.ArithmeticException e) {
-                    System.out.println(e.getMessage());
+                    break;
                 }
-                theError = guess.subtract(nextGuess, MathContext.DECIMAL128).abs();
-                guess = nextGuess;
             }
         }
-        
         return guess;
     }
 

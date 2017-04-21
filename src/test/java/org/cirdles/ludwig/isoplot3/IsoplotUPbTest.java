@@ -15,7 +15,6 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
-import org.cirdles.ludwig.isoplot3.UPb;
 import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
 import org.cirdles.utilities.Utilities;
 import org.junit.After;

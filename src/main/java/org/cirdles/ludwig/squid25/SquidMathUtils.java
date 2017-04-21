@@ -25,9 +25,9 @@ import org.cirdles.utilities.Utilities;
  * dimensional array of double.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas" target="_blank">Squid.MathUtils</a>
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas" target="_blank">Isoplot.Pub</a>
  *
  * @author James F. Bowring
  */
@@ -55,7 +55,7 @@ public final class SquidMathUtils {
      * @return double[1][3] containing mean, 1-sigma absolute, 95% confidence
      * @throws ArithmeticException
      */
-    public static double[][] tukeysBiweight(double[] values, double tuningConstant)
+    public static double[] tukeysBiweight(double[] values, double tuningConstant)
             throws ArithmeticException {
 
         int iterationMax = 100;
@@ -137,6 +137,6 @@ public final class SquidMathUtils {
 
         double err95 = t * sigma / Math.sqrt(n);
 
-        return new double[][]{{mean, sigma, err95}};
+        return new double[]{mean, sigma, err95};
     }
 }

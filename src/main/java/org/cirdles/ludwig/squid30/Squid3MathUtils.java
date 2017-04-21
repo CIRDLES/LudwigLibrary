@@ -28,13 +28,13 @@ import org.cirdles.utilities.Utilities;
  * BigDecimal.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/MathUtils.bas" target="_blank">Squid.MathUtils</a>
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas" target="_blank">Isoplot.Pub</a>
  *
  * @author James F. Bowring
  */
-public final class SquidMathUtils {
+public final class Squid3MathUtils {
 
     /**
      * Ludwig specifies: Calculates Tukey's biweight estimator of location &
@@ -56,7 +56,7 @@ public final class SquidMathUtils {
      * confidence
      * @throws ArithmeticException
      */
-    public static BigDecimal[][] tukeysBiweight(double[] values, double tuningConstant)
+    public static BigDecimal[] tukeysBiweight(double[] values, double tuningConstant)
             throws ArithmeticException {
 
         int iterationMax = 100;
@@ -141,7 +141,7 @@ public final class SquidMathUtils {
         BigDecimal err95 = t.multiply(sigma)
                 .divide(bigDecimalSqrtBabylonian(BigDecimal.valueOf(n)), MathContext.DECIMAL128);
 
-        return new BigDecimal[][]{{mean, sigma, err95}};
+        return new BigDecimal[]{mean, sigma, err95};
     }
 
 }
