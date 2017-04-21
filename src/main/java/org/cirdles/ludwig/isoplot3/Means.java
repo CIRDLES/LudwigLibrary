@@ -94,7 +94,7 @@ public class Means {
             double intMeanErr95 = intSigmaMean * (double) (probability >= 0.3 ? 1.96
                     : t95 * Math.sqrt(MSWD));
             double intErr68 = intSigmaMean * (double) (probability >= 0.3 ? 0.9998
-                    : studentsT.inverseCumulativeProbability(68.26) * Math.sqrt(MSWD));
+                    : studentsT.inverseCumulativeProbability(0.6826) * Math.sqrt(MSWD));
 
             //TODO: (VBA line 508) Resolve how to specify minProb for next two sections of code
             // at this point we have the basic weighted mean info
