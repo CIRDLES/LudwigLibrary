@@ -15,7 +15,6 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
-import org.cirdles.ludwig.isoplot3.RobustReg;
 import org.cirdles.squid.SquidConstants;
 import org.junit.After;
 import org.junit.AfterClass;

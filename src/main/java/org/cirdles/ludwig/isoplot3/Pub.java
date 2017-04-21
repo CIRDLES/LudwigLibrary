@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Shrimp prawn files data reduction. Each function returns an array of double.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas" target="_blank">Isoplot.Pub</a>
  *
  * @author James F. Bowring
  */

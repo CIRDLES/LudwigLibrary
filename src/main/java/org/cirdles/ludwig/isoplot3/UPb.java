@@ -26,7 +26,7 @@ import static org.cirdles.squid.SquidConstants.uRatio;
  * double.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas" target="_blank">Isoplot.UPb</a>
  * @author James F. Bowring
  */
 public class UPb {

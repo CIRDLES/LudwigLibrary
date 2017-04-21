@@ -25,7 +25,7 @@ import org.cirdles.utilities.Utilities;
  * of double.
  *
  * @see
- * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/RobustReg.bas
+ *  <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/RobustReg.bas" target="_blank">Isoplot.RobustReg</a>
  * @author James F. Bowring
  */
 public class RobustReg {
@@ -63,9 +63,9 @@ public class RobustReg {
             for (int i = 0; i < (n - 1); i++) {
                 for (int j = i + 1; j < n; j++) {
                     double vs = 0.0;
-                    double vy = 0.0;
+                    double vy;
                     k++;
-                    if (xValues[i] != xValues[j]) {
+                    if ((xValues[i] - xValues[j]) != 0.0) {
                         vs = (yValues[j] - yValues[i]) / (xValues[j] - xValues[i]);
                     }
 

@@ -51,9 +51,9 @@ public class Utilities {
 
     /**
      * Performs excel-style rounding to a given number of significant figures
-     * @param value
-     * @param sigFigs
-     * @return 
+     * @param value double to round 
+     * @param sigFigs count of significant digits for rounding
+     * @return double rounded to sigFigs significant digits
      */
     public static double roundedToSize(double value, int sigFigs) {
         BigDecimal valueBD = new BigDecimal(value);
