@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.utilities;
+package org.cirdles.ludwig.squid25;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,19 +39,17 @@ public class Utilities {
         if (values.length == 0) {
             median = 0.0;
         } else {
-            DescriptiveStatistics stats = new DescriptiveStatistics();
-            // Add the data from the array
-            for (int i = 0; i < values.length; i++) {
-                stats.addValue(values[i]);
-            }
+            DescriptiveStatistics stats = new DescriptiveStatistics(values);
             median = stats.getPercentile(50);
         }
         return median;
     }
 
     /**
-     * Performs excel-style rounding to a given number of significant figures
-     * @param value double to round 
+     * Performs excel-style rounding of double to a given number of significant
+     * figures.
+     *
+     * @param value double to round
      * @param sigFigs count of significant digits for rounding
      * @return double rounded to sigFigs significant digits
      */
@@ -60,5 +58,37 @@ public class Utilities {
         int newScale = sigFigs - (valueBD.precision() - valueBD.scale());
         BigDecimal valueBDtoSize = valueBD.setScale(newScale, RoundingMode.HALF_UP);
         return valueBDtoSize.doubleValue();
+    }
+
+    /**
+     * Performs excel-style rounding of double[] to a given number of
+     * significant figures.
+     *
+     * @param values double[] to round
+     * @param sigFigs count of significant digits for rounding
+     * @return double[] rounded to sigFigs significant digits
+     */
+    public static double[] roundedToSize(double[] values, int sigFigs) {
+        double[] retVal = new double[values.length];
+        for (int i = 0; i < retVal.length; i++) {
+            retVal[i] = roundedToSize(values[i], sigFigs);
+        }
+        return retVal;
+    }
+
+    /**
+     * Performs excel-style rounding of double[][] to a given number of
+     * significant figures.
+     *
+     * @param values double[][] to round
+     * @param sigFigs count of significant digits for rounding
+     * @return double[][] rounded to sigFigs significant digits
+     */
+    public static double[][] roundedToSize(double[][] values, int sigFigs) {
+        double[][] retVal = new double[values.length][];
+        for (int i = 0; i < retVal.length; i++) {
+            retVal[i] = roundedToSize(values[i], sigFigs);
+        }
+        return retVal;
     }
 }

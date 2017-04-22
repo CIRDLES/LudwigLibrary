@@ -15,7 +15,7 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
-import org.cirdles.squid.SquidConstants;
+import org.cirdles.ludwig.squid25.SquidConstants;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
