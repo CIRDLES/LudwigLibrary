@@ -16,8 +16,8 @@
 package org.cirdles.ludwig.isoplot3;
 
 import java.util.Random;
-import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
-import org.cirdles.utilities.Utilities;
+import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_EPSILON;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.RobustReg VBA code for use

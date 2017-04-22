@@ -18,9 +18,9 @@ package org.cirdles.ludwig.squid30;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import static org.cirdles.ludwig.squid30.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
-import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
-import static org.cirdles.squid.SquidConstants.SQUID_TINY_VALUE;
-import org.cirdles.utilities.Utilities;
+import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_EPSILON;
+import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_TINY_VALUE;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  * BigDecimal implementations of Ken Ludwig's Squid VBA code for use with Shrimp

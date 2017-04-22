@@ -15,10 +15,10 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
-import static org.cirdles.squid.SquidConstants.MAXEXP;
-import static org.cirdles.squid.SquidConstants.lambda235;
-import static org.cirdles.squid.SquidConstants.lambda238;
-import static org.cirdles.squid.SquidConstants.uRatio;
+import static org.cirdles.ludwig.squid25.SquidConstants.MAXEXP;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
+import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.UPb VBA code for use with

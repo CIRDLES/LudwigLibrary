@@ -15,8 +15,8 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
-import static org.cirdles.squid.SquidConstants.SQUID_EPSILON;
-import org.cirdles.utilities.Utilities;
+import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_EPSILON;
+import org.cirdles.ludwig.squid25.Utilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.squid;
+package org.cirdles.ludwig.squid25;
 
 /**
  * Defines constants used throughout Ludwig's Squid VBA code.
