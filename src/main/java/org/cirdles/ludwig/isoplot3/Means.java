@@ -45,7 +45,7 @@ public class Means {
 
         double[] retVal = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-        // check precondition of same size xValues and yValues and at least 3 points
+        // check precondition of same size values and errors and at least 3 points
         int nPts = values.length;
         if ((nPts == errors.length) && nPts > 2) {
             // proceed
