@@ -15,6 +15,8 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
+import static org.cirdles.ludwig.isoplot3.U_2.inv2x2;
+import org.cirdles.ludwig.squid25.SquidConstants;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXEXP;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
@@ -41,8 +43,7 @@ public class UPb {
      *
      * @param r207_206r
      * @param r207_206r_1sigmaAbs is 1-sigma absolute
-     * @return double[2] where [0] = age in annum and [1] = 1 sigma
-     * uncertainty
+     * @return double[2] where [0] = age in annum and [1] = 1 sigma uncertainty
      * @throws ArithmeticException
      */
     public static double[] pbPbAge(double r207_206r, double r207_206r_1sigmaAbs)
@@ -104,4 +105,79 @@ public class UPb {
 
         return new double[]{t, Math.abs(r207_206r_1sigmaAbs / deriv)};
     }
+
+    /**
+     * Ludwig: Calculate the sums of the squares of the weighted residuals for a
+     * single Conv.-Conc. X-Y data point, where the true value of each of the
+     * data pts is assumed to be on the same point on the concordia curve, &
+     * where the decay constants that describe the concordia curve have known
+     * uncertainties. See GCA 62, p. 665-676, 1998 for explanation.
+     *
+     * @note this implementation ignors lambda uncertainties.
+     *
+     * @param xConc double Concordia x-axis ratio
+     * @param yConc double Concordia y-axis ratio
+     * @param covariance double [2][2] matrix of age uncertainty covariances
+     * @param t Age in annum
+     * @return double[1] {concordSums}
+     */
+    public static double[] concordSums(double xConc, double yConc, double[][] covariance, double t) {
+
+        double[] retVal = new double[]{0.0};
+
+        double e5 = lambda235 * t;
+
+        if (Math.abs(e5) <= MAXEXP) {
+            e5 = Math.exp(e5);
+            double e8 = Math.exp(lambda238 * t);
+            double Ee5 = e5 - 1.0;
+            double Ee8 = e8 - 1.0;
+            double Rx = xConc - Ee5;
+            double Ry = yConc - Ee8;
+
+            double[] inverted = inv2x2(covariance[0][0], covariance[1][1], covariance[0][1]);
+
+            retVal[0] = Rx * Rx * inverted[0] + Ry * Ry * inverted[1] + 2 * Rx * Ry * inverted[2];
+        }
+        return retVal;
+    }
+
+    /**
+     * Ludwig: Calculate the variance in age for a single assumed-concordant
+     * data point on the Conv. U/Pb concordia diagram (with or without taking
+     * into account the uranium decay-constant errors). See GCA v62, p665-676,
+     * 1998 for explanation.
+     *
+     * @param covariance double[2][2] matrix
+     * @param t age in annum
+     * @return double[1] {sigmaT 1-sigma abs uncertainty in age t}
+     */
+    public static double[] varTcalc(double[][] covariance, double t) {
+
+        double[] retVal = new double[]{0.0};
+
+        double e5 = lambda235 * t;
+        if (Math.abs(e5) <= MAXEXP) {
+            e5 = Math.exp(e5);
+            double e8 = Math.exp(lambda238 * t);
+            double Q5 = lambda235 * e5;
+            double Q8 = lambda238 * e8;
+            double Xvar = covariance[0][0];
+            double Yvar = covariance[1][1];
+
+            double Cov = covariance[0][1];
+            double[] inverted = inv2x2(covariance[0][0], covariance[1][1], covariance[0][1]);
+
+            // Fisher is the expected second derivative with respect to T of the
+            //  sums-of-squares of the weighted residuals.
+            double Fisher = Q5 * Q5 * inverted[0] + Q8 * Q8 * inverted[1] + 2.0 * Q5 * Q8 * inverted[2];
+
+            if (Fisher > 0.0) {
+                retVal[0] = Math.sqrt(1.0 / Fisher);
+            }
+        }
+
+        return retVal;
+    }
+
 }
