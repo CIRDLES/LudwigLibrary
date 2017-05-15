@@ -211,7 +211,7 @@ public class Pub {
     public static double[] concordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
         double[] retVal = new double[]{0, 0, 0};
 
-        double inputData[] = new double[5];
+        double inputData[];
 
         if ((r207Pb_235U > 0.0) && (r206Pb_238U > 0.0)) {
             inputData = new double[]{r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho};
@@ -260,7 +260,6 @@ public class Pub {
 
         if ((trialAge >= MINLOG) && (trialAge <= MAXLOG) && (yConc > 0.0)) {
             tNLE = Math.log(trialAge) / lambda238;
-            trialAge = tNLE;
 
             tNLE = ageNLE(xConc, yConc, vcXY, tNLE)[0];
             if (tNLE > 0.0) {

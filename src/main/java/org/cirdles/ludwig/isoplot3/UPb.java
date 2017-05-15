@@ -162,10 +162,10 @@ public class UPb {
             double e8 = Math.exp(lambda238 * t);
             double Q5 = lambda235 * e5;
             double Q8 = lambda238 * e8;
-            double Xvar = covariance[0][0];
-            double Yvar = covariance[1][1];
+//            double Xvar = covariance[0][0];
+//            double Yvar = covariance[1][1];
 
-            double Cov = covariance[0][1];
+//            double Cov = covariance[0][1];
             double[] inverted = inv2x2(covariance[0][0], covariance[1][1], covariance[0][1]);
 
             // Fisher is the expected second derivative with respect to T of the

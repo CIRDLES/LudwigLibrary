@@ -54,7 +54,7 @@ public class CMC {
         double yP = Math.abs(ratioY_1SigmaAbs / ratioY);
 
         double xP2 = xP * xP;
-        double yP2 = yP * yP;
+//        double yP2 = yP * yP;
 
         double abP = 0.0;
         double a = 0.0;
@@ -67,6 +67,7 @@ public class CMC {
         try {
             abP = Math.sqrt(xP2 + yP * yP - 2 * xP * yP * rhoXY);
         } catch (Exception e) {
+            abP = 0.0;
         }
         if (abP >= 0.0) {
 
