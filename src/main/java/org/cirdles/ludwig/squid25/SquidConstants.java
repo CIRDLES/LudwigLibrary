@@ -22,17 +22,60 @@ package org.cirdles.ludwig.squid25;
  */
 public final class SquidConstants {
 
+    /**
+     *
+     */
     public static final double SQUID_TINY_VALUE = 1e-30;
+
+    /**
+     *
+     */
     public static final double SQUID_EPSILON = 1e-10;
+
+    /**
+     *
+     */
     public static final double SQUID_ERROR_VALUE = -9.87654321012346;
+
+    /**
+     *
+     */
     public static final double MAXEXP = 709;
+
+    /**
+     *
+     */
     public static final double MAXLOG = 1E+308;
+
+    /**
+     *
+     */
     public static final double MINLOG = 1E-307;
 
+    /**
+     *
+     */
+    public static final double SQUID_UPPER_LIMIT_1_SIGMA_PERCENT = 9999.0;
+
     // March 2017 place holders until constants models are implemented
+    /**
+     *
+     */
     public static final double lambda238 = 1.55125e-10; // Ludwig uses e-4 for MA
+
+    /**
+     *
+     */
     public static final double lambda235 = 0.00000000098485;
+
+    /**
+     *
+     */
     public static final double uRatio = 137.88;
+
+    /**
+     *
+     */
     public static final double badAge = -1.23456789; // Ludwig calls it BadT
 
 }
