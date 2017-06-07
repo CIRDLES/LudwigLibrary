@@ -52,8 +52,12 @@ public final class SquidConstants {
      */
     public static final double MINLOG = 1E-307;
 
-    // March 2017 place holders until constants models are implemented
+    /**
+     *
+     */
+    public static final double SQUID_UPPER_LIMIT_1_SIGMA_PERCENT = 9999.0;
 
+    // March 2017 place holders until constants models are implemented
     /**
      *
      */
