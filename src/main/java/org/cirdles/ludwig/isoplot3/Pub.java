@@ -155,9 +155,12 @@ public class Pub {
                     // age in annum
                     retVal[0] = t2;
                 } else {
-                    // force termination
+                    // force termination when d2 == 0;
                     testTolerance = 0.0;
                 }
+            } else {
+                // force termination when count or e5 are out of bounds
+                testTolerance = 0.0;
             }
         } while (testTolerance >= tolerance);
 
