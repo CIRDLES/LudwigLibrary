@@ -110,6 +110,15 @@ public class PubTest {
         result = Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
 
+        System.out.println("concordiaTW - age calcs impossible");
+        r238U_206Pb = 0.13527488;
+        r238U_206Pb_1SigmaAbs = 0.0055755;
+        r207Pb_206Pb = 0.1068302;
+        r207Pb_206Pb_1SigmaAbs = 0.0018455;
+        expResult = new double[]{0.0,0.0,0.0,0.0};
+        result = Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
+        assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
+
     }
 
     /**
