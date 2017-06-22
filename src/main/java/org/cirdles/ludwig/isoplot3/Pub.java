@@ -58,7 +58,7 @@ public class Pub {
      */
     public static double[] robustReg2(double[] xValues, double[] yValues) {
 
-        double[] retVal = new double[]{0, 0, 0};
+        double[] retVal = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
         // check precondition of same size xValues and yValues and at least 3 points
         int n = xValues.length;
