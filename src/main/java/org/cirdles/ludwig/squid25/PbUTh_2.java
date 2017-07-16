@@ -1,0 +1,243 @@
+/*
+ * Copyright 2006-2017 CIRDLES.org.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.cirdles.ludwig.squid25;
+
+import static org.cirdles.ludwig.isoplot3.Pub.age7corrWithErr;
+import static org.cirdles.ludwig.isoplot3.Pub.pb76;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda232;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_64;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_74;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_84;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_86;
+import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
+
+/**
+ * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with
+ * Shrimp prawn files data reduction. Each public function returns a one-
+ * dimensional array of double.
+ *
+ * @see
+ * <a href="https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/PbUTh_2.bas" target="_blank">Squid.PbUTh_2</a>
+ *
+ * @author James F. Bowring
+ */
+public class PbUTh_2 {
+
+    private PbUTh_2() {
+    }
+
+    /**
+     * Ludwig specifies: Returns 204Pb/206Pb required to force
+     * 206Pb/238U-207Pb/206Pb ages to concordance.
+     *
+     * @param pb76tot
+     * @param age7corPb6U8
+     * @return double [1] containing 204Pb/206Pb
+     */
+    public static double[] pb46cor7(double pb76tot, double age7corPb6U8) {
+
+        double[] retVal = new double[]{0.0};
+        double alpha0 = sComm0_64;
+        double beta0 = sComm0_74;
+
+        double pb76true = pb76(age7corPb6U8)[0];
+
+        try {
+            retVal = new double[]{(pb76tot - pb76true) / (beta0 - pb76true * alpha0)};
+        } catch (Exception e) {
+        }
+        return retVal;
+    }
+
+    /**
+     * Ludwig specifies: Returns 204Pb/206Pb required to force
+     * 206Pb/238U-208Pb/232Th ages to concordance.
+     *
+     * @param pb86tot
+     * @param th2U8
+     * @param age8corPb6U8
+     * @return double [1] containing 204Pb/206Pb
+     */
+    public static double[] pb46cor8(double pb86tot, double th2U8, double age8corPb6U8) {
+
+        double[] retVal = new double[]{0.0};
+
+        double alpha0 = sComm0_64;
+        double gamma0 = sComm0_84;
+
+        try {
+            double numer = Math.expm1(age8corPb6U8 * lambda232);
+            double denom = Math.expm1(age8corPb6U8 * lambda238);
+            double pb86rad = numer / denom * th2U8;
+            retVal = new double[]{(pb86tot - pb86rad) / (gamma0 - pb86rad * alpha0)};
+        } catch (Exception e) {
+        }
+        return retVal;
+    }
+
+    /**
+     * Ludwig specifies: Returns radiogenic 208Pb/206Pb %err where the common
+     * 204Pb/206Pb is that required to force the 206Pb/238U-208Pb/232Th ages to
+     * concordance.
+     *
+     * @param pb86tot
+     * @param pb86totPer
+     * @param pb76tot
+     * @param pb76totPer
+     * @param pb6U8tot
+     * @param pb6U8totPer
+     * @param age7corPb6U8
+     * @return double [1] containing radiogenic 208Pb/206Pb %err or 999 on bad
+     * math
+     */
+    public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
+            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8) {
+
+        double[] retVal = new double[]{999.0};
+
+        double alpha0 = sComm0_64;
+        double beta0 = sComm0_74;
+        double gamma0 = sComm0_84;
+
+        double r = pb6U8tot;
+        double sigmaR = pb6U8totPer / 100.0 * r;
+        double phi = pb76tot;
+        double sigmaPhi = pb76totPer / 100.0 * phi;
+        double theta = pb86tot;
+        double sigmaTheta = pb86totPer / 100.0 * theta;
+        double u = 1.0 / uRatio;
+        double phi0 = beta0 / alpha0;
+
+        double exp5 = Math.exp(age7corPb6U8 * lambda235);
+        double exp8 = Math.exp(age7corPb6U8 * lambda238);
+        double rStar = exp8 - 1.0;
+        double sStar = exp5 - 1.0;
+        double phiStar = sStar / rStar * u;
+        double p = rStar / r;
+
+        double alphaPrime = (phi - phiStar) / (beta0 - phiStar * alpha0);
+        double thetaStar7 = (theta / alphaPrime - gamma0) / (1.0 / alphaPrime - alpha0);
+        double m1 = lambda238 * exp8;
+        double m2 = lambda235 * exp5;
+
+        double j1 = p / m1 - sStar / r / m2;
+        double j2 = 1.0 / (r / m1 - u * r * phi0 / m2);
+        double d1 = 1.0 - alpha0 * alphaPrime;
+        double d2 = beta0 - phiStar * alpha0;
+
+        double k1 = (p - r * j1 * j2) / m1;
+        double k2 = u * j2 * r * r / m1 / m2;
+        double k3 = u / rStar * (m2 - phiStar * m1);
+        double k4 = (alpha0 * alphaPrime - 1.0) / d2;
+        double k5 = alphaPrime / d1;
+        double k7 = (alpha0 * thetaStar7 - gamma0) / d1;
+
+        double varThetaStar7 = Math.pow(sigmaTheta / d1, 2)
+                + Math.pow(k1 * k3 * k4 * k7 * sigmaR, 2)
+                + Math.pow(k7 * (1.0 / d2 + k2 * k3 * k4) * sigmaPhi, 2);
+
+        if (varThetaStar7 >= 0.0) {
+            double sigmaThetaStar7 = Math.sqrt(varThetaStar7);
+            retVal = new double[]{100.0 * sigmaThetaStar7 / Math.abs(thetaStar7)};
+        }
+
+        return retVal;
+    }
+
+    /**
+     * This method implements Ludwig's Age7CorrPb8Th2.
+     *
+     * Ludwig specifies Age7CorrPb8Th2: Returns the 208Pb/232Th age, assuming
+     * the true 206/204 is that required to force 206/238-207/235 concordance.
+     *
+     * @param totPb206U238
+     * @param totPb208Th232
+     * @param totPb86
+     * @param totPb76
+     * @return double [1] containing age7CorrPb8Th2
+     */
+    public static double[] age7CorrPb8Th2(double totPb206U238, double totPb208Th232,
+            double totPb86, double totPb76)
+            throws ArithmeticException {
+
+        double gamma0 = sComm0_64 * sComm0_86;
+
+        double age7corPb6U8
+                = age7corrWithErr(totPb206U238, 0.0, totPb76, 0.0)[0];
+        double radPb6U8 = Math.expm1(lambda238 * age7corPb6U8);
+        double term = totPb206U238 - radPb6U8;
+        term = term == 0 ? SquidConstants.SQUID_VERY_SMALL_VALUE : term;
+        double alpha = sComm0_64 * totPb206U238 / term;
+        double gamma = totPb86 * alpha;
+        double radfract8 = (gamma - gamma0) / gamma;
+        double radPb8Th2 = totPb208Th232 * radfract8;
+        double age7corrPb8Th2 = Math.log(1.0 + radPb8Th2) / lambda232;
+
+        return new double[]{age7corrPb8Th2, 0};
+    }
+
+    /**
+     * This method combines Ludwig's Age7CorrPb8Th2 and AgeErr7CorrPb8Th2.
+     *
+     * Ludwig specifies Age7CorrPb8Th2: Returns the 208Pb/232Th age, assuming
+     * the true 206/204 is that required to force 206/238-207/235 concordance.
+     *
+     * Ludwig specifies AgeErr7CorrPb8Th2: Returns the error of the 208Pb/232Th
+     * age, where the 208Pb/232Th age is calculated assuming the true 206/204 is
+     * that required to force 206/238-207/235 concordance. The error is
+     * calculated numerically, by successive perturbation of the input errors.
+     *
+     * @param totPb206U238
+     * @param totPb206U238percentErr
+     * @param totPb208Th232
+     * @param totPb208Th232percentErr
+     * @param totPb86
+     * @param totPb86percentErr
+     * @param totPb76
+     * @param totPb76percentErr
+     * @return double [2] containing age7CorrPb8Th2, age7CorrPb8Th2Err
+     */
+    public static double[] age7CorrPb8Th2WithErr(double totPb206U238, double totPb206U238percentErr, double totPb208Th232,
+            double totPb208Th232percentErr, double totPb86, double totPb86percentErr, double totPb76, double totPb76percentErr)
+            throws ArithmeticException {
+
+        // Perturb each input variable by its assigned error
+        double ptotPb6U8 = (1.0 + totPb206U238percentErr / 100.0) * totPb206U238;
+        double ptotPb8Th2 = (1.0 + totPb208Th232percentErr / 100.0) * totPb208Th232;
+        double ptheta = totPb86 * (1.0 + totPb86percentErr / 100.0);
+        double pphi = totPb76 * (1.0 + totPb76percentErr / 100.0);
+
+        double ageVariance = 0.0;
+
+        double[] delta = new double[5];
+
+        // delta[0] is age
+        delta[0] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76)[0];
+        delta[1] = age7CorrPb8Th2(ptotPb6U8, totPb208Th232, totPb86, totPb76)[0];
+        delta[2] = age7CorrPb8Th2(totPb206U238, ptotPb8Th2, totPb86, totPb76)[0];
+        delta[3] = age7CorrPb8Th2(totPb206U238, totPb208Th232, ptheta, totPb76)[0];
+        delta[4] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, pphi)[0];
+
+        for (int i = 1; i < 5; i++) {
+            ageVariance += Math.pow(delta[i] - delta[0], 2);
+        }
+
+        return new double[]{delta[0], Math.sqrt(ageVariance)};
+
+    }
+}

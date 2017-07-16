@@ -20,7 +20,7 @@ import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_TINY_VALUE;
 
 /**
  * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with
- * Shrimp prawn files data reduction. Each public function returns a two
+ * Shrimp prawn files data reduction. Each public function returns a one-
  * dimensional array of double.
  *
  * @see
