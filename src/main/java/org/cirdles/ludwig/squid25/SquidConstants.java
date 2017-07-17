@@ -26,6 +26,8 @@ public final class SquidConstants {
      *
      */
     public static final double SQUID_TINY_VALUE = 1e-30;
+    
+    public static final double SQUID_VERY_SMALL_VALUE = 1e-16;
 
     /**
      *
@@ -61,12 +63,13 @@ public final class SquidConstants {
     /**
      *
      */
-    public static final double lambda238 = 1.55125e-10; // Ludwig uses e-4 for MA
+    public static final double lambda238 = 1.55125e-10; // Ludwig uses 1e6 for MA
 
     /**
      *
      */
-    public static final double lambda235 = 0.00000000098485;
+    public static final double lambda235 = 9.8485e-10;
+    public static final double lambda232 = 4.9475e-11;
 
     /**
      *
@@ -77,5 +80,13 @@ public final class SquidConstants {
      *
      */
     public static final double badAge = -1.23456789; // Ludwig calls it BadT
+
+    public static final double sComm0_64 = 18.053;
+    public static final double sComm0_76 = 0.8637;
+    public static final double sComm0_86 = 2.0971;
+    public static final double sComm0_74 = 15.5923761;// (i.e. sComm0_64 * sComm0_76)
+    public static final double sComm0_84 = 37.8589463;// (i.e. sComm0_64 * sComm0_86)
+    
+    public static final double PRESENT_238U235U = 137.88;
 
 }

@@ -19,13 +19,20 @@ import java.util.Arrays;
 import org.apache.commons.math3.distribution.FDistribution;
 import static org.cirdles.ludwig.isoplot3.CMC.concConvert;
 import static org.cirdles.ludwig.isoplot3.UPb.concordSums;
+import static org.cirdles.ludwig.isoplot3.UPb.pbPbAge;
 import static org.cirdles.ludwig.isoplot3.UPb.varTcalc;
 import static org.cirdles.ludwig.isoplot3.U_2.inv2x2;
+import org.cirdles.ludwig.squid25.SquidConstants;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXEXP;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXLOG;
 import static org.cirdles.ludwig.squid25.SquidConstants.MINLOG;
+import static org.cirdles.ludwig.squid25.SquidConstants.lambda232;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_64;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_76;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_86;
+import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
 
 /**
  * double implementations of Ken Ludwig's Isoplot.Pub VBA code for use with
@@ -278,6 +285,202 @@ public class Pub {
 
         }
         return retVal;
+    }
+
+    /**
+     * Ludwig specifies Return radiogenic 207Pb/206Pb (secular equilibrium). All
+     * calculations in annum.
+     *
+     * @param age
+     * @return double [1] containing radiogenic 207Pb/206Pb.
+     */
+    public static double[] pb76(double age) {
+        double[] retVal = new double[]{0.0};
+
+        if (age == 0.0) {
+            retVal = new double[]{lambda235 / lambda238 / uRatio};
+        } else {
+            retVal = new double[]{Math.expm1(lambda235 * age) / Math.expm1(lambda238 * age) / uRatio};
+        }
+
+        return retVal;
+    }
+
+    /**
+     * This method combines Ludwig's Age7Corr and AgeEr7Corr.
+     *
+     * Ludwig specifies Age7Corr: Age from uncorrected Tera-Wasserburg ratios,
+     * assuming the specified common-Pb 207/206.
+     *
+     * Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age error.
+     *
+     * @param totPb6U8
+     * @param totPb6U8err
+     * @param totPb76
+     * @param totPb76err
+     * @return double [2] containing age7corrected, age7correctedErr
+     */
+    public static double[] age7corrWithErr(double totPb6U8, double totPb6U8err, double totPb76, double totPb76err)
+            throws ArithmeticException {
+
+        double commPb76 = sComm0_76;
+        double commPb76err = 0.0;
+
+        int iterationMax = 999;
+
+        double totPb7U5 = totPb76 * uRatio * totPb6U8;
+        double t = 0.0;
+        double toler = 0.001;
+        double delta = 0.0;
+        double t1 = 1000.0e6;
+
+        // Solve using Newton's method, using 1000 Ma as trial age.
+        double e5;
+        double e8;
+
+        int iterations = 0;
+        do {
+            iterations++;
+
+            t = t1;
+
+            e5 = lambda235 * t;
+            if (Math.abs(e5) > MAXEXP) {
+                throw new ArithmeticException();
+            }
+            e8 = Math.exp(lambda238 * t);
+            e5 = Math.exp(e5);
+            double ee8 = e8 - 1.0;
+            double ee5 = e5 - 1.0;
+
+            double f = uRatio * commPb76 * (totPb6U8 - ee8) - totPb7U5 + ee5;
+            double deriv = lambda235 * e5 - uRatio * commPb76 * lambda238 * e8;
+            if (deriv == 0.0) {
+                throw new ArithmeticException();
+            }
+
+            delta = -f / deriv;
+            t1 = t + delta;
+
+        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
+
+        // calculate error
+        double totPb7U5var
+                = uRatio * uRatio * (Math.pow(totPb6U8 * totPb76err, 2) + Math.pow(totPb76 * totPb6U8err, 2));
+        e8 = Math.exp(lambda238 * t);
+        e5 = Math.exp(lambda235 * t);
+        double ee8 = e8 - 1.0;
+
+        double denom = Math.pow(uRatio * commPb76 * lambda238 * e8 - lambda235 * e5, 2);
+        double numer1 = Math.pow(uRatio * (totPb6U8 - ee8) * commPb76err, 2);
+        double numer2 = uRatio * uRatio * commPb76 * (commPb76 - 2.0 * totPb76) * totPb6U8err * totPb6U8err;
+        double numer3 = totPb7U5var;
+        double numer = numer1 + numer2 + numer3;
+
+        return new double[]{t, Math.sqrt(numer / denom)};
+    }
+
+    /**
+     * This method combines Ludwig's AgePb76 and AgeErPb76.
+     *
+     * Ludwig specifies AgePb76: Age (Ma) from radiogenic 207Pb/206Pb (Note: we
+     * use annum here)
+     *
+     * Ludwig specifies AgeErPb76: Error in Pb7/6 age, input err is abs.
+     *
+     * @param pb76rad
+     * @param pb76err
+     * @return double [2] containing agePb76, agePb76Err
+     * @throws ArithmeticException
+     */
+    public static double[] agePb76WithErr(double pb76rad, double pb76err)
+            throws ArithmeticException {
+
+        return pbPbAge(pb76rad, pb76err);
+    }
+
+    /**
+     * This method combines Ludwig's Age8Corr and AgeEr8Corr.
+     *
+     * Ludwig specifies Age8Corr: Age from uncorrected Tera-Wasserburg ratios,
+     * assuming the specified common-Pb 207/206.
+     *
+     * Ludwig specifies AgeEr8Corr: Error in 208-corrected age (input-ratio
+     * errors are absolute).
+     *
+     * @param totPb6U8
+     * @param totPb6U8err
+     * @param totPb8Th2
+     * @param totPb8Th2err
+     * @param th2U8
+     * @param th2U8err
+     * @return double [2] containing age8corrected, age8correctedErr
+     */
+    public static double[] age8corrWithErr(double totPb6U8, double totPb6U8err, double totPb8Th2, double totPb8Th2err,
+            double th2U8, double th2U8err)
+            throws ArithmeticException {
+
+        double commPb68 = 1.0 / sComm0_86;
+        double commPb68err = 0.0;
+
+        int iterationMax = 999;
+
+        double t = 0.0;
+        double toler = 0.001;
+        double delta = 0.0;
+        double t1 = 1000.0e6;
+
+        // Solve using Newton's method, using 1000 Ma as trial age.
+        double e2;
+        double e8;
+
+        int iterations = 0;
+        do {
+            iterations++;
+
+            t = t1;
+
+            e8 = lambda238 * t;
+            if (Math.abs(e8) > MAXEXP) {
+                throw new ArithmeticException();
+            }
+            e8 = Math.exp(e8);
+            e2 = Math.exp(lambda232 * t);
+
+            double f = totPb6U8 - e8 + 1.0 - th2U8 * commPb68 * (totPb8Th2 - e2 + 1);
+            double deriv = th2U8 * commPb68 * lambda232 * e2 - lambda238 * e8;
+            if (deriv == 0.0) {
+                throw new ArithmeticException();
+            }
+
+            delta = -f / deriv;
+            t1 = t + delta;
+
+        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
+
+        // calculate error
+        double g = totPb8Th2;
+        double sigmaG = totPb8Th2err;
+        double h = th2U8;
+        double sigmaH = th2U8err;
+        double sigmaA = totPb6U8err;
+        double psiI = commPb68;
+        double sigmaPsiI = commPb68err;
+
+        e2 = Math.exp(lambda232 * t);
+        e8 = Math.exp(lambda238 * t);
+
+        double p = g + 1.0 - e2;
+
+        t1 = Math.pow(h * sigmaG, 2);
+        double t2 = Math.pow(p * sigmaH, 2);
+        double t3 = Math.pow(h * p * sigmaPsiI / psiI, 2);
+        double k = lambda238 * e8 - h * psiI * lambda232 * e2;
+
+        double numer = Math.pow(sigmaA, 2) + Math.pow(psiI, 2) * (t1 + t2 + t3);
+        double denom = k * k;
+
+        return new double[]{t, Math.sqrt(numer / denom)};
     }
 
 }
