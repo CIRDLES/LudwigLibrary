@@ -86,5 +86,7 @@ public final class SquidConstants {
     public static final double sComm0_86 = 2.0971;
     public static final double sComm0_74 = 15.5923761;// (i.e. sComm0_64 * sComm0_76)
     public static final double sComm0_84 = 37.8589463;// (i.e. sComm0_64 * sComm0_86)
+    
+    public static final double PRESENT_238U235U = 137.88;
 
 }

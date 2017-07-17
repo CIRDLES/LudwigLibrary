@@ -5,6 +5,7 @@
  */
 package org.cirdles.ludwig.squid25;
 
+import static org.cirdles.ludwig.squid25.SquidConstants.PRESENT_238U235U;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -107,7 +108,7 @@ public class PbUTh_2Test {
     /**
      * Test of age7CorrPb8Th2 method, of class PbUTh_2.
      *
-     * per Bodorkos from Squid2.5 file 100142_G6147_original_frozen.xls:
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
      *
      * Column header: 207corr208Pb/232ThAge
      *
@@ -118,32 +119,135 @@ public class PbUTh_2Test {
     @Test
     public void testAge7CorrPb8Th2() {
         System.out.println("age7CorrPb8Th2");
-        double totPb206U238 = 0.0915928758248389;
-        double totPb208Th232 = 0.0280531210114337;
-        double totPb86 = 0.0831580681678389;
+        double totPb206U238 = 0.0915570339460798;
+        double totPb208Th232 = 0.0280421792577493;
+        double totPb86 = 0.0831580681678;
         double totPb76 = 0.0592518351787661;
-        double[] expResult = new double[]{2.51601400669704};
+        double[] expResult = new double[]{553438043.974625};
         double[] result = PbUTh_2.age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76);
-//        assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
     }
 
     /**
      * Test of age7CorrPb8Th2WithErr method, of class PbUTh_2.
+     *
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
+     *
+     * this method combines Squid2.5's Age7CorrPb8Th2 and AgeErr7CorrPb8Th2
+     *
+     * Column header: 207corr208Pb/232ThAge
+     *
+     * Column header: 1σ err (to the right of 207corr208Pb/232ThAge)
+     *
+     * Usage:
+     * "=Age7CorrPb8Th2([Total206Pb/238U],[Total208Pb/232Th],[208/206],[207/206],sComm0_64,sComm0_76,sComm0_86)"
+     *
+     * Usage: "=AgeErr7corrPb8Th2([Total206Pb/238U],[Total206Pb/238U
+     * %err],[Total208Pb/232Th],[Total208Pb/232Th %err],[207/206],[207/206
+     * %err],[208/206],… [208/206 %err],sComm0_64,sComm0_76,sComm0_86)"
      */
     @Test
     public void testAge7CorrPb8Th2WithErr() {
         System.out.println("age7CorrPb8Th2WithErr");
-        double totPb206U238 = 0.0;
-        double totPb206U238percentErr = 0.0;
-        double totPb208Th232 = 0.0;
-        double totPb208Th232percentErr = 0.0;
-        double totPb86 = 0.0;
-        double totPb86percentErr = 0.0;
-        double totPb76 = 0.0;
-        double totPb76percentErr = 0.0;
-        double[] expResult = null;
+        double totPb206U238 = 0.0915570339460798;
+        double totPb206U238percentErr = 0.839844375205747;// / 100.0 * 0.0915570339460798;
+        double totPb208Th232 = 0.0280421792577493;
+        double totPb208Th232percentErr = 1.63774616675883;// / 100.0 * 0.0280421792577493;
+        double totPb86 = 0.0831580681678;
+        double totPb86percentErr = 1.38682396372;// / 100. * 0.0831580681678;
+        double totPb76 = 0.0592518351787661;
+        double totPb76percentErr = 0.688011049803;// / 100.0 * 0.0592518351787661;
+        double[] expResult = new double[]{553438043.974625, 11665992.0078184};
         double[] result = PbUTh_2.age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, totPb86, totPb86percentErr, totPb76, totPb76percentErr);
-//        assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+    }
+
+    /**
+     * Test of pb206U238rad method, of class PbUTh_2.
+     *
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
+     *
+     * Column header: 8corr206STAR/238
+     *
+     * Usage: "=Pb206U238rad([208corr206Pb/238UAge])"
+     */
+    @Test
+    public void testPb206U238rad() {
+        System.out.println("pb206U238rad");
+        double age = 564971592.74734;
+        double[] expResult = new double[]{0.0915964069749142};
+        double[] result = PbUTh_2.pb206U238rad(age);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+    }
+
+    /**
+     * Test of rad8corPb7U5WithErr method, of class PbUTh_2.
+     *
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
+     *
+     * this method combines Squid2.5's Rad8corPb7U5 and Rad8corPb7U5PErr
+     *
+     * Column header: 8corr207STAR/235
+     *
+     * Column header: %err (to the right of 8corr207STAR/235)
+     *
+     * Usage:
+     * "=Rad8corPb7U5([208corr206Pb/238UAge],[Total206Pb/238U],[207/206],sComm0_76)"
+     *
+     * Usage: "=Rad8corPb7U5perr([Total206Pb/238U],[Total206Pb/238U
+     * %err],[8corr206STAR/238],[Total206Pb/238U]TIMES[207/206]/Present238U235U,[232Th/238U],[232Th/238U
+     * %err],[207/206], [207/206 %err],[208/206],[208/206
+     * %err],sComm0_76,sComm0_86)"
+     */
+    @Test
+    public void testRad8corPb7U5WithErr() {
+        System.out.println("rad8corPb7U5WithErr");
+        double totPb6U8 = 0.0915570339460798;
+        double totPb6U8per = 0.839844375205747;
+        double radPb6U8 = 0.0915964069749142;
+        double totPb7U5 = 0.0915570339460798 * 0.0592518351788 / PRESENT_238U235U;
+        double th2U8 = 0.271509072107;
+        double th2U8per = 0.231502107594;
+        double totPb76 = 0.0592518351788;
+        double totPb76per = 0.688011049803;
+        double totPb86 = 0.0831580681678;
+        double totPb86per = 1.38682396372;
+        double[] expResult = new double[]{0.752677098785157, 1.0823631953636};
+        double[] result = PbUTh_2.rad8corPb7U5WithErr(totPb6U8, totPb6U8per, radPb6U8,
+                totPb7U5, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+    }
+
+    /**
+     * Test of rad8corConcRho method, of class PbUTh_2.
+     *
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
+     *
+     * Column header: err.corr. (to the right of %err, to the right of
+     * 8corr206STAR/238)
+     *
+     * Usage: "=Rad8corConcRho([Total206Pb/238U],[Total206Pb/238U
+     * %err],[8corr206STAR/238],[232Th/238U],[232Th/238U
+     * %err],[207/206],[207/206 %err],[208/206],[208/206
+     * %err],sComm0_76,sComm0_86)"
+     */
+    @Test
+    public void testRad8corConcRho() {
+        System.out.println("rad8corConcRho");
+        double totPb6U8 = 0.0915570339460798;
+        double totPb6U8per = 0.839844375205747;
+        double radPb6U8 = 0.0915964069749142;
+        double th2U8 = 0.271509072107;
+        double th2U8per = 0.231502107594;
+        double totPb76 = 0.0592518351788;
+        double totPb76per = 0.688011049803;
+        double totPb86 = 0.0831580681678;
+        double totPb86per = 1.38682396372;
+        double[] expResult = new double[]{0.646167502023579};
+        double[] result = PbUTh_2.rad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
     }
 
 }

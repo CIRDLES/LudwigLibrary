@@ -22,6 +22,7 @@ import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_64;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_74;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_76;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_84;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_86;
 import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
@@ -47,7 +48,7 @@ public class PbUTh_2 {
      *
      * @param pb76tot
      * @param age7corPb6U8
-     * @return double [1] containing 204Pb/206Pb
+     * @return double [1] as{204Pb/206Pb}
      */
     public static double[] pb46cor7(double pb76tot, double age7corPb6U8) {
 
@@ -71,7 +72,7 @@ public class PbUTh_2 {
      * @param pb86tot
      * @param th2U8
      * @param age8corPb6U8
-     * @return double [1] containing 204Pb/206Pb
+     * @return double [1] as {204Pb/206Pb}
      */
     public static double[] pb46cor8(double pb86tot, double th2U8, double age8corPb6U8) {
 
@@ -102,8 +103,7 @@ public class PbUTh_2 {
      * @param pb6U8tot
      * @param pb6U8totPer
      * @param age7corPb6U8
-     * @return double [1] containing radiogenic 208Pb/206Pb %err or 999 on bad
-     * math
+     * @return double [1] as {radiogenic 208Pb/206Pb, %err(999 is bad)} math
      */
     public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
             double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8) {
@@ -169,7 +169,7 @@ public class PbUTh_2 {
      * @param totPb208Th232
      * @param totPb86
      * @param totPb76
-     * @return double [1] containing age7CorrPb8Th2
+     * @return double [1] as {age7CorrPb8Th2}
      */
     public static double[] age7CorrPb8Th2(double totPb206U238, double totPb208Th232,
             double totPb86, double totPb76)
@@ -188,7 +188,7 @@ public class PbUTh_2 {
         double radPb8Th2 = totPb208Th232 * radfract8;
         double age7corrPb8Th2 = Math.log(1.0 + radPb8Th2) / lambda232;
 
-        return new double[]{age7corrPb8Th2, 0};
+        return new double[]{age7corrPb8Th2};
     }
 
     /**
@@ -210,7 +210,7 @@ public class PbUTh_2 {
      * @param totPb86percentErr
      * @param totPb76
      * @param totPb76percentErr
-     * @return double [2] containing age7CorrPb8Th2, age7CorrPb8Th2Err
+     * @return double [2] as {age7CorrPb8Th2, age7CorrPb8Th2Err}
      */
     public static double[] age7CorrPb8Th2WithErr(double totPb206U238, double totPb206U238percentErr, double totPb208Th232,
             double totPb208Th232percentErr, double totPb86, double totPb86percentErr, double totPb76, double totPb76percentErr)
@@ -240,4 +240,148 @@ public class PbUTh_2 {
         return new double[]{delta[0], Math.sqrt(ageVariance)};
 
     }
+
+    /**
+     * Ludwig specifies: Returns the radiogenic 206Pb/238U ratio for the
+     * specified age.
+     *
+     * @param age
+     * @return double [1] as {radiogenic 206Pb/238U ratio}
+     * @throws ArithmeticException
+     */
+    public static double[] pb206U238rad(double age)
+            throws ArithmeticException {
+        return new double[]{Math.expm1(lambda238 * age)};
+    }
+
+    /**
+     * This method combines Ludwig's Rad8corPb7U5 and Rad8corPb7U5Perr.
+     *
+     * Ludwig specifies Rad8corPb7U5: Returns the radiogenic 208-corrected
+     * 207PbSTAR/235U ratio.
+     *
+     * Ludwig specifies Rad8corPb7U5Perr: Returns the %error of a 208-corrected
+     * 207PbSTAR/235U.
+     *
+     * @param totPb6U8
+     * @param totPb6U8per
+     * @param radPb6U8
+     * @param totPb7U5
+     * @param th2U8
+     * @param th2U8per
+     * @param totPb76
+     * @param totPb76per
+     * @param totPb86
+     * @param totPb86per
+     * @return double [2] as {ratio, percent error}
+     * @throws ArithmeticException
+     */
+    public static double[] rad8corPb7U5WithErr(double totPb6U8, double totPb6U8per,
+            double radPb6U8, double totPb7U5, double th2U8, double th2U8per, double totPb76,
+            double totPb76per, double totPb86, double totPb86per)
+            throws ArithmeticException {
+
+        // calculate ratio
+        double radFract6 = radPb6U8 / totPb6U8;
+        double commFract6 = 1.0 - radFract6;
+        double ratio = (totPb76 - commFract6 * sComm0_76) * uRatio * totPb6U8;
+
+        // calculate error
+        double k = 1.0 / th2U8;
+        double SigmaTotPb6U8 = totPb6U8per / 100.0 * totPb6U8;
+        double SigmaTotPb76 = totPb76per / 100.0 * totPb76;
+        double SigmaTotPb86 = totPb86per / 100.0 * totPb86;
+        double SigmaK = th2U8per / 100.0 * k;
+        double u = uRatio;
+
+        double q = totPb86 - sComm0_86 * commFract6;
+
+        double radPb8Th2 = (totPb86 - commFract6 * sComm0_86) * totPb6U8 / th2U8;
+        double radPb7U5 = (totPb76 - commFract6 * sComm0_76) * u * totPb6U8;
+        double m1 = lambda238 * (1.0 + radPb6U8);
+        double m2 = lambda232 * (1.0 + radPb8Th2);
+        double h1 = radFract6 / m1 - q * k / m2;
+        double h2 = 1.0 / (totPb6U8 / m1 - k * totPb6U8 * sComm0_86 / m2);
+
+        double Term1 = Math.pow(h1 * SigmaTotPb6U8, 2);
+        double Term2 = Math.pow(totPb6U8 / m2, 2);
+        double Term3 = Math.pow(q * SigmaK, 2);
+        double term4 = Math.pow(th2U8 * SigmaTotPb86, 2);
+
+        double sigmaCommfract6 = Math.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
+        double covTotPb86CommFract6 = h1 * h2 * SigmaTotPb6U8 * SigmaTotPb6U8;
+
+        Term1 = Math.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
+        Term2 = Math.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + Math.pow(sComm0_76 * sigmaCommfract6, 2));
+        Term3 = -2.0 * radPb7U5 * u * sComm0_76 * covTotPb86CommFract6;
+
+        double sigmaRadPb7U5 = Math.sqrt(Term1 + Term2 + Term3);
+
+        return new double[]{ratio, sigmaRadPb7U5 / radPb7U5 * 100.0};
+    }
+
+    /**
+     * Ludwig specifies: Returns the error correlation for 208-corrected
+     * 206PbSTAR/238U-207PbSTAR/235U ratio-pairs.
+     *
+     * @param totPb6U8
+     * @param totPb6U8per
+     * @param radPb6U8
+     * @param th2U8
+     * @param th2U8per
+     * @param totPb76
+     * @param totPb76per
+     * @param totPb86
+     * @param totPb86per
+     * @return double [1] = {error correlation}
+     * @throws ArithmeticException
+     */
+    public static double[] rad8corConcRho(double totPb6U8, double totPb6U8per, double radPb6U8,
+            double th2U8, double th2U8per, double totPb76, double totPb76per,
+            double totPb86, double totPb86per)
+            throws ArithmeticException {
+
+        double u = uRatio;
+        double k = 1.0 / th2U8;
+        double SigmaK = th2U8per / 100.0 * k;
+        double SigmaTotPb76 = totPb76per / 100.0 * totPb76;
+        double SigmaTotPb86 = totPb86per / 100.0 * totPb86;
+        double SigmaTotPb6U8 = totPb6U8per / 100.0 * totPb6U8;
+        double radFract6 = radPb6U8 / totPb6U8;
+        double commFract6 = 1.0 - radFract6;
+        double q = totPb86 - sComm0_86 * commFract6;
+
+        double radPb8Th2 = (totPb86 - commFract6 * sComm0_86) * totPb6U8 / th2U8;
+        double radPb7U5 = (totPb76 - commFract6 * sComm0_76) * u * totPb6U8;
+        double m1 = lambda238 * (1.0 + radPb6U8);
+        double m2 = lambda232 * (1.0 + radPb8Th2);
+        double h1 = radFract6 / m1 - q * k / m2;
+        double h2 = 1.0 / (totPb6U8 / m1 - k * totPb6U8 * sComm0_86 / m2);
+
+        double Term1 = Math.pow(h1 * SigmaTotPb6U8, 2);
+        double Term2 = Math.pow(totPb6U8 / m2, 2);
+        double Term3 = Math.pow(q * SigmaK, 2);
+        double term4 = Math.pow(k * SigmaTotPb86, 2);
+
+        double SigmaCommfract6 = Math.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
+
+        double CovTotPb86CommFract6 = h1 * h2 * SigmaTotPb6U8 * SigmaTotPb6U8;
+        double SigmaRadPb6U8 = Math.sqrt(Math.pow(radFract6 * SigmaTotPb6U8, 2) + totPb6U8 * totPb6U8
+                * SigmaCommfract6 * SigmaCommfract6);
+
+        Term1 = Math.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
+        Term2 = Math.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + Math.pow(sComm0_76 * SigmaCommfract6, 2));
+        Term3 = -2.0 * radPb7U5 * u * sComm0_76 * CovTotPb86CommFract6;
+
+        double SigmaRadPb7U5 = Math.sqrt(Term1 + Term2 + Term3);
+
+        Term1 = radFract6 * radPb7U5 / totPb6U8 * SigmaTotPb6U8 * SigmaTotPb6U8;
+        Term2 = u * totPb6U8 * totPb6U8 * sComm0_76 * SigmaCommfract6 * SigmaCommfract6;
+        Term3 = -CovTotPb86CommFract6 * (u * totPb6U8 * radFract6 * sComm0_76 + radPb7U5);
+
+        double CovRad68Rad75 = Term1 + Term2 + Term3;
+
+        return new double[]{CovRad68Rad75 / (SigmaRadPb6U8 * SigmaRadPb7U5)};
+    }
+
 }
