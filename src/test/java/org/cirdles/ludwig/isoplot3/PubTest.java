@@ -182,10 +182,11 @@ public class PubTest {
         double r206Pb_238U = 0.0367475296433289;
         double r206Pb_238U_1SigmaAbs = 0.0000998234261966304;
         double rho = 0.370096880869828;
-        double[] expResult = new double[]{232628743.083742, 0620177.514250217};
+        double[] expResult = new double[]{232628743.083742, 0620177.514250217, 0.937383339484404};
         double[] result = Pub.concordia(r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+//        assertEquals(Utilities.roundedToSize(expResult[2], 12), Utilities.roundedToSize(result[2], 12), SquidConstants.SQUID_EPSILON);
         // todo: test additional outputs
     }
 

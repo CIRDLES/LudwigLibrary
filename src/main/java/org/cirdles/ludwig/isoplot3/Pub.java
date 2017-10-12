@@ -153,7 +153,7 @@ public class Pub {
 
                 // Second derivative of T w.r.t. S, times +0.5
                 double d2a = (Q5 * Q5 + Qq5 * Rx) * inverted[0] + (Q8 * Q8 + Qq8 * Ry) * inverted[1];
-                double d2b = (2 * Q5 * Q8 + Ry * Qq5 + Rx * Qq8) * inverted[2];
+                double d2b = (2.0 * Q5 * Q8 + Ry * Qq5 + Rx * Qq8) * inverted[2];
                 double d2 = d2a + d2b;
                 if (d2 != 0.0) {
                     double Incr = d1 / d2;
@@ -219,7 +219,7 @@ public class Pub {
      * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
-        double[] retVal = new double[]{0, 0, 0};
+        double[] retVal = new double[]{0, 0, 0, 0};
 
         double inputData[];
 
