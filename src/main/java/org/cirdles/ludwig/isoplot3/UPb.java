@@ -109,11 +109,11 @@ public class UPb {
     /**
      * Ludwig: Calculate the sums of the squares of the weighted residuals for a
      * single Conv.-Conc. X-Y data point, where the true value of each of the
-     * data pts is assumed to be on the same point on the Concordia curve, &
-     * where the decay constants that describe the Concordia curve have known
+     * data pts is assumed to be on the same point on the concordia curve, &
+     * where the decay constants that describe the concordia curve have known
      * uncertainties. See GCA 62, p. 665-676, 1998 for explanation.
      *
-     * @note this implementation ignores lambda uncertainties.
+     * @note this implementation ignors lambda uncertainties.
      *
      * @param xConc double Concordia x-axis ratio
      * @param yConc double Concordia y-axis ratio
@@ -128,10 +128,10 @@ public class UPb {
         double e5 = lambda235 * t;
 
         if (Math.abs(e5) <= MAXEXP) {
-            e5 = Math.expm1(e5);
-            double e8 = Math.expm1(lambda238 * t);
-            double Ee5 = e5;// - 1.0;
-            double Ee8 = e8;// - 1.0;
+            e5 = Math.exp(e5);
+            double e8 = Math.exp(lambda238 * t);
+            double Ee5 = e5 - 1.0;
+            double Ee8 = e8 - 1.0;
             double Rx = xConc - Ee5;
             double Ry = yConc - Ee8;
 
