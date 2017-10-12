@@ -37,7 +37,7 @@ public class U_2 {
      * @param xy matrix element 0,1
      * @return double[3] containing inverted iXX, iYY, iXY
      */
-    public static double[] inv2x2(double xx, double yy, double xy) {//isoplot3.U_2.bas
+    public static double[] inv2x2(double xx, double yy, double xy) {
         double[] retVal = new double[]{0.0, 00, 0.0};
 
         double determinant = xx * yy - xy * xy;
