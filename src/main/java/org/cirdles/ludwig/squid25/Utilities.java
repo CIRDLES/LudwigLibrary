@@ -54,12 +54,9 @@ public class Utilities {
      * @return double rounded to sigFigs significant digits
      */
     public static double roundedToSize(double value, int sigFigs) {
-        BigDecimal valueBDtoSize = BigDecimal.ZERO;
-        if (Double.isFinite(value)) {
-            BigDecimal valueBD = new BigDecimal(value);
-            int newScale = sigFigs - (valueBD.precision() - valueBD.scale());
-            valueBDtoSize = valueBD.setScale(newScale, RoundingMode.HALF_UP);
-        }
+        BigDecimal valueBD = new BigDecimal(value);
+        int newScale = sigFigs - (valueBD.precision() - valueBD.scale());
+        BigDecimal valueBDtoSize = valueBD.setScale(newScale, RoundingMode.HALF_UP);
         return valueBDtoSize.doubleValue();
     }
 
