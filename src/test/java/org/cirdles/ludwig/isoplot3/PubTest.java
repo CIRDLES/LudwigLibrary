@@ -56,7 +56,7 @@ public class PubTest {
 
     /**
      * Test of robustReg2 method, of class Pub.
-     * 
+     *
      * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
      */
     @Test
@@ -171,8 +171,9 @@ public class PubTest {
 
     /**
      * Test of concordia method, of class Pub.
-     * 
-     * per Bodorkos from Squid2.5 file 100142_ShowcaseTaskSwitches_2017-05-15_frozen.xls:
+     *
+     * per Bodorkos from Squid2.5 file
+     * 100142_ShowcaseTaskSwitches_2017-05-15_frozen.xls:
      */
     @Test
     public void testConcordia() {
@@ -206,7 +207,7 @@ public class PubTest {
 
     /**
      * Test of pb76 method, of class Pub.
-     * 
+     *
      * per Bodorkos from Squid2.5 file 100142_G6147_original_frozen.xls:
      */
     @Test
@@ -307,6 +308,118 @@ public class PubTest {
         double[] result = Pub.age8corrWithErr(totPb6U8, totPb6U8err, totPb8Th2, totPb8Th2err, th2U8, th2U8err);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+    }
+
+    /**
+     * Test of wtdXYmean method, of class Pub.
+     */
+    @Test
+    public void testWtdXYmean() {
+        System.out.println("wtdXYmean");
+        double[] xValues = null;
+        double[] xSigmaAbs = null;
+        double[] yValues = null;
+        double[] ySigmaAbs = null;
+        double[] xyRho = null;
+        double[] expResult = null;
+//        double[] result = Pub.wtdXYmean(xValues, xSigmaAbs, yValues, ySigmaAbs, xyRho);
+//        assertArrayEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of xyWtdAv method, of class Pub.
+     *
+     * per Bodorkos from Squid2.5 file 100142_G6147_orig_2017-07-17_frozen.xls:
+     */
+    @Test
+    public void testXyWtdAv() {
+        System.out.println("xyWtdAv");
+        double[] xValues = new double[]{29.038276619774400,
+            28.962731803109400,
+            29.097060635139800,
+            28.842384806820300,
+            28.861563547681000,
+            29.107374849218200,
+            29.125213776286600,
+            29.528318842589300,
+            29.169244944426900,
+            29.122758103922000,
+            29.747385484018200,
+            29.750080912707000,
+            29.082376643273100,
+            29.513185950977200,
+            29.007162816660400,
+            28.628556887111700};
+        double[] xSigmaAbs = new double[]{0.339732464326735,
+            0.316884522277895,
+            0.269048291434525,
+            0.285435980602155,
+            0.280748328852665,
+            0.269249215846282,
+            0.345307114133269,
+            0.277884441870308,
+            0.294446996393033,
+            0.270715610114915,
+            0.343658642333774,
+            0.324832735996536,
+            0.305641622355936,
+            0.295063499010632,
+            0.293424006012238,
+            0.285342147235436};
+        double[] yValues = new double[]{0.703168242005922,
+            0.702705092572938,
+            0.705316527132481,
+            0.699262093751709,
+            0.703970115405744,
+            0.704549396285328,
+            0.704294472936119,
+            0.712497620651544,
+            0.705606392630601,
+            0.705658519101410,
+            0.719502681285090,
+            0.723962155394378,
+            0.706905406197642,
+            0.712136584642144,
+            0.701585244974213,
+            0.697793590125715};
+        double[] ySigmaAbs = new double[]{0.007911113090569,
+            0.007439111803061,
+            0.006201310416314,
+            0.006488097246945,
+            0.006442467323778,
+            0.006197705221283,
+            0.008117310853311,
+            0.006355998210889,
+            0.006660507180081,
+            0.006231053858498,
+            0.007989790917553,
+            0.006744266777212,
+            0.006892808937810,
+            0.006729114150088,
+            0.006632324976340,
+            0.006504175799673};
+        double[] xyRho = new double[]{0.961639144784279,
+            0.967579103090984,
+            0.950863750785978,
+            0.937561605495064,
+            0.940807295482200,
+            0.950972724513384,
+            0.972123615036359,
+            0.947926877224199,
+            0.935110326478811,
+            0.949918006472550,
+            0.961223830311932,
+            0.853192909851446,
+            0.927795658120236,
+            0.945137955370916,
+            0.934533688755066,
+            0.935187787919097};
+        double[] expResult = new double[]{0.256640683538696, 0.001883711552997 / 2.0, 0.036747529643329, 0.000099823426197 / 2.0, 0.370096880869828, 907.495939642581000, 0.000000000000000};
+        double[] result = Pub.xyWtdAv(xValues, xSigmaAbs, yValues, ySigmaAbs, xyRho);
+//        assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
+
     }
 
 }
