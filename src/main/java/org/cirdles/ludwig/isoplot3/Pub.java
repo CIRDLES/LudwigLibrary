@@ -581,7 +581,7 @@ public class Pub {
                 MSWD = wtdXYMean[2] / df;
             }
 
-            FDistribution fdist = new FDistribution(df, 1E9);
+            FDistribution fdist = new FDistribution(df, 1E15);
             double probability = 1.0 - fdist.cumulativeProbability(MSWD);
 
             retVal = new double[]{wtdXYMean[0], wtdXYMean[3], wtdXYMean[1], wtdXYMean[4], wtdXYMean[5], MSWD, probability};
