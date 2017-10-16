@@ -22,14 +22,12 @@ import static org.cirdles.ludwig.isoplot3.UPb.concordSums;
 import static org.cirdles.ludwig.isoplot3.UPb.pbPbAge;
 import static org.cirdles.ludwig.isoplot3.UPb.varTcalc;
 import static org.cirdles.ludwig.isoplot3.U_2.inv2x2;
-import org.cirdles.ludwig.squid25.SquidConstants;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXEXP;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXLOG;
 import static org.cirdles.ludwig.squid25.SquidConstants.MINLOG;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda232;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
-import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_64;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_76;
 import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_86;
 import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
@@ -408,12 +406,12 @@ public class Pub {
      * Ludwig specifies AgeEr8Corr: Error in 208-corrected age (input-ratio
      * errors are absolute).
      *
-     * @param totPb6U8
-     * @param totPb6U8err
-     * @param totPb8Th2
-     * @param totPb8Th2err
-     * @param th2U8
-     * @param th2U8err
+     * @param totPb6U8 double
+     * @param totPb6U8err double
+     * @param totPb8Th2 double
+     * @param totPb8Th2err double
+     * @param th2U8 double
+     * @param th2U8err double
      * @return double [2] containing age8corrected, age8correctedErr
      */
     public static double[] age8corrWithErr(double totPb6U8, double totPb6U8err, double totPb8Th2, double totPb8Th2err,
@@ -483,4 +481,111 @@ public class Pub {
         return new double[]{t, Math.sqrt(numer / denom)};
     }
 
+    /**
+     * Ludwig specifies Calculate the position, errs, & err corr of the weighted
+     * mean of a suite of X-Y data pts.
+     *
+     * @param xValues double[]
+     * @param xSigmaAbs double[]
+     * @param yValues double[]
+     * @param ySigmaAbs double[]
+     * @param xyRho double[]
+     * @return double[]{xBar, yBar, sumsXY, errX, errY, rhoXY}
+     */
+    public static double[] wtdXYmean(double[] xValues, double[] xSigmaAbs, double[] yValues, double[] ySigmaAbs, double[] xyRho) {
+        double[] retVal = new double[]{0., 0., 0., 0., 0., 0.};
+
+        int nPts = xValues.length;
+        if ((xValues.length + xSigmaAbs.length + yValues.length + ySigmaAbs.length + xyRho.length) == (nPts * 5)) {
+
+            double xVar;
+            double yVar;
+            double cov;
+            double a = 0.0;
+            double b = 0.0;
+            double c = 0.0;
+            double alpha = 0.0;
+            double beta = 0.0;
+            double[][] oh = new double[nPts][3];
+
+            for (int i = 0; i < nPts; i++) {
+                xVar = xSigmaAbs[i] * xSigmaAbs[i];
+                yVar = ySigmaAbs[i] * ySigmaAbs[i];
+                cov = xyRho[i] * Math.sqrt(xVar * yVar);
+                double[] inverted = inv2x2(xVar, yVar, cov);
+                a = a + inverted[0];
+                b = b + inverted[1];
+                c = c + inverted[2];
+                alpha = alpha + xValues[i] * inverted[0] + yValues[i] * inverted[2];
+                beta = beta + yValues[i] * inverted[1] + xValues[i] * inverted[2];
+                oh[i][0] = inverted[0];
+                oh[i][1] = inverted[1];
+                oh[i][2] = inverted[2];
+            }
+
+            double denom = a * b - c * c;
+            if (denom != 0.0) {
+                double xBar = (b * alpha - beta * c) / denom;
+                double yBar = (a * beta - alpha * c) / denom;
+
+                double sumsXY = 0.0;
+                double[] wtdResid = new double[nPts];
+
+                for (int i = 0; i < nPts; i++) {
+                    double rX = xValues[i] - xBar;
+                    double rY = yValues[i] - yBar;
+                    double s1 = rX * rX * oh[i][0] + rY * rY * oh[i][1];
+                    double s2 = 2 * rX * rY * oh[i][2];
+                    double wtdResidual = s1 + s2;
+                    sumsXY = sumsXY + wtdResidual;
+                    wtdResid[i] = Math.sqrt(wtdResidual);
+                }
+
+                //  Now calculate the variance-covariance matrix of Xbar,Ybar
+                double[] vcXY = inv2x2(a, b, c);
+                double errX = Math.sqrt(vcXY[0]);
+                double errY = Math.sqrt(vcXY[1]);
+                double rhoXY = vcXY[2] / (errX * errY);
+
+                retVal = new double[]{xBar, yBar, sumsXY, errX, errY, rhoXY};
+            }
+        }
+        return retVal;
+    }
+
+    /**
+     * Ludwig wrote this method as a wrapper for function wtdXYmean that returns
+     * 2-sigma uncertainties. This method returns 1-sigma uncertainties in
+     * keeping with our new standards.
+     *
+     * @param xValues double[]
+     * @param xSigmaAbs double[]
+     * @param yValues double[]
+     * @param ySigmaAbs double[]
+     * @param xyRho double[]
+     * @return double [7] containing X mean, X uncertainty a priori, Y mean, Y
+     * uncertainty a priori, uncertainty correlation, MSWD, probability of fit.
+     */
+    public static double[] xyWtdAv(double[] xValues, double[] xSigmaAbs, double[] yValues, double[] ySigmaAbs, double[] xyRho) {
+        double[] retVal = new double[]{0., 0., 0., 0., 0., 0.};
+
+        int nPts = xValues.length;
+        if ((xValues.length + xSigmaAbs.length + yValues.length + ySigmaAbs.length + xyRho.length) == (nPts * 5)) {
+
+            double[] wtdXYMean = wtdXYmean(xValues, xSigmaAbs, yValues, ySigmaAbs, xyRho);
+            double MSWD;
+            int df = 2 * nPts - 2;
+            if (df <= 0) {
+                MSWD = 0.0;
+            } else {
+                MSWD = wtdXYMean[2] / df;
+            }
+
+            FDistribution fdist = new FDistribution(df, 1E15);
+            double probability = 1.0 - fdist.cumulativeProbability(MSWD);
+
+            retVal = new double[]{wtdXYMean[0], wtdXYMean[3], wtdXYMean[1], wtdXYMean[4], wtdXYMean[5], MSWD, probability};
+        }
+        return retVal;
+    }
 }
