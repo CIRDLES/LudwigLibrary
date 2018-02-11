@@ -28,7 +28,7 @@ import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_86;
 import static org.cirdles.ludwig.squid25.SquidConstants.uRatio;
 
 /**
- * double implementations of Ken Ludwig's Squid.MathUtils VBA code for use with
+ * double implementations of Ken Ludwig's Squid.PbUTh VBA code for use with
  * Shrimp prawn files data reduction. Each public function returns a one-
  * dimensional array of double.
  *
@@ -51,10 +51,24 @@ public class PbUTh_2 {
      * @return double [1] as{204Pb/206Pb}
      */
     public static double[] pb46cor7(double pb76tot, double age7corPb6U8) {
+        return pb46cor7(pb76tot, sComm0_64, sComm0_74, age7corPb6U8);
+    }
+
+    /**
+     * Ludwig specifies: Returns 204Pb/206Pb required to force
+     * 206Pb/238U-207Pb/206Pb ages to concordance.
+     *
+     * @param pb76tot
+     * @param alpha0
+     * @param beta0
+     * @param sComm_64
+     * @param sComm_74
+     * @param age7corPb6U8
+     * @return double [1] as{204Pb/206Pb}
+     */
+    public static double[] pb46cor7(double pb76tot, double alpha0, double beta0, double age7corPb6U8) {
 
         double[] retVal = new double[]{0.0};
-        double alpha0 = sComm0_64;
-        double beta0 = sComm0_74;
 
         double pb76true = pb76(age7corPb6U8)[0];
 
@@ -75,11 +89,27 @@ public class PbUTh_2 {
      * @return double [1] as {204Pb/206Pb}
      */
     public static double[] pb46cor8(double pb86tot, double th2U8, double age8corPb6U8) {
+        return pb46cor8(pb86tot, th2U8, sComm0_64, sComm0_84, age8corPb6U8, lambda232, lambda238);
+    }
+
+    /**
+     * Ludwig specifies: Returns 204Pb/206Pb required to force
+     * 206Pb/238U-208Pb/232Th ages to concordance.
+     *
+     * @param pb86tot
+     * @param th2U8
+     * @param alpha0
+     * @param gamma0
+     * @param sComm_64
+     * @param sComm_74
+     * @param age8corPb6U8
+     * @param lambda232
+     * @param lambda238
+     * @return double [1] as {204Pb/206Pb}
+     */
+    public static double[] pb46cor8(double pb86tot, double th2U8, double alpha0, double gamma0, double age8corPb6U8, double lambda232, double lambda238) {
 
         double[] retVal = new double[]{0.0};
-
-        double alpha0 = sComm0_64;
-        double gamma0 = sComm0_84;
 
         try {
             double numer = Math.expm1(age8corPb6U8 * lambda232);
@@ -107,12 +137,33 @@ public class PbUTh_2 {
      */
     public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
             double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8) {
+        return pb86radCor7per(pb86tot, pb86totPer, pb76tot, pb76totPer, pb6U8tot, pb6U8totPer, age7corPb6U8, sComm0_64, sComm0_74, sComm0_84, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * Ludwig specifies: Returns radiogenic 208Pb/206Pb %err where the common
+     * 204Pb/206Pb is that required to force the 206Pb/238U-208Pb/232Th ages to
+     * concordance.
+     *
+     * @param pb86tot
+     * @param pb86totPer
+     * @param pb76tot
+     * @param pb76totPer
+     * @param pb6U8tot
+     * @param pb6U8totPer
+     * @param age7corPb6U8
+     * @param alpha0
+     * @param beta0
+     * @param gamma0
+     * @param lambda235
+     * @param lambda238
+     * @param uRatio
+     * @return double [1] as {radiogenic 208Pb/206Pb, %err(999 is bad)} math
+     */
+    public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
+            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8, double alpha0, double beta0, double gamma0, double lambda235, double lambda238,  double uRatio) {
 
         double[] retVal = new double[]{999.0};
-
-        double alpha0 = sComm0_64;
-        double beta0 = sComm0_74;
-        double gamma0 = sComm0_84;
 
         double r = pb6U8tot;
         double sigmaR = pb6U8totPer / 100.0 * r;
