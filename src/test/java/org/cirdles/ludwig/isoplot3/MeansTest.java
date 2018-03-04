@@ -58,7 +58,7 @@ public class MeansTest {
      */
     @Test
     public void testWeightedAverage() {
-        System.out.println("weightedAverage using Ma data and uncertainties - oracle is Ludwig's Isoplot3.Means.WeighetedAverage");
+        System.out.println("weightedAverage using Ma data and uncertainties - oracle is Ludwig's Isoplot3.Means.WeightedAverage");
         double[] values = new double[]{
             422.429481678253000,
             445.673004549890000,
@@ -111,8 +111,68 @@ public class MeansTest {
             83.429587216997200
         };
 
-        double[] expResult = new double[]{431.72278878305707, 9.52995899409635, 1.3076310129910607, 0.15160797601388276, 5.249036183859748, 18.712872106652267};
-        double[] result = Means.weightedAverage(values, errors);
+        double[] expResult = new double[]{431.72278878305707, 9.52995899409635, 1.3076310129910607, 0.15160797601388276, 
+            11.148926709700243, 22.600383557789442, 431.72278878305707, Double.NaN, 9.47463633792501, 19.206370342480437};
+        double[] result = Means.weightedAverage(values, errors, false, false)[0];
+        assertArrayEquals(expResult, result, SQUID_EPSILON);
+
+        System.out.println("weightedAverage using Ma data and uncertainties - oracle is Ludwig's Isoplot3.Means.WeightedAverage");
+        values = new double[]{
+            // 0.00884012768001511,
+            0.00884482434708822,
+            0.00894942461822356,
+            0.00889112670953696,
+            0.00890349557746501,
+            0.00883138331975604,
+            0.00876125771950047,
+            //0.00892612565709379,
+            //0.00889761850769793,
+            0.00892993550196493,
+            0.00890203514590812,
+            //0.00905772917568000,
+            //0.00887281165404440,
+            0.00869497835253045,
+            0.00878625290110216,
+            0.00898639388860170,
+            0.00891147007556454,
+            0.00895363451243574,
+            0.00883845165839725,
+            0.00890646409897058,
+            0.00879306700888207
+
+        };
+        // these are 1-sigma percent errors
+        errors = new double[]{
+            //0.580084916224033,
+            0.318530700755801,
+            0.304784915850586,
+            0.499614559386961,
+            0.307217150220516,
+            0.314323819438596,
+            0.307491828713402,
+            //0.562739415363749,
+            //0.578265872862096,
+            0.349453015920481,
+            0.313567592682458,
+            //0.564822124409578,
+            //0.855773017427626,
+            0.319535292145000,
+            0.317747355283710,
+            0.313471282662508,
+            0.381403634488646,
+            0.315330262602451,
+            0.328677825685174,
+            0.319268071644238,
+            0.335187788342414,};
+
+        expResult = new double[]{0.00887749449587791, 7.522980667607139E-6, 5.658307625943268, 3.953271043855011E-11, 
+            1.8553844825270366E-5, 3.8381092164863615E-5, 0.008878829024487339, 5.8914250295570144E-5, 1.687608175425885E-5, 3.491041642807011E-5};
+
+        double[] absUnct = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            absUnct[i] = (errors[i] * values[i]) / 100.0;
+        }
+        result = Means.weightedAverage(values, absUnct, true, false)[0];
         assertArrayEquals(expResult, result, SQUID_EPSILON);
 
     }
