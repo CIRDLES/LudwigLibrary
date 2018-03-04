@@ -51,7 +51,7 @@ public final class SquidMathUtils {
      *
      * @param values double[] array of values
      * @param tuningConstant integer 0 to 9
-     * @return double[1][3] containing mean, 1-sigma absolute, 95% confidence
+     * @return double[3] containing mean, 1-sigma absolute, 95% confidence
      * @throws ArithmeticException
      */
     public static double[] tukeysBiweight(double[] values, double tuningConstant)
