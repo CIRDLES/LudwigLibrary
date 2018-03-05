@@ -53,7 +53,7 @@ public class Means {
         double[] values = inValues.clone();
         double[] errors = inErrors.clone();
 
-        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {0.0}};
+        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {0.0}};
 
         //TODO: (VBA line 508) Resolve how to specify minProb for next two sections of code
         double minProb = 0.1;
@@ -277,9 +277,10 @@ public class Means {
                 extMean,
                 extSigma,
                 extMeanErr68,
-                extMeanErr95
+                extMeanErr95,
+                nRej
             },
-            values
+            values // contains zeroes for each reject
             };
         }
 
