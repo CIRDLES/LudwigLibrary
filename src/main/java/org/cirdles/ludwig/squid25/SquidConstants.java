@@ -58,6 +58,12 @@ public final class SquidConstants {
      *
      */
     public static final double SQUID_UPPER_LIMIT_1_SIGMA_PERCENT = 9999.0;
+    
+        /**
+     *
+     */
+    public static final double SQUID_MINIMUM_PROBABILITY = 0.3;
+
 
     // March 2017 place holders until constants models are implemented
     /**
