@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import static org.cirdles.ludwig.squid25.SquidConstants.SQUID_MINIMUM_PROBABILITY;
 import org.cirdles.ludwig.squid25.SquidMathUtils;
 import org.cirdles.ludwig.squid25.Utilities;
 import static org.cirdles.ludwig.squid25.Utilities.median;
@@ -54,9 +55,6 @@ public class Means {
         double[] errors = inErrors.clone();
 
         double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {0.0}};
-
-        //TODO: (VBA line 508) Resolve how to specify minProb for next two sections of code
-        double minProb = 0.1;
 
         // check precondition of same size values and errors and at least 3 points
         int nPts = values.length;
@@ -156,7 +154,7 @@ public class Means {
                 // need to find external uncertainty
                 List<Double> yyList = new ArrayList<>();
                 List<Double> iVarYList = new ArrayList<>();
-                if ((probability < minProb) || (MSWD > 1.0)) {
+                if ((probability < SQUID_MINIMUM_PROBABILITY) || (MSWD > 1.0)) {
                     //'Find the MLE constant external variance
                     nN = 0;
                     for (int i = 0; i < nPts; i++) {
@@ -206,7 +204,7 @@ public class Means {
                     extMeanErr68 = t68 / t95 * extMeanErr95;
                 }
 
-                if (canReject && probability < minProb) {
+                if (canReject && probability < SQUID_MINIMUM_PROBABILITY) {
                     // GOSUB REJECT
                     double wtdAvg = 0.0;
                     double wtdAvgErr = 0.0;
