@@ -111,11 +111,11 @@ public class MeansTest {
             83.429587216997200
         };
 
-        double[] expResult = new double[]{431.72278878305707, 9.52995899409635, 1.3076310129910607, 0.15160797601388276,
-            11.148926709700243, 22.600383557789442, 0.0, 0.0, 0.0, 0.0};
+        double[] expResult = new double[]{431.72278878305707, 9.52995899409635,
+            11.148926709700243, 22.600383557789442, 1.3076310129910607, 0.15160797601388276};
         double[] result = Means.weightedAverage(values, errors, false, false)[0];
         assertArrayEquals(expResult, result, SQUID_EPSILON);
-        
+
         System.out.println("weightedAverage 238");
         values = new double[]{
             // 0.00884012768001511,
@@ -165,8 +165,7 @@ public class MeansTest {
             0.319268071644238,
             0.335187788342414};
 
-        expResult = new double[]{0.00887749449587791, 7.522980667607139E-6, 5.658307625943268, 3.953271043855011E-11,
-            1.8553844825270366E-5, 3.8381092164863615E-5, 0.008878829024487339, 5.8914250295570144E-5, 1.687608175425885E-5, 3.491041642807011E-5};
+        expResult = new double[]{0.008878829024487339, 5.8914250295570144E-5, 1.687608175425885E-5, 3.491041642807011E-5, 5.658307625943268, 3.953271043855011E-11};
 
         double[] absUnct = new double[values.length];
         for (int i = 0; i < values.length; i++) {
@@ -174,8 +173,7 @@ public class MeansTest {
         }
         result = Means.weightedAverage(values, absUnct, true, false)[0];
         assertArrayEquals(expResult, result, SQUID_EPSILON);
-        
-        
+
         System.out.println("weightedAverage 232");
         values = new double[]{
             0.01310443459586880,
@@ -212,7 +210,7 @@ public class MeansTest {
             2.86412556074729000,
             2.98178690055848000,
             4.94424224421275000,
-//            5.51694791918178000,
+            //            5.51694791918178000,
             2.72408323321023000,
             3.52277366334225000,
             2.95144043643686000,
@@ -226,13 +224,14 @@ public class MeansTest {
             3.22906820874518000
         };
 
-        expResult = new double[]{0.01307771811564064, 9.008745163259912E-5, 1.0893416768705497, 0.35375414119317605,
-            9.006943414227261E-5, 1.7657140519989427E-4	, 0.0, 0.0, 0.0, 0.0};
+        expResult = new double[]{0.01307771811564064, 9.008745163259912E-5,
+            9.006943414227261E-5, 1.7657140519989427E-4, 1.0893416768705497, 0.35375414119317605};
 
         absUnct = new double[values.length];
         for (int i = 0; i < values.length; i++) {
             absUnct[i] = (errors[i] * values[i]) / 100.0;
         }
+
         result = Means.weightedAverage(values, absUnct, true, false)[0];
         assertArrayEquals(expResult, result, SQUID_EPSILON);
 

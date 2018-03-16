@@ -43,10 +43,11 @@ public class Means {
      * Ludwig's WeightedAverage and assumes ConstExtErr = true since all
      * possible values are returned and caller can decide
      *
-     * @param values as double[] with length nPts
-     * @param errors as double[] with length nPts
-     * @return double[9][]{intMean, intSigmaMean, MSWD, probability, intErr68,
-     * intMeanErr95, extMean, extSigma, extMeanErr68, extMeanErr95}, {values
+     * @param inValues as double[] with length nPts
+     * @param inErrors as double[] with length nPts
+     * @param canReject
+     * @param canTukeys
+     * @return double[6][]{mean, sigmaMean, err68, err95, MSWD, probability}, {values
      * with rejected as 0}
      */
     public static double[][] weightedAverage(double[] inValues, double[] inErrors, boolean canReject, boolean canTukeys) {
@@ -54,7 +55,7 @@ public class Means {
         double[] values = inValues.clone();
         double[] errors = inErrors.clone();
 
-        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {}};
+        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {}};
 
         // check precondition of same size values and errors and at least 3 points
         int nPts = values.length;
@@ -260,21 +261,33 @@ public class Means {
                 double medianMinusErr = median - medianLowerLim(tbX);
             }
 
-            retVal = new double[][]{{
-                intMean,
-                intSigmaMean,
-                MSWD,
-                probability,
-                intErr68,
-                intMeanErr95,
-                extMean,
-                extSigma,
-                extMeanErr68,
-                extMeanErr95,
-            },
-            // contains zeroes for each reject
-            values
-            };
+            // determine whether to return internal or external
+            if (extMean != 0.0) {
+                retVal = new double[][]{{
+                    extMean,
+                    extSigma,
+                    extMeanErr68,
+                    extMeanErr95,
+                    MSWD,
+                    probability
+                },
+                // contains zeroes for each reject
+                values
+                };
+            } else {
+                retVal = new double[][]{{
+                    intMean,
+                    intSigmaMean,
+                    intErr68,
+                    intMeanErr95,
+                    MSWD,
+                    probability
+                },
+                // contains zeroes for each reject
+                values
+                };
+            }
+
         }
 
         return retVal;
@@ -361,17 +374,17 @@ public class Means {
         double sumXW = 0.0;
 
         for (int i = 0; i < n; i++) {
-            w[i] = 1.0 / (intVar[i] + extVar);     
+            w[i] = 1.0 / (intVar[i] + extVar);
             sumW += w[i];
-            sumXW += x[i] * w[i];  
+            sumXW += x[i] * w[i];
         }
 
-        double xBar = sumXW / sumW; 
+        double xBar = sumXW / sumW;
 
         double sumW2resid2 = 0.0;
         for (int i = 0; i < n; i++) {
-            double residual = x[i] - xBar; 
-            sumW2resid2 += w[i] * w[i] * residual * residual; 
+            double residual = x[i] - xBar;
+            sumW2resid2 += w[i] * w[i] * residual * residual;
         }
 
         double ff = sumW2resid2 - sumW;
