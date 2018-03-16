@@ -36,6 +36,11 @@ public class Resistant {
      * Determine the Median Absolute Deviation (MAD) from the median for the
      * first N values in vector xValues.
      *
+     * March 2018 Bodorkos and Bowring note that this operation is flawed when used on
+     * uncertainties because it does not consider the values related to the
+     * uncertainties. The only way to replicate Squid2.5 results is to input
+     * 1sigma percent uncertainties rather than absolute uncertainties.
+     *
      * @param xValues
      * @return double[1] where [0] = Median Absolute Deviation
      */
@@ -55,7 +60,7 @@ public class Resistant {
 
             double medianyR2 = median(yR2);
 
-            retVal = new double[]{1.4826 * ( 1.0 + 5.0 / (nN - 2) ) * Math.sqrt( medianyR2 )};
+            retVal = new double[]{1.4826 * (1.0 + 5.0 / (nN - 2)) * Math.sqrt(medianyR2)};
         }
 
         return retVal;

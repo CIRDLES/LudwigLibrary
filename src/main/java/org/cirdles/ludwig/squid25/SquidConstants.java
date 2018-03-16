@@ -26,7 +26,7 @@ public final class SquidConstants {
      *
      */
     public static final double SQUID_TINY_VALUE = 1e-30;
-    
+
     public static final double SQUID_VERY_SMALL_VALUE = 1e-16;
 
     /**
@@ -58,12 +58,11 @@ public final class SquidConstants {
      *
      */
     public static final double SQUID_UPPER_LIMIT_1_SIGMA_PERCENT = 9999.0;
-    
-        /**
+
+    /**
      *
      */
-    public static final double SQUID_MINIMUM_PROBABILITY = 0.3;
-
+    public static final double SQUID_MINIMUM_PROBABILITY = 0.05;
 
     // March 2017 place holders until constants models are implemented
     /**
@@ -92,7 +91,7 @@ public final class SquidConstants {
     public static final double sComm0_86 = 2.0971;
     public static final double sComm0_74 = 15.5923761;// (i.e. sComm0_64 * sComm0_76)
     public static final double sComm0_84 = 37.8589463;// (i.e. sComm0_64 * sComm0_86)
-    
+
     public static final double PRESENT_238U235U = 137.88;
 
 }
