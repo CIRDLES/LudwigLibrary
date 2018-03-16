@@ -54,7 +54,7 @@ public class Means {
         double[] values = inValues.clone();
         double[] errors = inErrors.clone();
 
-        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {0.0}};
+        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {}};
 
         // check precondition of same size values and errors and at least 3 points
         int nPts = values.length;
@@ -154,7 +154,7 @@ public class Means {
                 // need to find external uncertainty
                 List<Double> yyList = new ArrayList<>();
                 List<Double> iVarYList = new ArrayList<>();
-                if ((probability < SQUID_MINIMUM_PROBABILITY) || (MSWD > 1.0)) {
+                if ((probability < SQUID_MINIMUM_PROBABILITY) && (MSWD > 1.0)) {
                     //'Find the MLE constant external variance
                     nN = 0;
                     for (int i = 0; i < nPts; i++) {
@@ -174,7 +174,7 @@ public class Means {
                     double[] wtdExtRtsec = wtdExtRTSEC(0, 10.0 * intSigmaMean * intSigmaMean, yy, iVarY);
 
                     // check for failure
-                    if (wtdExtRtsec[3] == 0) {
+                    if (wtdExtRtsec[3] == 0.0) {
                         extMean = wtdExtRtsec[1];
                         extSigma = Math.sqrt(wtdExtRtsec[0]);
 
@@ -182,29 +182,24 @@ public class Means {
                         extMeanErr95 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2.0)) * wtdExtRtsec[2];
                         extErr68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0)) * wtdExtRtsec[2];
 
-                        // line 531 missing checks on failure left out for now
-                        // line 543
-                        //extMeanErr68 = t68 / t95 * extMeanErr95;
-                    } else { // check for failure
-                        if (MSWD > 4.0) {  //Failure of RTSEC algorithm because of extremely high MSWD
-                            DescriptiveStatistics stats = new DescriptiveStatistics(yy);
-                            extSigma = stats.getStandardDeviation();
-                            extMean = stats.getMean();
-                            extMeanErr95 = t95 * extSigma / Math.sqrt(nN);
-                            studentsT = new TDistribution(nU);
-                            extErr68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0)) * extSigma;
-                        } else {
-                            extSigma = 0.0;
-                            extMean = 0.0;
-                            extMeanErr95 = 0.0;
-                            extErr68 = 0.0;
-                        }
+                    } else if (MSWD > 4.0) {  //Failure of RTSEC algorithm because of extremely high MSWD
+                        DescriptiveStatistics stats = new DescriptiveStatistics(yy);
+                        extSigma = stats.getStandardDeviation();
+                        extMean = stats.getMean();
+                        extMeanErr95 = t95 * extSigma / Math.sqrt(nN);
+                        studentsT = new TDistribution(nU);
+                        extErr68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0)) * extSigma;
+                    } else {
+                        extSigma = 0.0;
+                        extMean = 0.0;
+                        extMeanErr95 = 0.0;
+                        extErr68 = 0.0;
                     }
 
                     extMeanErr68 = t68 / t95 * extMeanErr95;
                 }
 
-                if (canReject && probability < SQUID_MINIMUM_PROBABILITY) {
+                if (canReject && (probability < SQUID_MINIMUM_PROBABILITY)) {
                     // GOSUB REJECT
                     double wtdAvg = 0.0;
                     double wtdAvgErr = 0.0;
@@ -276,9 +271,9 @@ public class Means {
                 extSigma,
                 extMeanErr68,
                 extMeanErr95,
-                nRej
             },
-            values // contains zeroes for each reject
+            // contains zeroes for each reject
+            values
             };
         }
 
@@ -310,7 +305,6 @@ public class Means {
         double lastf2 = 0.0;
         double lastf1 = 0.0;
         int j = 0;
-        //System.out.println(">> " + extVar1 + "   " + extVar2 + "   " + fL[0] + "   " + f[0]);
 
         if (Math.abs(f[0] - fL[0]) > 1e-10) {
             if (Math.abs(fL[0]) < Math.abs(f[0])) {
@@ -344,7 +338,6 @@ public class Means {
                     rts = tmp;
                     f = wtdExtFunc(rts, x, intVar);
                     if ((Math.abs(f[0]) >= facc) && (Math.abs(f[0]) != Math.abs(lastf2))) {
-                       // System.out.println("loop " + (j + 1) + "   " + Utilities.roundedToSize(dx, 15) + "  " + rts + "  " + f[1] + "  " + f[2] + "  " + f[0] + "  " + lastf1 + "  " + lastf2 + "  " + fL[0]);
                         lastf2 = lastf1;
                         lastf1 = f[0];
                     } else {
@@ -353,7 +346,6 @@ public class Means {
                 }
 
             }
-           // System.out.println("END " + (j + 1) + "   " + dx + "  " + rts + "  " + f[1] + "  " + f[2] + "  " + f[0] + "  " + lastf1 + "  " + lastf2 + "  " + fL[0]);
 
             retVal = new double[]{rts, f[1], f[2], 0.0};
         }
@@ -369,23 +361,22 @@ public class Means {
         double sumXW = 0.0;
 
         for (int i = 0; i < n; i++) {
-            w[i] = 1.0 / (intVar[i] + extVar);      //Utilities.roundedToSize(1.0 / (intVar[i] + extVar), 15);
+            w[i] = 1.0 / (intVar[i] + extVar);     
             sumW += w[i];
-            sumXW += x[i] * w[i];   //Utilities.roundedToSize(x[i] * w[i], 15);
+            sumXW += x[i] * w[i];  
         }
 
-        double xBar = sumXW / sumW; // Utilities.roundedToSize(sumXW / sumW, 15);
+        double xBar = sumXW / sumW; 
 
         double sumW2resid2 = 0.0;
         for (int i = 0; i < n; i++) {
-            double residual = x[i] - xBar; //Utilities.roundedToSize(x[i], 15) - xBar;
-            sumW2resid2 += w[i] * w[i] * residual * residual;   //Utilities.roundedToSize(w[i] * w[i] * residual * residual, 15);
+            double residual = x[i] - xBar; 
+            sumW2resid2 += w[i] * w[i] * residual * residual; 
         }
 
         double ff = sumW2resid2 - sumW;
 
-        double xBarSigma = Math.sqrt(Math.abs(1.0 / sumW));//Utilities.roundedToSize(Math.sqrt(Math.abs(1.0 / sumW)), 15);
-
+        double xBarSigma = Math.sqrt(Math.abs(1.0 / sumW));
         return new double[]{ff, xBar, xBarSigma};
     }
 
