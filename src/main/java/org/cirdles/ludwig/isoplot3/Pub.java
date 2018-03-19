@@ -123,8 +123,7 @@ public class Pub {
 
         int maxCount = 1000;
         double tolerance = 0.000001;
-        // default value
-        double testTolerance = 1.0;
+        double testTolerance;
 
         double[] inverted = inv2x2(covariance[0][0], covariance[1][1], covariance[0][1]);
 
@@ -293,7 +292,7 @@ public class Pub {
      * @return double [1] containing radiogenic 207Pb/206Pb.
      */
     public static double[] pb76(double age) {
-        double[] retVal = new double[]{0.0};
+        double[] retVal;
 
         if (age == 0.0) {
             retVal = new double[]{lambda235 / lambda238 / uRatio};
@@ -529,7 +528,6 @@ public class Pub {
                 double yBar = (a * beta - alpha * c) / denom;
 
                 double sumsXY = 0.0;
-                double[] wtdResid = new double[nPts];
 
                 for (int i = 0; i < nPts; i++) {
                     double rX = xValues[i] - xBar;
@@ -538,7 +536,6 @@ public class Pub {
                     double s2 = 2 * rX * rY * oh[i][2];
                     double wtdResidual = s1 + s2;
                     sumsXY = sumsXY + wtdResidual;
-                    wtdResid[i] = Math.sqrt(wtdResidual);
                 }
 
                 //  Now calculate the variance-covariance matrix of Xbar,Ybar

@@ -70,7 +70,7 @@ public class BigDecimalCustomAlgorithms {
             //iterate until the amount between guesses is zero, meaning more precision would be needed to store the next estimation
             BigDecimal theError = BigDecimal.ONE;
             while (theError.compareTo(new BigDecimal(0)) != 0) {
-                BigDecimal nextGuess = BigDecimal.ZERO;
+                BigDecimal nextGuess;
                 try {
                     nextGuess = guess.add(S.divide(guess, precisionMC)).divide(new BigDecimal(2.0), precisionMC);
                 } catch (java.lang.ArithmeticException e) {
