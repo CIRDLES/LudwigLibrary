@@ -61,7 +61,6 @@ public class Means {
         int nPts = values.length;
         int nN = nPts;
         int count = 0;
-        int nRej = 0;
 
         // where does this come from??
         boolean hardRej = false;
@@ -156,7 +155,7 @@ public class Means {
                 List<Double> yyList = new ArrayList<>();
                 List<Double> iVarYList = new ArrayList<>();
                 if ((probability < SQUID_MINIMUM_PROBABILITY) && (MSWD > 1.0)) {
-                    //'Find the MLE constant external variance
+                    // Find the MLE constant external variance
                     nN = 0;
                     for (int i = 0; i < nPts; i++) {
                         if (values[i] != 0.0) {
@@ -168,8 +167,6 @@ public class Means {
                     // resize arrays
                     yy = yyList.stream().mapToDouble(Double::doubleValue).toArray();
                     iVarY = iVarYList.stream().mapToDouble(Double::doubleValue).toArray();
-
-                    double intVar = nN / weight;
 
                     // call secant method
                     double[] wtdExtRtsec = wtdExtRTSEC(0, 10.0 * intSigmaMean * intSigmaMean, yy, iVarY);
@@ -221,8 +218,8 @@ public class Means {
                             double pointError = 2.0 * Math.sqrt(errors[i] * errors[i] + extSigma * extSigma);
                             // 2-sigma error of point being tested
                             double totalError = Math.sqrt(pointError * pointError + (4.0 * extMeanErr68 * extMeanErr68));
-                            // 1st-pass tolerance is 2-sigma; 2nd is 2.25-sigma; 3rd is 2.5-sigma..
-                            double tolerance = (1 + (count - 1) / 4) * totalError;
+                            // 1st-pass tolerance is 2-sigma; 2nd is 2.25-sigma; 3rd is 2.5-sigma.
+                            double tolerance = (1.0 + (double)(count - 1.0) / 4.0) * totalError;
                             if (hardRej) {
                                 tolerance = tolerance * 1.25;
                             }
@@ -230,7 +227,6 @@ public class Means {
                             q = values[i] - wtdAvg;
 
                             if ((Math.abs(q) > tolerance) && nN > 2) {
-                                nRej++;
                                 nN--;
                                 wRejected[i][0] = values[i];
                                 values[i] = 0.0;
@@ -245,7 +241,7 @@ public class Means {
                 } // canReject test
             } while (reCalc);
 
-            if (canTukeys) {
+            if (canTukeys) { // March 2018 not finished as not sure where used
                 for (int i = 0; i < nPts; i++) {
                     tbX[i] = values[i];
                 }
