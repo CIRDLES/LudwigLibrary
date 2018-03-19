@@ -315,7 +315,7 @@ public class Means {
         double lastf1 = 0.0;
         int j = 0;
         
-        double failedFlag = 0.0; // passed
+        double failedFlag = 0.0; // false as in did not fail
 
         if (Math.abs(f[0] - fL[0]) > 1e-10) {
             if (Math.abs(fL[0]) < Math.abs(f[0])) {

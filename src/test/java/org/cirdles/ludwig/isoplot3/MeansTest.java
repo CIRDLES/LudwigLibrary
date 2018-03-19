@@ -256,7 +256,7 @@ public class MeansTest {
             0.0139594429074334,
             0.0128858346030185,
             0.0133586331217752,
-//            0.0120800837543763, march 2018 s.b. rejected but Simon mneeds to solve min prob issue
+            0.0120800837543763,
             0.0127637281929925,
             0.0131185889389555
 
@@ -281,7 +281,7 @@ public class MeansTest {
             3.01846810945945,
             3.35791764620727,
             2.99608087486247,
-//            3.23872225562792, march 2018 s.b. rejected but Simon mneeds to solve min prob issue
+            3.23872225562792,
             3.14717175952029,
             3.24423803664043
         };
