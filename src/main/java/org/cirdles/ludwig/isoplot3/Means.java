@@ -314,6 +314,8 @@ public class Means {
         double lastf2 = 0.0;
         double lastf1 = 0.0;
         int j = 0;
+        
+        double failedFlag = 0.0; // passed
 
         if (Math.abs(f[0] - fL[0]) > 1e-10) {
             if (Math.abs(fL[0]) < Math.abs(f[0])) {
@@ -344,6 +346,11 @@ public class Means {
                         }
                     } while ((tmp < 0) && (rct <= maxD));
 
+                    if (rct > maxD){
+                        failedFlag = 1.0;
+                        break;
+                    }
+                    
                     rts = tmp;
                     f = wtdExtFunc(rts, x, intVar);
                     if ((Math.abs(f[0]) >= facc) && (Math.abs(f[0]) != Math.abs(lastf2))) {
@@ -356,7 +363,7 @@ public class Means {
 
             }
 
-            retVal = new double[]{rts, f[1], f[2], 0.0};
+            retVal = new double[]{rts, f[1], f[2], failedFlag};
         }
 
         return retVal;
