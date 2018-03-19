@@ -69,8 +69,8 @@ public class Means {
             // proceed
             double[] inverseVar = new double[nPts];
             double[] wtdResid = new double[nPts];
-            double[] yy = new double[nPts];
-            double[] iVarY = new double[nPts];
+            double[] yy;
+            double[] iVarY;
             double[] tbX = new double[nPts];
 
             double[][] wRejected = new double[nPts][2];
@@ -95,7 +95,7 @@ public class Means {
             double biWtMean = 0.0;
             double biWtSigma = 0.0;
 
-            boolean reCalc = false;
+            boolean reCalc;
 
             // entry point for RECALC goto - consider another private method?
             do {
@@ -200,13 +200,10 @@ public class Means {
                 if (canReject && (probability < SQUID_MINIMUM_PROBABILITY)) {
                     // GOSUB REJECT
                     double wtdAvg = 0.0;
-                    double wtdAvgErr = 0.0;
                     if (extSigma != 0.0) {
                         wtdAvg = extMean;
-                        wtdAvgErr = extErr68;  //one sigma is all we put out
                     } else {
                         wtdAvg = intMean;
-                        wtdAvgErr = extErr68;  //one sigma is all we put out
                     }
 
                     //  reject outliers
@@ -242,9 +239,8 @@ public class Means {
             } while (reCalc);
 
             if (canTukeys) { // March 2018 not finished as not sure where used
-                for (int i = 0; i < nPts; i++) {
-                    tbX[i] = values[i];
-                }
+                System.arraycopy(values, 0, tbX, 0, nPts);
+                
                 double[] tukey = SquidMathUtils.tukeysBiweight(tbX, 6);
                 biWtMean = tukey[0];
                 biWtSigma = tukey[1];
@@ -296,6 +292,8 @@ public class Means {
      *
      * @param extVar1
      * @param extVar2
+     * @param x
+     * @param intVar
      * @return double[4] where 0 = extVar, 1 = xBar, 2 = xBarSigma, 3 =
      * failedFlag where 0 = no failed, 1 = failed
      */
@@ -306,14 +304,16 @@ public class Means {
         int maxD = 100;
         double xacc = 0.000000001;
         double facc = 0.0000001;
-        double rts = 0.0;
-        double xl = 0.0;
+        double rts;
+        double xl;
 
         double[] fL = wtdExtFunc(extVar1, x, intVar);
         double[] f = wtdExtFunc(extVar2, x, intVar);
         double lastf2 = 0.0;
         double lastf1 = 0.0;
-        int j = 0;
+        int j;
+        
+        double failedFlag = 0.0; // false as in did not fail
 
         if (Math.abs(f[0] - fL[0]) > 1e-10) {
             if (Math.abs(fL[0]) < Math.abs(f[0])) {
@@ -326,7 +326,7 @@ public class Means {
                 rts = extVar2;
                 xl = extVar1;
             }
-            double dx = 0.0;
+            double dx;
             for (j = 0; j < maxIt; j++) {
 
                 if (f[0] != fL[0]) {
@@ -344,6 +344,11 @@ public class Means {
                         }
                     } while ((tmp < 0) && (rct <= maxD));
 
+                    if (rct > maxD){
+                        failedFlag = 1.0;
+                        break;
+                    }
+                    
                     rts = tmp;
                     f = wtdExtFunc(rts, x, intVar);
                     if ((Math.abs(f[0]) >= facc) && (Math.abs(f[0]) != Math.abs(lastf2))) {
@@ -356,7 +361,7 @@ public class Means {
 
             }
 
-            retVal = new double[]{rts, f[1], f[2], 0.0};
+            retVal = new double[]{rts, f[1], f[2], failedFlag};
         }
 
         return retVal;
@@ -396,7 +401,7 @@ public class Means {
      * @return double median confidence level
      */
     public static double medianConfLevel(int n) {
-        double retVal = 0.0;
+        double retVal;
 
         // Table from Rock et al, based on Sign test & table of binomial probs for a ranked data-set.
         double[] rockTable = new double[]{75.0, 87.8, 93.8, 96.9, 98.4, 93.0, 96.1, 97.9, 93.5, 96.1,
@@ -421,7 +426,7 @@ public class Means {
      * @return double median upper error
      */
     public static double medianUpperLim(double[] values) {
-        double retVal = 0.0;
+        double retVal;
 
         // Table from Rock et al, based on Sign test & table of binomial probs for a ranked data-set.
         double[] uR = new double[]{1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8};
@@ -447,7 +452,7 @@ public class Means {
      * @return
      */
     public static double medianLowerLim(double[] values) {
-        double retVal = 0.0;
+        double retVal;
 
         // Table from Rock et al, based on Sign test & table of binomial probs for a ranked data-set.
         double[] lR = new double[]{3, 4, 5, 6, 7, 07, 8, 9, 9, 10, 11, 11, 12, 13, 13, 14, 14, 15, 16, 16, 17, 18, 18};
