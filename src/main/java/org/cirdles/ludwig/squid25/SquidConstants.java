@@ -62,7 +62,7 @@ public final class SquidConstants {
     /**
      *
      */
-    public static final double SQUID_MINIMUM_PROBABILITY = 0.3; //confirmed by S. Bodorkos March 2018
+    public static final double SQUID_MINIMUM_PROBABILITY = 0.05; //confirmed by S. Bodorkos 19 March 2018
 
     // March 2017 place holders until constants models are implemented
     /**
