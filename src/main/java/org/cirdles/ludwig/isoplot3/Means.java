@@ -47,15 +47,15 @@ public class Means {
      * @param inErrors as double[] with length nPts
      * @param canReject
      * @param canTukeys
-     * @return double[6][]{mean, sigmaMean, err68, err95, MSWD, probability}, {values
-     * with rejected as 0}
+     * @return double[7][]{mean, sigmaMean, err68, err95, MSWD, probability, externalFlag}, {values
+     * with rejected as 0.0}.  externalFlag = 1.0 for external uncertainty, 0.0 for internal
      */
     public static double[][] weightedAverage(double[] inValues, double[] inErrors, boolean canReject, boolean canTukeys) {
 
         double[] values = inValues.clone();
         double[] errors = inErrors.clone();
 
-        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {}};
+        double[][] retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, {}};
 
         // check precondition of same size values and errors and at least 3 points
         int nPts = values.length;
@@ -88,7 +88,6 @@ public class Means {
 
             double extMean = 0.0;
             double extMeanErr95 = 0.0;
-            double extErr68 = 0.0;
             double extMeanErr68 = 0.0;
             double extSigma = 0.0;
 
@@ -148,7 +147,6 @@ public class Means {
 
                 extMean = 0.0;
                 extMeanErr95 = 0.0;
-                extErr68 = 0.0;
                 extMeanErr68 = 0.0;
 
                 // need to find external uncertainty
@@ -178,20 +176,16 @@ public class Means {
 
                         studentsT = new TDistribution(2 * nN - 2);
                         extMeanErr95 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2.0)) * wtdExtRtsec[2];
-                        extErr68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0)) * wtdExtRtsec[2];
 
                     } else if (MSWD > 4.0) {  //Failure of RTSEC algorithm because of extremely high MSWD
                         DescriptiveStatistics stats = new DescriptiveStatistics(yy);
                         extSigma = stats.getStandardDeviation();
                         extMean = stats.getMean();
                         extMeanErr95 = t95 * extSigma / Math.sqrt(nN);
-                        studentsT = new TDistribution(nU);
-                        extErr68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0)) * extSigma;
                     } else {
                         extSigma = 0.0;
                         extMean = 0.0;
                         extMeanErr95 = 0.0;
-                        extErr68 = 0.0;
                     }
 
                     extMeanErr68 = t68 / t95 * extMeanErr95;
@@ -261,7 +255,8 @@ public class Means {
                     extMeanErr68,
                     extMeanErr95,
                     MSWD,
-                    probability
+                    probability,
+                    1.0
                 },
                 // contains zeroes for each reject
                 values
@@ -273,7 +268,8 @@ public class Means {
                     intErr68,
                     intMeanErr95,
                     MSWD,
-                    probability
+                    probability,
+                    0.0
                 },
                 // contains zeroes for each reject
                 values
