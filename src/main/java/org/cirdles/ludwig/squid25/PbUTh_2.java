@@ -161,7 +161,7 @@ public class PbUTh_2 {
      * @return double [1] as {radiogenic 208Pb/206Pb, %err(999 is bad)} math
      */
     public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
-            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8, double alpha0, double beta0, double gamma0, double lambda235, double lambda238,  double uRatio) {
+            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8, double alpha0, double beta0, double gamma0, double lambda235, double lambda238, double uRatio) {
 
         double[] retVal = new double[]{999.0};
 
@@ -435,4 +435,52 @@ public class PbUTh_2 {
         return new double[]{CovRad68Rad75 / (SigmaRadPb6U8 * SigmaRadPb7U5)};
     }
 
+    /**
+     * Ludwig specifies: Returns radiogenic 208Pb/206Pb where the common
+     * 204Pb/206Pb is that required to force the 206Pb/238U-208Pb/232Th ages to
+     * concordance.
+     *
+     * @param pb86tot
+     * @param pb86totPer
+     * @param pb76tot
+     * @param pb76totPer
+     * @param radPb86cor7
+     * @param pb46cor7
+     * @param stdRadPb76
+     * @param alpha0
+     * @param beta0
+     * @param gamma0
+     * @return double [1] = {radiogenic 208Pb/206Pb}
+     * @throws ArithmeticException
+     */
+    public static double[] stdPb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
+            double pb76totPer, double radPb86cor7, double pb46cor7, double stdRadPb76,
+            double alpha0, double beta0, double gamma0)
+            throws ArithmeticException {
+
+        double[] retVal;
+
+        double alphaPrime = pb46cor7;
+        double phi = pb76tot;
+        double sigmaPhi = pb76totPer / 100.0 * phi;
+        double theta = pb86tot;
+        double sigmaTheta = pb86totPer / 100.0 * theta;
+        double thetaStar7 = radPb86cor7;
+        double phiStar = stdRadPb76;
+
+        double d1 = 1.0 - alphaPrime * alpha0;
+        double d2 = beta0 - alpha0 * phiStar;
+        double k7 = (alpha0 * thetaStar7 - gamma0) / d1;
+
+        double varThetaStar7 = Math.pow((sigmaTheta / d1), 2) + Math.pow((k7 / d2 * sigmaPhi), 2);
+
+        if (varThetaStar7 < 0) {
+            retVal = new double[]{999};
+        } else {
+            double sigmaThetaStar7 = Math.sqrt(varThetaStar7);
+            retVal = new double[]{100.0 * sigmaThetaStar7 / Math.abs(thetaStar7)};
+        }
+
+        return retVal;
+    }
 }
