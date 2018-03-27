@@ -250,4 +250,25 @@ public class PbUTh_2Test {
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
     }
 
+    /**
+     * Test of stdPb86radCor7per method, of class PbUTh_2.
+     */
+    @Test
+    public void testStdPb86radCor7per() {
+        System.out.println("stdPb86radCor7per");
+        double pb86tot = 0.0701269310998;
+        double pb86totPer = 6.04834961324;
+        double pb76tot = 0.0596696323508;
+        double pb76totPer = 0.600518775911;
+        double radPb86cor7 = 0.0679088858715221;
+        double pb46cor7 = 0.0000609634534116361;
+        double stdRadPb76 = 0.0587838486664528;
+        double alpha0 = 17.821;
+        double beta0 = 15.5773361;
+        double gamma0 = 37.5933995;
+        double expResult = 6.3910701101908876;
+        double result = PbUTh_2.stdPb86radCor7per(pb86tot, pb86totPer, pb76tot, pb76totPer, radPb86cor7, pb46cor7, stdRadPb76, alpha0, beta0, gamma0)[0];
+        assertEquals(expResult, result, SquidConstants.SQUID_EPSILON);
+    }
+
 }

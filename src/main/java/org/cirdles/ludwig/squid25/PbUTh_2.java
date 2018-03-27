@@ -129,11 +129,12 @@ public class PbUTh_2 {
      * @param pb6U8tot
      * @param pb6U8totPer
      * @param age7corPb6U8
-     * @return double [1] as {radiogenic 208Pb/206Pb, %err(999 is bad)} math
+     * @return double [1] as {radiogenic 208Pb/206Pb %err(999 is bad)}
      */
     public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
             double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8) {
-        return pb86radCor7per(pb86tot, pb86totPer, pb76tot, pb76totPer, pb6U8tot, pb6U8totPer, age7corPb6U8, sComm0_64, sComm0_74, sComm0_84, lambda235, lambda238, uRatio);
+        return pb86radCor7per(pb86tot, pb86totPer, pb76tot, pb76totPer, pb6U8tot, pb6U8totPer,
+                age7corPb6U8, sComm0_64, sComm0_74, sComm0_84, lambda235, lambda238, uRatio);
     }
 
     /**
@@ -154,10 +155,11 @@ public class PbUTh_2 {
      * @param lambda235
      * @param lambda238
      * @param uRatio
-     * @return double [1] as {radiogenic 208Pb/206Pb, %err(999 is bad)} math
+     * @return double [1] as {radiogenic 208Pb/206Pb %err(999 is bad)}
      */
     public static double[] pb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
-            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8, double alpha0, double beta0, double gamma0, double lambda235, double lambda238, double uRatio) {
+            double pb76totPer, double pb6U8tot, double pb6U8totPer, double age7corPb6U8,
+            double alpha0, double beta0, double gamma0, double lambda235, double lambda238, double uRatio) {
 
         double[] retVal = new double[]{999.0};
 
@@ -206,7 +208,7 @@ public class PbUTh_2 {
         return retVal;
     }
 
-        /**
+    /**
      * This method implements Ludwig's Age7CorrPb8Th2.
      *
      * Ludwig specifies Age7CorrPb8Th2: Returns the 208Pb/232Th age, assuming
@@ -223,7 +225,7 @@ public class PbUTh_2 {
             throws ArithmeticException {
         return age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76, sComm0_64, sComm0_86, lambda232, lambda238);
     }
-    
+
     /**
      * This method implements Ludwig's Age7CorrPb8Th2.
      *
@@ -322,8 +324,8 @@ public class PbUTh_2 {
             throws ArithmeticException {
         return pb206U238rad(age, lambda238);
     }
-    
-        /**
+
+    /**
      * Ludwig specifies: Returns the radiogenic 206Pb/238U ratio for the
      * specified age.
      *
@@ -337,7 +339,7 @@ public class PbUTh_2 {
         return new double[]{Math.expm1(lambda238 * age)};
     }
 
-        /**
+    /**
      * This method combines Ludwig's Rad8corPb7U5 and Rad8corPb7U5Perr.
      *
      * Ludwig specifies Rad8corPb7U5: Returns the radiogenic 208-corrected
@@ -363,10 +365,10 @@ public class PbUTh_2 {
             double radPb6U8, double totPb7U5, double th2U8, double th2U8per, double totPb76,
             double totPb76per, double totPb86, double totPb86per)
             throws ArithmeticException {
-        return rad8corPb7U5WithErr(totPb6U8, totPb6U8per, radPb6U8, totPb7U5, th2U8, th2U8per, 
+        return rad8corPb7U5WithErr(totPb6U8, totPb6U8per, radPb6U8, totPb7U5, th2U8, th2U8per,
                 totPb76, totPb76per, totPb86, totPb86per, sComm0_76, sComm0_86, uRatio, lambda232, lambda238);
     }
-    
+
     /**
      * This method combines Ludwig's Rad8corPb7U5 and Rad8corPb7U5Perr.
      *
@@ -396,7 +398,7 @@ public class PbUTh_2 {
      */
     public static double[] rad8corPb7U5WithErr(double totPb6U8, double totPb6U8per,
             double radPb6U8, double totPb7U5, double th2U8, double th2U8per, double totPb76,
-            double totPb76per, double totPb86, double totPb86per, double sComm0_76, double sComm0_86, 
+            double totPb76per, double totPb86, double totPb86per, double sComm0_76, double sComm0_86,
             double uRatio, double lambda232, double lambda238)
             throws ArithmeticException {
 
@@ -439,7 +441,7 @@ public class PbUTh_2 {
         return new double[]{ratio, sigmaRadPb7U5 / radPb7U5 * 100.0};
     }
 
-        /**
+    /**
      * Ludwig specifies: Returns the error correlation for 208-corrected
      * 206PbSTAR/238U-207PbSTAR/235U ratio-pairs.
      *
@@ -459,10 +461,10 @@ public class PbUTh_2 {
             double th2U8, double th2U8per, double totPb76, double totPb76per,
             double totPb86, double totPb86per)
             throws ArithmeticException {
-        return rad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per, 
+        return rad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per,
                 totPb86, totPb86per, sComm0_76, sComm0_86, uRatio, lambda232, lambda238);
     }
-    
+
     /**
      * Ludwig specifies: Returns the error correlation for 208-corrected
      * 206PbSTAR/238U-207PbSTAR/235U ratio-pairs.
@@ -486,7 +488,7 @@ public class PbUTh_2 {
      */
     public static double[] rad8corConcRho(double totPb6U8, double totPb6U8per, double radPb6U8,
             double th2U8, double th2U8per, double totPb76, double totPb76per,
-            double totPb86, double totPb86per, double sComm0_76, double sComm0_86, 
+            double totPb86, double totPb86per, double sComm0_76, double sComm0_86,
             double uRatio, double lambda232, double lambda238)
             throws ArithmeticException {
 
@@ -536,7 +538,8 @@ public class PbUTh_2 {
     /**
      * Ludwig specifies: Returns radiogenic 208Pb/206Pb where the common
      * 204Pb/206Pb is that required to force the 206Pb/238U-208Pb/232Th ages to
-     * concordance.
+     * concordance. Actually calculates the 1-sigma percent uncertainty! and is
+     * designed for reference materials (aka standards) - JFB
      *
      * @param pb86tot
      * @param pb86totPer
@@ -548,7 +551,7 @@ public class PbUTh_2 {
      * @param alpha0
      * @param beta0
      * @param gamma0
-     * @return double [1] = {radiogenic 208Pb/206Pb}
+     * @return double [1] = {radiogenic 208Pb/206Pb %err(999 is bad)}
      * @throws ArithmeticException
      */
     public static double[] stdPb86radCor7per(double pb86tot, double pb86totPer, double pb76tot,
