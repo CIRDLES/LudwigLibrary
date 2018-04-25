@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
+group = 'com.github.CIRDLES'
+
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -19,58 +21,79 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-    group = "org.cirdles"
-    version = "1.0.7"
+group = "org.cirdles"
+version = "1.0.7"
 
-    description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
+description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-    dependencies {
-        compile "org.apache.commons:commons-math3:3.6.1"
+dependencies {
+    compile "org.apache.commons:commons-math3:3.6.1"
     
-        testCompile "junit:junit:4.12"
-        testCompile "org.assertj:assertj-core:3.5.1"
-    }
+    testCompile "junit:junit:4.12"
+    testCompile "org.assertj:assertj-core:3.5.1"
+}
 
-    repositories {
-        mavenCentral()
+repositories {
+    mavenCentral()
         
-        maven {
-            url "https://jitpack.io"
-        }
-        
-        maven {
-            url "https://maven.repository.redhat.com/ga/"
-        }
+    maven {
+        url "https://jitpack.io"
     }
+        
+    maven {
+        url "https://maven.repository.redhat.com/ga/"
+    }
+}
     
-    javadoc {
-        options.tags = [
+javadoc {
+    options.tags = [
             'pre:a:Precondition:',
             'post:a:Postcondition:',
             'imports:a:Imports libraries:',
             'author:a:Author:',
             'see:a:Visual Basic Code:',
             'note:a:Please Note:'
-        ]
-    }
+    ]
+}
     
-    if (JavaVersion.current().isJava8Compatible()) {
-        allprojects {
-            tasks.withType(Javadoc) {
-                options.addStringOption('Xdoclint:none', '-quiet')
-            }
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
         }
     }
+}
     
     
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
 artifacts {
+    archives sourcesJar
     archives javadocJar
+}
+
+// To specify a license in the pom:
+install {
+  repositories.mavenInstaller {
+    pom.project {
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }
 }
