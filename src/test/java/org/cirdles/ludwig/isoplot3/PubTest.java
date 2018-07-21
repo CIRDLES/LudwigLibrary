@@ -6,6 +6,7 @@
 package org.cirdles.ludwig.isoplot3;
 
 import org.cirdles.ludwig.squid25.SquidConstants;
+import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_76;
 import org.cirdles.ludwig.squid25.Utilities;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -247,6 +248,17 @@ public class PubTest {
         double[] result = Pub.xage7corrWithErr(totPb6U8, totPb6U8err, totPb76, totPb76err);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+
+        System.out.println("age7corrWithErr  # 2 (from perm4_7corr)");
+        totPb6U8 = 0.515826107781068;
+        totPb6U8err = 0.922853256399605 / 100.0 * 0.515826107781068;
+        totPb76 = 0.182991055066;
+        totPb76err = 0.414818785308 / 100.0 * 0.182991055066;
+        expResult = new double[]{2682151784.44307, 31459190.5096457};
+        result = Pub.age7corrWithErr(totPb6U8, totPb6U8err, totPb76, totPb76err,0.8741, 9.8485E-10, 1.55125E-10, 137.88);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+        assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
+
     }
 
     /**
