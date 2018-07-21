@@ -42,12 +42,41 @@ public class CMC {
      * @param ratioY_1SigmaAbs 1-sigma uncertainty for ratioY
      * @param rhoXY correlation coefficient between uncertainties in ratioX and
      * ratioY
-     * @param inTW true if data is Terra Waserburg (TW), false if Wetherill Conconcordia
+     * @param inTW true if data is Terra Waserburg (TW), false if Wetherill
+     * Conconcordia
      * @return double[5] of conversions: ratioX, ratioX_1SigmaAbs, ratioY,
      * ratioY_1SigmaAbs, rhoXY
      */
     public static double[] concConvert(
             double ratioX, double ratioX_1SigmaAbs, double ratioY, double ratioY_1SigmaAbs, double rhoXY, boolean inTW) {
+            return concConvert(ratioX, ratioX_1SigmaAbs, ratioY, ratioY_1SigmaAbs, rhoXY, inTW, SquidConstants.uRatio);
+    }
+
+    /**
+     * Ludwig's comments: Convert T-W concordia data to Conv., or vice-versa eg
+     * 238/206-207/206[-204/206] to/from 207/235-206/238[-204/238]. This
+     * implementation is for 2D only and excludes the optional 3D conversion.
+     *
+     * @param ratioX TW 238/206 or WC 207/235
+     * @param ratioX_1SigmaAbs 1-sigma uncertainty for ratioX
+     * @param ratioY TW 207/206 or WC 206/238
+     * @param ratioY_1SigmaAbs 1-sigma uncertainty for ratioY
+     * @param rhoXY correlation coefficient between uncertainties in ratioX and
+     * ratioY
+     * @param inTW true if data is Terra Waserburg (TW), false if Wetherill
+     * Conconcordia
+     * @param uRatio
+     * @return double[5] of conversions: ratioX, ratioX_1SigmaAbs, ratioY,
+     * ratioY_1SigmaAbs, rhoXY
+     */
+    public static double[] concConvert(
+            double ratioX, 
+            double ratioX_1SigmaAbs, 
+            double ratioY, 
+            double ratioY_1SigmaAbs, 
+            double rhoXY, 
+            boolean inTW,
+            double uRatio) {
         double[] retVal;
 
         double xP = Math.abs(ratioX_1SigmaAbs / ratioX);
@@ -72,7 +101,7 @@ public class CMC {
         if (abP >= 0.0) {
 
             if (inTW) {
-                a = ratioY / ratioX * SquidConstants.uRatio; // 207/235
+                a = ratioY / ratioX * uRatio; // 207/235
                 b = 1.0 / ratioX; // 206/238
                 if (abP != 0.0) {
                     aP = abP;
@@ -81,7 +110,7 @@ public class CMC {
                 }
             } else {
                 a = 1.0 / ratioY;  // 238/206
-                b = ratioX / ratioY / SquidConstants.uRatio; // 207/206
+                b = ratioX / ratioY / uRatio; // 207/206
                 aP = yP;
                 bP = abP;
                 if (abP != 0.0) {

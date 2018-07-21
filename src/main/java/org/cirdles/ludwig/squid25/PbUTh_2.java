@@ -68,7 +68,7 @@ public class PbUTh_2 {
 
         double[] retVal = new double[]{0.0};
 
-        double pb76true = pb76(age7corPb6U8)[0];
+        double pb76true = pb76(age7corPb6U8, lambda235, lambda238, uRatio)[0];
 
         try {
             retVal = new double[]{(pb76tot - pb76true) / (beta0 - pb76true * alpha0)};
@@ -220,10 +220,10 @@ public class PbUTh_2 {
      * @param totPb76
      * @return double [1] as {age7CorrPb8Th2}
      */
-    public static double[] age7CorrPb8Th2(double totPb206U238, double totPb208Th232,
+    public static double[] xage7CorrPb8Th2(double totPb206U238, double totPb208Th232,
             double totPb86, double totPb76)
             throws ArithmeticException {
-        return age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76, sComm0_64, sComm0_86, lambda232, lambda238);
+        return age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio);
     }
 
     /**
@@ -239,17 +239,29 @@ public class PbUTh_2 {
      * @param sComm0_64
      * @param sComm0_86
      * @param lambda232
+     * @param lambda235
      * @param lambda238
+     * @param uRatio
      * @return double [1] as {age7CorrPb8Th2}
      */
-    public static double[] age7CorrPb8Th2(double totPb206U238, double totPb208Th232,
-            double totPb86, double totPb76, double sComm0_64, double sComm0_86, double lambda232, double lambda238)
+    public static double[] age7CorrPb8Th2(
+            double totPb206U238,
+            double totPb208Th232,
+            double totPb86,
+            double totPb76,
+            double sComm0_64,
+            double sComm0_76,
+            double sComm0_86,
+            double lambda232,
+            double lambda235,
+            double lambda238,
+            double uRatio)
             throws ArithmeticException {
 
         double gamma0 = sComm0_64 * sComm0_86;
 
         double age7corPb6U8
-                = age7corrWithErr(totPb206U238, 0.0, totPb76, 0.0)[0];
+                = age7corrWithErr(totPb206U238, 0.0, totPb76, 0.0, sComm0_76, lambda235, lambda238, uRatio)[0];
         double radPb6U8 = Math.expm1(lambda238 * age7corPb6U8);
         double term = totPb206U238 - radPb6U8;
         term = term == 0 ? SquidConstants.SQUID_VERY_SMALL_VALUE : term;
@@ -283,8 +295,63 @@ public class PbUTh_2 {
      * @param totPb76percentErr
      * @return double [2] as {age7CorrPb8Th2, age7CorrPb8Th2Err}
      */
-    public static double[] age7CorrPb8Th2WithErr(double totPb206U238, double totPb206U238percentErr, double totPb208Th232,
-            double totPb208Th232percentErr, double totPb86, double totPb86percentErr, double totPb76, double totPb76percentErr)
+    public static double[] xage7CorrPb8Th2WithErr(
+            double totPb206U238,
+            double totPb206U238percentErr,
+            double totPb208Th232,
+            double totPb208Th232percentErr,
+            double totPb86,
+            double totPb86percentErr,
+            double totPb76,
+            double totPb76percentErr)
+            throws ArithmeticException {
+        return age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, totPb86,
+                totPb86percentErr, totPb76, totPb76percentErr, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * This method combines Ludwig's Age7CorrPb8Th2 and AgeErr7CorrPb8Th2.
+     *
+     * Ludwig specifies Age7CorrPb8Th2: Returns the 208Pb/232Th age, assuming
+     * the true 206/204 is that required to force 206/238-207/235 concordance.
+     *
+     * Ludwig specifies AgeErr7CorrPb8Th2: Returns the error of the 208Pb/232Th
+     * age, where the 208Pb/232Th age is calculated assuming the true 206/204 is
+     * that required to force 206/238-207/235 concordance. The error is
+     * calculated numerically, by successive perturbation of the input errors.
+     *
+     * @param totPb206U238
+     * @param totPb206U238percentErr
+     * @param totPb208Th232
+     * @param totPb208Th232percentErr
+     * @param totPb86
+     * @param totPb86percentErr
+     * @param totPb76
+     * @param totPb76percentErr
+     * @param sComm0_64
+     * @param sComm0_86
+     * @param lambda232
+     * @param lambda235
+     * @param lambda238
+     * @param uRatio
+     * @return double [2] as {age7CorrPb8Th2, age7CorrPb8Th2Err}
+     */
+    public static double[] age7CorrPb8Th2WithErr(
+            double totPb206U238,
+            double totPb206U238percentErr,
+            double totPb208Th232,
+            double totPb208Th232percentErr,
+            double totPb86,
+            double totPb86percentErr,
+            double totPb76,
+            double totPb76percentErr,
+            double sComm0_64,
+            double sComm0_76,
+            double sComm0_86,
+            double lambda232,
+            double lambda235,
+            double lambda238,
+            double uRatio)
             throws ArithmeticException {
 
         // Perturb each input variable by its assigned error
@@ -298,11 +365,11 @@ public class PbUTh_2 {
         double[] delta = new double[5];
 
         // delta[0] is age
-        delta[0] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76)[0];
-        delta[1] = age7CorrPb8Th2(ptotPb6U8, totPb208Th232, totPb86, totPb76)[0];
-        delta[2] = age7CorrPb8Th2(totPb206U238, ptotPb8Th2, totPb86, totPb76)[0];
-        delta[3] = age7CorrPb8Th2(totPb206U238, totPb208Th232, ptheta, totPb76)[0];
-        delta[4] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, pphi)[0];
+        delta[0] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
+        delta[1] = age7CorrPb8Th2(ptotPb6U8, totPb208Th232, totPb86, totPb76, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
+        delta[2] = age7CorrPb8Th2(totPb206U238, ptotPb8Th2, totPb86, totPb76, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
+        delta[3] = age7CorrPb8Th2(totPb206U238, totPb208Th232, ptheta, totPb76, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
+        delta[4] = age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, pphi, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
 
         for (int i = 1; i < 5; i++) {
             ageVariance += Math.pow(delta[i] - delta[0], 2);
@@ -320,7 +387,7 @@ public class PbUTh_2 {
      * @return double [1] as {radiogenic 206Pb/238U ratio}
      * @throws ArithmeticException
      */
-    public static double[] pb206U238rad(double age)
+    public static double[] xpb206U238rad(double age)
             throws ArithmeticException {
         return pb206U238rad(age, lambda238);
     }
@@ -361,7 +428,7 @@ public class PbUTh_2 {
      * @return double [2] as {ratio, percent error}
      * @throws ArithmeticException
      */
-    public static double[] rad8corPb7U5WithErr(double totPb6U8, double totPb6U8per,
+    public static double[] xrad8corPb7U5WithErr(double totPb6U8, double totPb6U8per,
             double radPb6U8, double totPb7U5, double th2U8, double th2U8per, double totPb76,
             double totPb76per, double totPb86, double totPb86per)
             throws ArithmeticException {
@@ -457,7 +524,7 @@ public class PbUTh_2 {
      * @return double [1] = {error correlation}
      * @throws ArithmeticException
      */
-    public static double[] rad8corConcRho(double totPb6U8, double totPb6U8per, double radPb6U8,
+    public static double[] xrad8corConcRho(double totPb6U8, double totPb6U8per, double radPb6U8,
             double th2U8, double th2U8per, double totPb76, double totPb76per,
             double totPb86, double totPb86per)
             throws ArithmeticException {
