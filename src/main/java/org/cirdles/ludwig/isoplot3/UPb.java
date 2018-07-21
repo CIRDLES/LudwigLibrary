@@ -15,8 +15,8 @@
  */
 package org.cirdles.ludwig.isoplot3;
 
+import java.util.Arrays;
 import static org.cirdles.ludwig.isoplot3.U_2.inv2x2;
-import org.cirdles.ludwig.squid25.SquidConstants;
 import static org.cirdles.ludwig.squid25.SquidConstants.MAXEXP;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda235;
 import static org.cirdles.ludwig.squid25.SquidConstants.lambda238;
@@ -47,6 +47,26 @@ public class UPb {
      * @throws ArithmeticException
      */
     public static double[] pbPbAge(double r207_206r, double r207_206r_1sigmaAbs)
+            throws ArithmeticException {
+        return pbPbAge(r207_206r, r207_206r_1sigmaAbs, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * Calculates age in annum from radiogenic Pb-207/206 and the absolute
+     * 1-sigma uncertainty in the 7/6 ratio. Uses Newton's method. Does not
+     * handle Ludwig's case of lambda uncertainties.
+     *
+     * @param r207_206r
+     * @param r207_206r_1sigmaAbs is 1-sigma absolute
+     * @return double[2] where [0] = age in annum and [1] = 1 sigma uncertainty
+     * @throws ArithmeticException
+     */
+    public static double[] pbPbAge(
+            double r207_206r,
+            double r207_206r_1sigmaAbs,
+            double lambda235,
+            double lambda238,
+            double uRatio)
             throws ArithmeticException {
         // made toler smaller by factor of 10 from Ludwig
         double toler = 0.000001;
@@ -106,6 +126,10 @@ public class UPb {
         return new double[]{t, Math.abs(r207_206r_1sigmaAbs / deriv)};
     }
 
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(pbPbAge(0.05845338848554994, 4.84527392772108000)));
+    }
+
     /**
      * Ludwig: Calculate the sums of the squares of the weighted residuals for a
      * single Conv.-Conc. X-Y data point, where the true value of each of the
@@ -121,7 +145,32 @@ public class UPb {
      * @param t Age in annum
      * @return double[1] {concordSums}
      */
-    public static double[] concordSums(double xConc, double yConc, double[][] covariance, double t) {
+    public static double[] x(double xConc, double yConc, double[][] covariance, double t) {
+        return concordSums(xConc, yConc, covariance, t, lambda235, lambda238);
+    }
+
+    /**
+     * Ludwig: Calculate the sums of the squares of the weighted residuals for a
+     * single Conv.-Conc. X-Y data point, where the true value of each of the
+     * data pts is assumed to be on the same point on the Concordia curve, &
+     * where the decay constants that describe the Concordia curve have known
+     * uncertainties. See GCA 62, p. 665-676, 1998 for explanation.
+     *
+     * @note this implementation ignores lambda uncertainties.
+     *
+     * @param xConc double Concordia x-axis ratio
+     * @param yConc double Concordia y-axis ratio
+     * @param covariance double [2][2] matrix of age uncertainty covariances
+     * @param t Age in annum
+     * @return double[1] {concordSums}
+     */
+    public static double[] concordSums(
+            double xConc,
+            double yConc,
+            double[][] covariance,
+            double t,
+            double lambda235,
+            double lambda238) {
 
         double[] retVal = new double[]{0.0};
 
@@ -152,7 +201,25 @@ public class UPb {
      * @param t age in annum
      * @return double[1] {sigmaT 1-sigma abs uncertainty in age t}
      */
-    public static double[] varTcalc(double[][] covariance, double t) {
+    public static double[] xvarTcalc(double[][] covariance, double t) {
+        return varTcalc(covariance, t, lambda235, lambda238);
+    }
+
+    /**
+     * Ludwig: Calculate the variance in age for a single assumed-concordant
+     * data point on the Conv. U/Pb concordia diagram (with or without taking
+     * into account the uranium decay-constant errors). See GCA v62, p665-676,
+     * 1998 for explanation.
+     *
+     * @param covariance double[2][2] matrix
+     * @param t age in annum
+     * @return double[1] {sigmaT 1-sigma abs uncertainty in age t}
+     */
+    public static double[] varTcalc(
+            double[][] covariance, 
+            double t,
+            double lambda235,
+            double lambda238) {
 
         double[] retVal = new double[]{0.0};
 
@@ -162,7 +229,7 @@ public class UPb {
             double e8 = Math.exp(lambda238 * t);
             double Q5 = lambda235 * e5;
             double Q8 = lambda238 * e8;
-            
+
             double[] inverted = inv2x2(covariance[0][0], covariance[1][1], covariance[0][1]);
 
             // Fisher is the expected second derivative with respect to T of the

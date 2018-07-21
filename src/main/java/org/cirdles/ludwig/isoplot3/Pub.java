@@ -114,7 +114,29 @@ public class Pub {
      * @param trialAge estimate of age in annum
      * @return double[1] Age in annum
      */
-    public static double[] ageNLE(double xVal, double yVal, double[][] covariance, double trialAge) {
+    public static double[] xageNLE(double xVal, double yVal, double[][] covariance, double trialAge) {
+        return ageNLE(xVal, yVal, covariance, trialAge, lambda235, lambda238);
+    }
+
+    /**
+     * Ludwig: (Age No Lambda Errors) Using a 2-D Newton's method, find the age
+     * for a presumed-concordant point on the U-Pb Concordia diagram that
+     * minimizes Sums, assuming no decay-constant errors. See GCA 62, p.
+     * 665-676, 1998 for explanation.
+     *
+     * @param xVal x-axis ratio from Concordia
+     * @param yVal y-axis ratio from Concordia
+     * @param covariance double[2][2] covariance matrix
+     * @param trialAge estimate of age in annum
+     * @return double[1] Age in annum
+     */
+    public static double[] ageNLE(
+            double xVal,
+            double yVal,
+            double[][] covariance,
+            double trialAge,
+            double lambda235,
+            double lambda238) {
 
         double[] retVal = new double[]{0.0};
 
@@ -184,13 +206,37 @@ public class Pub {
      * @param r207Pb_206Pb_1SigmaAbs
      * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
-    public static double[] concordiaTW(double r238U_206Pb, double r238U_206Pb_1SigmaAbs, double r207Pb_206Pb, double r207Pb_206Pb_1SigmaAbs) {
+    public static double[] xconcordiaTW(double r238U_206Pb, double r238U_206Pb_1SigmaAbs, double r207Pb_206Pb, double r207Pb_206Pb_1SigmaAbs) {
+        return concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * Ludwig: Returns Concordia age for T-W concordia data See Concordia
+     * function for usage.
+     *
+     * @note This implementation does not use inputs for rho or lambda
+     * uncertainty inclusion
+     *
+     * @param r238U_206Pb
+     * @param r238U_206Pb_1SigmaAbs
+     * @param r207Pb_206Pb
+     * @param r207Pb_206Pb_1SigmaAbs
+     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     */
+    public static double[] concordiaTW(
+            double r238U_206Pb,
+            double r238U_206Pb_1SigmaAbs,
+            double r207Pb_206Pb,
+            double r207Pb_206Pb_1SigmaAbs,
+            double lambda235,
+            double lambda238,
+            double uRatio) {
         double[] retVal = new double[]{0, 0, 0};
 
         if ((r238U_206Pb > 0.0) && (r207Pb_206Pb > 0.0)) {
-            double[] concConvert = concConvert(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs, 0.0, true);
+            double[] concConvert = concConvert(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs, 0.0, true, uRatio);
 
-            retVal = concordia(concConvert[0], concConvert[1], concConvert[2], concConvert[3], concConvert[4]);
+            retVal = concordia(concConvert[0], concConvert[1], concConvert[2], concConvert[3], concConvert[4], lambda235, lambda238);
         }
 
         return retVal;
@@ -215,7 +261,37 @@ public class Pub {
      * @param rho
      * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
-    public static double[] concordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
+    public static double[] xconcordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
+        return concordia(r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho, lambda235, lambda238);
+    }
+
+    /**
+     * Ludwig: Returns Concordia age for Conv.-concordia data; Input the
+     * Concordia X,err,Y,err,RhoXY Output is 1 range of 4 values -- t, t-error
+     * (1-sigma apriori),MSWD,Prob-of-fit If a second row is included in the
+     * output range, include names of the 4 result-values. Output errors are
+     * always 2-sigma.
+     *
+     * @note this implementation outputs 1-sigma abs uncertainty
+     *
+     * @note Assume only one data point for now, with 1-sigma absolute
+     * uncertainty for each coordinate.
+     *
+     * @param r207Pb_235U
+     * @param r207Pb_235U_1SigmaAbs
+     * @param r206Pb_238U
+     * @param r206Pb_238U_1SigmaAbs
+     * @param rho
+     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     */
+    public static double[] concordia(
+            double r207Pb_235U,
+            double r207Pb_235U_1SigmaAbs,
+            double r206Pb_238U,
+            double r206Pb_238U_1SigmaAbs,
+            double rho,
+            double lambda235,
+            double lambda238) {
         double[] retVal = new double[]{0, 0, 0, 0};
 
         double inputData[];
@@ -223,7 +299,7 @@ public class Pub {
         if ((r207Pb_235U > 0.0) && (r206Pb_238U > 0.0)) {
             inputData = new double[]{r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho};
 
-            retVal = concordiaAges(inputData);
+            retVal = concordiaAges(inputData, lambda235, lambda238);
         }
 
         return retVal;
@@ -244,7 +320,29 @@ public class Pub {
      * r206Pb_238U, r206Pb_238U_1SigmaAbs, rho
      * @return double[4] {age, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
      */
-    public static double[] concordiaAges(double[] inputData) {
+    public static double[] xconcordiaAges(double[] inputData) {
+        return concordiaAges(inputData, lambda235, lambda238);
+    }
+
+    /**
+     * Ludwig: Calculate the weighted X-Y mean of the data pts (including error
+     * correlation) & the "Concordia Age" & age-error of Xbar, Ybar. The
+     * "Concordia Age" is the most probable age of a data point if one can
+     * assume that the U/Pb ages of the true data point are precisely
+     * concordant. Calculates the age & error both with & without uranium
+     * decay-constant errors. See GCA 62, p. 665-676, 1998 for explanation.
+     *
+     * @note this implementation only handles the case of one data point with no
+     * lambda errors
+     *
+     * @param inputData double[5] containing r207Pb_235U, r207Pb_235U_1SigmaAbs,
+     * r206Pb_238U, r206Pb_238U_1SigmaAbs, rho
+     * @return double[4] {age, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
+     */
+    public static double[] concordiaAges(
+            double[] inputData,
+            double lambda235,
+            double lambda238) {
 
         double[] retVal = new double[]{0.0, 0.0, 0.0, 0.0};
 
@@ -268,11 +366,11 @@ public class Pub {
         if ((trialAge >= MINLOG) && (trialAge <= MAXLOG) && (yConc > 0.0)) {
             tNLE = Math.log(trialAge) / lambda238;
 
-            tNLE = ageNLE(xConc, yConc, vcXY, tNLE)[0];
+            tNLE = ageNLE(xConc, yConc, vcXY, tNLE, lambda235, lambda238)[0];
             if (tNLE > 0.0) {
-                double SumsAgeOneNLE = concordSums(xConc, yConc, vcXY, tNLE)[0];
+                double SumsAgeOneNLE = concordSums(xConc, yConc, vcXY, tNLE, lambda235, lambda238)[0];
                 double MswdAgeOneNLE = SumsAgeOneNLE;
-                double SigmaAgeNLE = varTcalc(vcXY, tNLE)[0];
+                double SigmaAgeNLE = varTcalc(vcXY, tNLE, lambda235, lambda238)[0];
 
                 FDistribution fdist = new FDistribution(1, 1E9);
                 double probability = 1.0 - fdist.cumulativeProbability(MswdAgeOneNLE);
@@ -291,7 +389,22 @@ public class Pub {
      * @param age
      * @return double [1] containing radiogenic 207Pb/206Pb.
      */
-    public static double[] pb76(double age) {
+    public static double[] xpb76(double age) {
+        return pb76(age, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * Ludwig specifies Return radiogenic 207Pb/206Pb (secular equilibrium). All
+     * calculations in annum.
+     *
+     * @param age
+     * @return double [1] containing radiogenic 207Pb/206Pb.
+     */
+    public static double[] pb76(
+            double age,
+            double lambda235,
+            double lambda238,
+            double uRatio) {
         double[] retVal;
 
         if (age == 0.0) {
@@ -317,10 +430,37 @@ public class Pub {
      * @param totPb76err
      * @return double [2] containing age7corrected, age7correctedErr
      */
-    public static double[] age7corrWithErr(double totPb6U8, double totPb6U8err, double totPb76, double totPb76err)
+    public static double[] xage7corrWithErr(double totPb6U8, double totPb6U8err, double totPb76, double totPb76err)
+            throws ArithmeticException {
+        return age7corrWithErr(totPb6U8, totPb6U8err, totPb76, totPb76err, sComm0_76, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * This method combines Ludwig's Age7Corr and AgeEr7Corr.
+     *
+     * Ludwig specifies Age7Corr: Age from uncorrected Tera-Wasserburg ratios,
+     * assuming the specified common-Pb 207/206.
+     *
+     * Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age error.
+     *
+     * @param totPb6U8
+     * @param totPb6U8err
+     * @param totPb76
+     * @param totPb76err
+     * @return double [2] containing age7corrected, age7correctedErr
+     */
+    public static double[] age7corrWithErr(
+            double totPb6U8,
+            double totPb6U8err,
+            double totPb76,
+            double totPb76err,
+            double commPb76,
+            double lambda235,
+            double lambda238,
+            double uRatio)
             throws ArithmeticException {
 
-        double commPb76 = sComm0_76;
+        //commPb76 = sComm0_76;
         double commPb76err = 0.0;
 
         int iterationMax = 999;
@@ -390,10 +530,37 @@ public class Pub {
      * @return double [2] containing agePb76, agePb76Err
      * @throws ArithmeticException
      */
-    public static double[] agePb76WithErr(double pb76rad, double pb76err)
+    public static double[] xagePb76WithErr(double pb76rad, double pb76err)
+            throws ArithmeticException {
+        return agePb76WithErr(pb76rad, pb76err, lambda235, lambda238, uRatio);
+    }
+
+    /**
+     * This method combines Ludwig's AgePb76 and AgeErPb76.
+     *
+     * Ludwig specifies AgePb76: Age (Ma) from radiogenic 207Pb/206Pb (Note: we
+     * use annum here)
+     *
+     * Ludwig specifies AgeErPb76: Error in Pb7/6 age, input err is abs.
+     *
+     * @param pb76rad
+     * @param pb76err
+     * @return double [2] containing agePb76, agePb76Err
+     * @throws ArithmeticException
+     */
+    public static double[] agePb76WithErr(
+            double pb76rad,
+            double pb76err,
+            double lambda235,
+            double lambda238,
+            double uRatio)
             throws ArithmeticException {
 
-        return pbPbAge(pb76rad, pb76err);
+        return pbPbAge(pb76rad, pb76err, lambda235, lambda238, uRatio);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(xagePb76WithErr(0.05845338848554994, 4.84527392772108000)));
     }
 
     /**
@@ -413,8 +580,39 @@ public class Pub {
      * @param th2U8err double
      * @return double [2] containing age8corrected, age8correctedErr
      */
-    public static double[] age8corrWithErr(double totPb6U8, double totPb6U8err, double totPb8Th2, double totPb8Th2err,
+    public static double[] xage8corrWithErr(double totPb6U8, double totPb6U8err, double totPb8Th2, double totPb8Th2err,
             double th2U8, double th2U8err)
+            throws ArithmeticException {
+        return age8corrWithErr(totPb6U8, totPb6U8err, totPb8Th2, totPb8Th2err, th2U8, th2U8err, sComm0_86, lambda232, lambda238);
+    }
+
+    /**
+     * This method combines Ludwig's Age8Corr and AgeEr8Corr.
+     *
+     * Ludwig specifies Age8Corr: Age from uncorrected Tera-Wasserburg ratios,
+     * assuming the specified common-Pb 207/206.
+     *
+     * Ludwig specifies AgeEr8Corr: Error in 208-corrected age (input-ratio
+     * errors are absolute).
+     *
+     * @param totPb6U8 double
+     * @param totPb6U8err double
+     * @param totPb8Th2 double
+     * @param totPb8Th2err double
+     * @param th2U8 double
+     * @param th2U8err double
+     * @return double [2] containing age8corrected, age8correctedErr
+     */
+    public static double[] age8corrWithErr(
+            double totPb6U8, 
+            double totPb6U8err, 
+            double totPb8Th2, 
+            double totPb8Th2err,
+            double th2U8, 
+            double th2U8err,
+            double sComm0_86,
+            double lambda232,
+            double lambda238)
             throws ArithmeticException {
 
         double commPb68 = 1.0 / sComm0_86;
