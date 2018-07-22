@@ -124,7 +124,7 @@ public class PbUTh_2Test {
         double totPb86 = 0.0831580681678;
         double totPb76 = 0.0592518351787661;
         double[] expResult = new double[]{553438043.974625};
-        double[] result = PbUTh_2.xage7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76);
+        double[] result = PbUTh_2.age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, totPb76);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
     }
 
@@ -158,7 +158,7 @@ public class PbUTh_2Test {
         double totPb76 = 0.0592518351787661;
         double totPb76percentErr = 0.688011049803;// / 100.0 * 0.0592518351787661;
         double[] expResult = new double[]{553438043.974625, 11665992.0078184};
-        double[] result = PbUTh_2.xage7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, totPb86, totPb86percentErr, totPb76, totPb76percentErr);
+        double[] result = PbUTh_2.age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, totPb86, totPb86percentErr, totPb76, totPb76percentErr);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
 
@@ -172,9 +172,9 @@ public class PbUTh_2Test {
         totPb76 = 0.182991055066;
         totPb76percentErr = 0.414818785308;
         expResult = new double[]{2785249252.63747, 187820763.531841};
-        result = PbUTh_2.age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, 
+        result = PbUTh_2.age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr,
                 totPb86, totPb86percentErr, totPb76, totPb76percentErr,
-                17.821,0.8741,2.1095, 4.9475E-11, 9.8485E-10, 1.55125E-10, 137.88);
+                17.821, 0.8741, 2.1095, 4.9475E-11, 9.8485E-10, 1.55125E-10, 137.88);
         assertEquals(Utilities.roundedToSize(expResult[0], 11), Utilities.roundedToSize(result[0], 11), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 10), Utilities.roundedToSize(result[1], 10), SquidConstants.SQUID_EPSILON);
 
@@ -194,7 +194,7 @@ public class PbUTh_2Test {
         System.out.println("pb206U238rad");
         double age = 564971592.74734;
         double[] expResult = new double[]{0.0915964069749142};
-        double[] result = PbUTh_2.xpb206U238rad(age);
+        double[] result = PbUTh_2.pb206U238rad(age);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
     }
 
@@ -231,7 +231,7 @@ public class PbUTh_2Test {
         double totPb86 = 0.0831580681678;
         double totPb86per = 1.38682396372;
         double[] expResult = new double[]{0.752677098785157, 1.0823631953636};
-        double[] result = PbUTh_2.xrad8corPb7U5WithErr(totPb6U8, totPb6U8per, radPb6U8,
+        double[] result = PbUTh_2.rad8corPb7U5WithErr(totPb6U8, totPb6U8per, radPb6U8,
                 totPb7U5, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
@@ -263,8 +263,24 @@ public class PbUTh_2Test {
         double totPb86 = 0.0831580681678;
         double totPb86per = 1.38682396372;
         double[] expResult = new double[]{0.646167502023579};
-        double[] result = PbUTh_2.xrad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per);
+        double[] result = PbUTh_2.rad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+
+        System.out.println("rad8corConcRho # 2");
+        totPb6U8 = 0.516226442956158;
+        totPb6U8per = 0.922853256399605;
+        radPb6U8 = 0.514661441487184;
+        th2U8 = 0.581453384857;
+        th2U8per = 0.513472145943;      
+        totPb76 = 0.182991055066;
+        totPb76per = 0.414818785308;        
+        totPb86 = 0.165872704801;
+        totPb86per = 2.07245310569;
+        expResult = new double[]{0.780515443937};
+        result = PbUTh_2.rad8corConcRho(totPb6U8, totPb6U8per, radPb6U8, th2U8, th2U8per, totPb76, totPb76per, totPb86, totPb86per,
+                0.8741, 2.1095, 137.88, 4.9475E-11, 1.55125E-10);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+
     }
 
     /**

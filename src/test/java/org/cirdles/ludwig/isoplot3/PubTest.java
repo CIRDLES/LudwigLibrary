@@ -147,7 +147,7 @@ public class PubTest {
         double r207Pb_206Pb = 0.0552518706529;
         double r207Pb_206Pb_1SigmaAbs = 0.0552518706529 * 1.96293438298 / 100;
         double[] expResult = new double[]{8.140922087390351E8, 1.3673235207954608E7, 113.12698774576353, 0.0};
-        double[] result = Pub.xconcordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
+        double[] result = Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
 
         System.out.println("concordiaTW");
@@ -156,7 +156,7 @@ public class PubTest {
         r207Pb_206Pb = 0.0610677354475;
         r207Pb_206Pb_1SigmaAbs = 0.0610677354475 * 2.93532493394 / 100;
         expResult = new double[]{8.630954888631245E8, 9431402.438459378, 14.58887204116458, 1.3370175743965262E-4};
-        result = Pub.xconcordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
+        result = Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
 
         System.out.println("concordiaTW - age calcs impossible");
@@ -165,7 +165,7 @@ public class PubTest {
         r207Pb_206Pb = 0.1068302;
         r207Pb_206Pb_1SigmaAbs = 0.0018455;
         expResult = new double[]{0.0, 0.0, 0.0, 0.0};
-        result = Pub.xconcordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
+        result = Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs);
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
 
     }
@@ -185,7 +185,7 @@ public class PubTest {
         double r206Pb_238U_1SigmaAbs = 0.0000998234261966304;
         double rho = 0.370096880869828;
         double[] expResult = new double[]{232628743.083742, 0620177.514250217, 0.937383339484404};
-        double[] result = Pub.xconcordia(r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho);
+        double[] result = Pub.concordia(r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
 //        assertEquals(Utilities.roundedToSize(expResult[2], 12), Utilities.roundedToSize(result[2], 12), SquidConstants.SQUID_EPSILON);
@@ -216,7 +216,7 @@ public class PubTest {
         System.out.println("pb76");
         double age = 564738561.835384;
         double[] expResult = new double[]{0.05893615898302093};
-        double[] result = Pub.xpb76(age);
+        double[] result = Pub.pb76(age);
         assertArrayEquals(expResult, result, SquidConstants.SQUID_EPSILON);
     }
 
@@ -245,7 +245,7 @@ public class PubTest {
         double totPb76 = 0.0592518351787661;
         double totPb76err = 0.688011049802507 / 100.0 * 0.0592518351787661;
         double[] expResult = new double[]{564738561.835384, 5212379.83636884};
-        double[] result = Pub.xage7corrWithErr(totPb6U8, totPb6U8err, totPb76, totPb76err);
+        double[] result = Pub.age7corrWithErr(totPb6U8, totPb6U8err, totPb76, totPb76err);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
 
@@ -283,7 +283,7 @@ public class PubTest {
         double pb76rad = 0.0552518706519236;
         double pb76err = 1.96293438301707 / 100.0 * 0.0552518706519236;
         double[] expResult = new double[]{422429481.64047, 43809508.1776918};
-        double[] result = Pub.xagePb76WithErr(pb76rad, pb76err);
+        double[] result = Pub.agePb76WithErr(pb76rad, pb76err);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
     }
@@ -317,7 +317,7 @@ public class PubTest {
         double th2U8 = 0.27150941987617;
         double th2U8err = 0.0;
         double[] expResult = new double[]{565183115.935407, 5332237.68794901};
-        double[] result = Pub.xage8corrWithErr(totPb6U8, totPb6U8err, totPb8Th2, totPb8Th2err, th2U8, th2U8err);
+        double[] result = Pub.age8corrWithErr(totPb6U8, totPb6U8err, totPb8Th2, totPb8Th2err, th2U8, th2U8err);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
     }
