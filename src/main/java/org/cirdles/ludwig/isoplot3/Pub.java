@@ -103,15 +103,15 @@ public class Pub {
     }
 
     /**
-     * Ludwig: (Age No Lambda Errors) Using a 2-D Newton's method, find the age
-     * for a presumed-concordant point on the U-Pb Concordia diagram that
-     * minimizes Sums, assuming no decay-constant errors. See GCA 62, p.
+     * Ludwig: (Age No Lambda Errors) Using a 2-D Newton's method, find the age8Corr
+ for a presumed-concordant point on the U-Pb Concordia diagram that
+ minimizes Sums, assuming no decay-constant errors. See GCA 62, p.
      * 665-676, 1998 for explanation.
      *
      * @param xVal x-axis ratio from Concordia
      * @param yVal y-axis ratio from Concordia
      * @param covariance double[2][2] covariance matrix
-     * @param trialAge estimate of age in annum
+     * @param trialAge estimate of age8Corr in annum
      * @return double[1] Age in annum
      */
     public static double[] ageNLE(double xVal, double yVal, double[][] covariance, double trialAge) {
@@ -119,15 +119,15 @@ public class Pub {
     }
 
     /**
-     * Ludwig: (Age No Lambda Errors) Using a 2-D Newton's method, find the age
-     * for a presumed-concordant point on the U-Pb Concordia diagram that
-     * minimizes Sums, assuming no decay-constant errors. See GCA 62, p.
+     * Ludwig: (Age No Lambda Errors) Using a 2-D Newton's method, find the age8Corr
+ for a presumed-concordant point on the U-Pb Concordia diagram that
+ minimizes Sums, assuming no decay-constant errors. See GCA 62, p.
      * 665-676, 1998 for explanation.
      *
      * @param xVal x-axis ratio from Concordia
      * @param yVal y-axis ratio from Concordia
      * @param covariance double[2][2] covariance matrix
-     * @param trialAge estimate of age in annum
+     * @param trialAge estimate of age8Corr in annum
      * @param lambda235
      * @param lambda238
      * @return double[1] Age in annum
@@ -180,7 +180,7 @@ public class Pub {
                     double Incr = d1 / d2;
                     testTolerance = Math.abs(Incr / T);
                     t2 = T + Incr;
-                    // age in annum
+                    // age8Corr in annum
                     retVal[0] = t2;
                 } else {
                     // force termination when d2 == 0;
@@ -196,8 +196,8 @@ public class Pub {
     }
 
     /**
-     * Ludwig: Returns Concordia age for T-W concordia data See Concordia
-     * function for usage.
+     * Ludwig: Returns Concordia age8Corr for T-W concordia data See Concordia
+ function for usage.
      *
      * @note This implementation does not use inputs for rho or lambda
      * uncertainty inclusion
@@ -206,15 +206,15 @@ public class Pub {
      * @param r238U_206Pb_1SigmaAbs
      * @param r207Pb_206Pb
      * @param r207Pb_206Pb_1SigmaAbs
-     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaTW(double r238U_206Pb, double r238U_206Pb_1SigmaAbs, double r207Pb_206Pb, double r207Pb_206Pb_1SigmaAbs) {
         return Pub.concordiaTW(r238U_206Pb, r238U_206Pb_1SigmaAbs, r207Pb_206Pb, r207Pb_206Pb_1SigmaAbs, lambda235, lambda238, uRatio);
     }
 
     /**
-     * Ludwig: Returns Concordia age for T-W concordia data See Concordia
-     * function for usage.
+     * Ludwig: Returns Concordia age8Corr for T-W concordia data See Concordia
+ function for usage.
      *
      * @param lambda235
      * @param lambda238
@@ -226,7 +226,7 @@ public class Pub {
      * @param r238U_206Pb_1SigmaAbs
      * @param r207Pb_206Pb
      * @param r207Pb_206Pb_1SigmaAbs
-     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaTW(
             double r238U_206Pb,
@@ -248,10 +248,10 @@ public class Pub {
     }
 
     /**
-     * Ludwig: Returns Concordia age for Conv.-concordia data; Input the
-     * Concordia X,err,Y,err,RhoXY Output is 1 range of 4 values -- t, t-error
-     * (1-sigma apriori),MSWD,Prob-of-fit If a second row is included in the
-     * output range, include names of the 4 result-values. Output errors are
+     * Ludwig: Returns Concordia age8Corr for Conv.-concordia data; Input the
+ Concordia X,err,Y,err,RhoXY Output is 1 range of 4 values -- t, t-error
+ (1-sigma apriori),MSWD,Prob-of-fit If a second row is included in the
+ output range, include names of the 4 result-values. Output errors are
      * always 2-sigma.
      *
      * @note this implementation outputs 1-sigma abs uncertainty
@@ -264,17 +264,17 @@ public class Pub {
      * @param r206Pb_238U
      * @param r206Pb_238U_1SigmaAbs
      * @param rho
-     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
         return Pub.concordia(r207Pb_235U, r207Pb_235U_1SigmaAbs, r206Pb_238U, r206Pb_238U_1SigmaAbs, rho, lambda235, lambda238);
     }
 
     /**
-     * Ludwig: Returns Concordia age for Conv.-concordia data; Input the
-     * Concordia X,err,Y,err,RhoXY Output is 1 range of 4 values -- t, t-error
-     * (1-sigma apriori),MSWD,Prob-of-fit If a second row is included in the
-     * output range, include names of the 4 result-values. Output errors are
+     * Ludwig: Returns Concordia age8Corr for Conv.-concordia data; Input the
+ Concordia X,err,Y,err,RhoXY Output is 1 range of 4 values -- t, t-error
+ (1-sigma apriori),MSWD,Prob-of-fit If a second row is included in the
+ output range, include names of the 4 result-values. Output errors are
      * always 2-sigma.
      *
      * @param lambda235
@@ -289,7 +289,7 @@ public class Pub {
      * @param r206Pb_238U
      * @param r206Pb_238U_1SigmaAbs
      * @param rho
-     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordia(
             double r207Pb_235U,
@@ -314,10 +314,10 @@ public class Pub {
 
     /**
      * Ludwig: Calculate the weighted X-Y mean of the data pts (including error
-     * correlation) & the "Concordia Age" & age-error of Xbar, Ybar. The
-     * "Concordia Age" is the most probable age of a data point if one can
-     * assume that the U/Pb ages of the true data point are precisely
-     * concordant. Calculates the age & error both with & without uranium
+     * correlation) & the "Concordia Age" & age8Corr-error of Xbar, Ybar. The
+ "Concordia Age" is the most probable age8Corr of a data point if one can
+ assume that the U/Pb ages of the true data point are precisely
+ concordant. Calculates the age8Corr & error both with & without uranium
      * decay-constant errors. See GCA 62, p. 665-676, 1998 for explanation.
      *
      * @note this implementation only handles the case of one data point with no
@@ -325,7 +325,7 @@ public class Pub {
      *
      * @param inputData double[5] containing r207Pb_235U, r207Pb_235U_1SigmaAbs,
      * r206Pb_238U, r206Pb_238U_1SigmaAbs, rho
-     * @return double[4] {age, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaAges(double[] inputData) {
         return Pub.concordiaAges(inputData, lambda235, lambda238);
@@ -333,10 +333,10 @@ public class Pub {
 
     /**
      * Ludwig: Calculate the weighted X-Y mean of the data pts (including error
-     * correlation) & the "Concordia Age" & age-error of Xbar, Ybar. The
-     * "Concordia Age" is the most probable age of a data point if one can
-     * assume that the U/Pb ages of the true data point are precisely
-     * concordant. Calculates the age & error both with & without uranium
+     * correlation) & the "Concordia Age" & age8Corr-error of Xbar, Ybar. The
+ "Concordia Age" is the most probable age8Corr of a data point if one can
+ assume that the U/Pb ages of the true data point are precisely
+ concordant. Calculates the age8Corr & error both with & without uranium
      * decay-constant errors. See GCA 62, p. 665-676, 1998 for explanation.
      *
      * @param lambda235
@@ -346,7 +346,7 @@ public class Pub {
      *
      * @param inputData double[5] containing r207Pb_235U, r207Pb_235U_1SigmaAbs,
      * r206Pb_238U, r206Pb_238U_1SigmaAbs, rho
-     * @return double[4] {age, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
+     * @return double[4] {age8Corr, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaAges(
             double[] inputData,
@@ -432,9 +432,9 @@ public class Pub {
      * This method combines Ludwig's Age7Corr and AgeEr7Corr.
      *
      * Ludwig specifies Age7Corr: Age from uncorrected Tera-Wasserburg ratios,
-     * assuming the specified common-Pb 207/206.
-     *
-     * Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age error.
+ assuming the specified common-Pb 207/206.
+
+ Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age8Corr error.
      *
      * @param totPb6U8
      * @param totPb6U8err
@@ -451,9 +451,9 @@ public class Pub {
      * This method combines Ludwig's Age7Corr and AgeEr7Corr.
      *
      * Ludwig specifies Age7Corr: Age from uncorrected Tera-Wasserburg ratios,
-     * assuming the specified common-Pb 207/206.
-     *
-     * Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age error.
+ assuming the specified common-Pb 207/206.
+
+ Ludwig specifies AgeEr7Corr: Calculation of 207-corrected age8Corr error.
      *
      * @param totPb6U8
      * @param totPb6U8err
@@ -487,7 +487,7 @@ public class Pub {
         double delta = 0.0;
         double t1 = 1000.0e6;
 
-        // Solve using Newton's method, using 1000 Ma as trial age.
+        // Solve using Newton's method, using 1000 Ma as trial age8Corr.
         double e5;
         double e8;
 
@@ -537,9 +537,9 @@ public class Pub {
      * This method combines Ludwig's AgePb76 and AgeErPb76.
      *
      * Ludwig specifies AgePb76: Age (Ma) from radiogenic 207Pb/206Pb (Note: we
-     * use annum here)
-     *
-     * Ludwig specifies AgeErPb76: Error in Pb7/6 age, input err is abs.
+ use annum here)
+
+ Ludwig specifies AgeErPb76: Error in Pb7/6 age8Corr, input err is abs.
      *
      * @param pb76rad
      * @param pb76err
@@ -555,9 +555,9 @@ public class Pub {
      * This method combines Ludwig's AgePb76 and AgeErPb76.
      *
      * Ludwig specifies AgePb76: Age (Ma) from radiogenic 207Pb/206Pb (Note: we
-     * use annum here)
-     *
-     * Ludwig specifies AgeErPb76: Error in Pb7/6 age, input err is abs.
+ use annum here)
+
+ Ludwig specifies AgeErPb76: Error in Pb7/6 age8Corr, input err is abs.
      *
      * @param pb76rad
      * @param pb76err
@@ -586,10 +586,10 @@ public class Pub {
      * This method combines Ludwig's Age8Corr and AgeEr8Corr.
      *
      * Ludwig specifies Age8Corr: Age from uncorrected Tera-Wasserburg ratios,
-     * assuming the specified common-Pb 207/206.
-     *
-     * Ludwig specifies AgeEr8Corr: Error in 208-corrected age (input-ratio
-     * errors are absolute).
+ assuming the specified common-Pb 207/206.
+
+ Ludwig specifies AgeEr8Corr: Error in 208-corrected age8Corr (input-ratio
+ errors are absolute).
      *
      * @param totPb6U8 double
      * @param totPb6U8err double
@@ -609,10 +609,10 @@ public class Pub {
      * This method combines Ludwig's Age8Corr and AgeEr8Corr.
      *
      * Ludwig specifies Age8Corr: Age from uncorrected Tera-Wasserburg ratios,
-     * assuming the specified common-Pb 207/206.
-     *
-     * Ludwig specifies AgeEr8Corr: Error in 208-corrected age (input-ratio
-     * errors are absolute).
+ assuming the specified common-Pb 207/206.
+
+ Ludwig specifies AgeEr8Corr: Error in 208-corrected age8Corr (input-ratio
+ errors are absolute).
      *
      * @param totPb6U8 double
      * @param totPb6U8err double
@@ -647,7 +647,7 @@ public class Pub {
         double delta = 0.0;
         double t1 = 1000.0e6;
 
-        // Solve using Newton's method, using 1000 Ma as trial age.
+        // Solve using Newton's method, using 1000 Ma as trial age8Corr.
         double e2;
         double e8;
 
@@ -675,6 +675,8 @@ public class Pub {
 
         } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
 
+        double age8Corr = t1;
+        
         // calculate error
         double g = totPb8Th2;
         double sigmaG = totPb8Th2err;
@@ -684,8 +686,8 @@ public class Pub {
         double psiI = commPb68;
         double sigmaPsiI = commPb68err;
 
-        e2 = Math.exp(lambda232 * t);
-        e8 = Math.exp(lambda238 * t);
+        e2 = Math.exp(lambda232 * age8Corr);
+        e8 = Math.exp(lambda238 * age8Corr);
 
         double p = g + 1.0 - e2;
 
@@ -696,8 +698,10 @@ public class Pub {
 
         double numer = Math.pow(sigmaA, 2) + Math.pow(psiI, 2) * (t1 + t2 + t3);
         double denom = k * k;
+        
+         double ageEr8Corr = Math.sqrt(numer / denom);
 
-        return new double[]{t, Math.sqrt(numer / denom)};
+        return new double[]{age8Corr, ageEr8Corr};
     }
 
     /**
