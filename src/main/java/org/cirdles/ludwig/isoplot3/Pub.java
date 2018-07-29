@@ -682,6 +682,8 @@ public class Pub {
         double sigmaG = totPb8Th2err;
         double h = th2U8;
         double sigmaH = th2U8err;
+        // July 2018 Simon dscovered that Ludwig zeroes this error - th2U8err;
+        sigmaH = 0.0;
         double sigmaA = totPb6U8err;
         double psiI = commPb68;
         double sigmaPsiI = commPb68err;

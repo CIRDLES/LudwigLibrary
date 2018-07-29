@@ -6,7 +6,6 @@
 package org.cirdles.ludwig.isoplot3;
 
 import org.cirdles.ludwig.squid25.SquidConstants;
-import static org.cirdles.ludwig.squid25.SquidConstants.sComm0_76;
 import org.cirdles.ludwig.squid25.Utilities;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -328,7 +327,7 @@ public class PubTest {
         totPb8Th2err = 2.32602099147682 / 100.0 * 0.147397260057089;
         th2U8 = 0.581453384857;
         th2U8err = 0.513472145943 / 100.0 * 0.581453384857;
-        expResult = new double[]{2.67844233729399E9, 2.214964125536768E7};
+        expResult = new double[]{2.67844233729399E9, 2.2149610752408966E7};
         result = Pub.age8corrWithErr(totPb6U8, totPb6U8err, totPb8Th2, totPb8Th2err, th2U8, th2U8err, 2.1095, 4.9475E-11, 1.55125E-10);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
