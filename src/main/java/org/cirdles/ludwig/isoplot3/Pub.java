@@ -85,7 +85,7 @@ public class Pub {
             // reduce indices by 1 to zero-based - this did not work but keeping them did
             // TODO: understand why - probably integer division related
             int lwrInd = (int) conf95Calcs[0] - 0;
-            int upprInd = (int) conf95Calcs[1] - 0;
+            int upprInd = (int) conf95Calcs[1] - 1;
 
             double lSlope = slp[lwrInd];
             double uSlope = slp[upprInd];

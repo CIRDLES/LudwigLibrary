@@ -114,6 +114,28 @@ public class PubTest {
         double[] result = Pub.robustReg2(xValues, yValues);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         // TODO: test 8 other results
+
+        System.out.println("robustReg2 test 2");
+        xValues = new double[]{
+            1.76417316,
+            1.714489829,
+            1.734569224,
+            1.771351941,
+            1.768402061,
+            1.766342834,
+            1.766277735};
+        yValues = new double[]{
+            -1.529271388,
+            -1.650928654,
+            -1.573850599,
+            -1.574514219,
+            -1.577817993,
+            -1.535529651,
+            -1.579515567};
+        expResult = new double[]{0.9856414973973155};
+        result = Pub.robustReg2(xValues, yValues);
+        assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
+        // TODO: test 8 other results
     }
 
     /**
