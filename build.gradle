@@ -22,7 +22,7 @@ task wrapper(type: Wrapper) {
 }
 
 group = "org.cirdles"
-version = "1.0.7"
+version = "1.0.8"
 
 description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
 
