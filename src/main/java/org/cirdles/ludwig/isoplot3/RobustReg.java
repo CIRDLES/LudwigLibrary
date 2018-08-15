@@ -107,7 +107,7 @@ public class RobustReg {
         if (nPts > 4) {
             int star95;
             if (nPts < 14) {
-                String c$ = "081012141719222528";
+                String c$ = "0081012141719222528";
                 star95 = Integer.parseInt(c$.substring(2 * nPts - 9, 2 * nPts - 7));
             } else {
                 double x = Math.sqrt(nPts * (nPts - 1.0) * (2.0 * nPts + 5.0) / 18.0);
