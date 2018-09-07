@@ -18,11 +18,11 @@ if (!hasProperty('mainClass')) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.9'
 }
 
 group = "org.cirdles"
-version = "1.0.8"
+version = "1.1.0"
 
 description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
 
