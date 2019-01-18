@@ -67,6 +67,37 @@ public class SquidMathUtilsTest {
         assertEquals(expValue, value, SquidConstants.SQUID_EPSILON);
         assertEquals(expSigma, sigma, SquidConstants.SQUID_EPSILON);
 
+        System.out.println("calculateTukeysBiweightMean test 2");
+        values = new double[]{0.0701269311,
+            0.07015861952,
+            0.07003238026,
+            0.07104611923,
+            0.06736331324,
+            0.07342762035,
+            0.07308375966,
+            0.06964566169,
+            0.07073497843,
+            0.06920469862,
+            0.07288619162,
+            0.06970642527,
+            0.07029836374,
+            0.06661243075,
+            0.06820837433,
+            0.07088312165,
+            0.06715154317,
+            0.07189521506,
+            0.06629794724,
+            0.06658774174,
+            0.07016820432};
+
+        expValue = 0.0697911642765795;
+        expSigma = 0.00212084209983744;
+        result = SquidMathUtils.tukeysBiweight(values, tuningConstant);
+        value = result[0];
+        sigma = result[1];
+        assertEquals(expValue, value, SquidConstants.SQUID_EPSILON);
+        assertEquals(expSigma, sigma, SquidConstants.SQUID_EPSILON);
+
     }
 
 }
