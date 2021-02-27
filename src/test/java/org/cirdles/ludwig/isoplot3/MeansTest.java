@@ -413,12 +413,14 @@ public class MeansTest {
         expResult = new double[]{0.004139985553629757, 8.537221087844026E-6,
             1.0224125556854436E-5, 2.0798084982225992E-5, 1.3639556591465185, 0.12759241433808055, 0.0};
 
+
         absUnct = new double[values.length];
         for (int i = 0; i < values.length; i++) {
             absUnct[i] = (errors[i] * values[i]) / 100.0;
         }
 
         result = Means.weightedAverage(values, absUnct, false, false)[0];
+
         assertArrayEquals(expResult, result, SQUID_EPSILON);
 
     }

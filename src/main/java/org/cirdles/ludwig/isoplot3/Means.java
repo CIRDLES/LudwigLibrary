@@ -65,7 +65,7 @@ public class Means {
         // where does this come from??
         boolean hardRej = false;
 
-        if ((nPts == errors.length) && nPts > 2) {
+        if ((nPts == errors.length) && nPts > 1) {
             // proceed
             double[] inverseVar = new double[nPts];
             double[] wtdResid = new double[nPts];
@@ -170,7 +170,7 @@ public class Means {
                     double[] wtdExtRtsec = wtdExtRTSEC(0, 10.0 * intSigmaMean * intSigmaMean, yy, iVarY);
 
                     // check for failure
-                    if (wtdExtRtsec[3] == 0.0) {
+                    if ((wtdExtRtsec[3] == 0.0) && (nPts > 2)) {
                         extMean = wtdExtRtsec[1];
                         extSigma = Math.sqrt(wtdExtRtsec[0]);
 
