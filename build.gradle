@@ -17,14 +17,14 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
+wrapper {
+    gradleVersion = '6.7.1'
 }
 
 group = "org.cirdles"
-version = "1.1.0"
+version = "1.1.1"
 
-description = "Ludwig's Algorithms adapted from Squid 2.50 and Isoplot3"
+description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
