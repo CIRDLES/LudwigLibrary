@@ -47,7 +47,7 @@ public class Means {
      * @param inErrors as double[] with length nPts
      * @param canReject
      * @param canTukeys
-     * @return double[7][]{mean, sigmaMean, err68, err95, MSWD, probability, externalFlag}, {values
+     * @return double[2][7]{mean, 1sigmaMean, exterr68, exterr95, MSWD, probability, externalFlag}, {values
      * with rejected as 0.0}.  externalFlag = 1.0 for external uncertainty, 0.0 for internal
      */
     public static double[][] weightedAverage(double[] inValues, double[] inErrors, boolean canReject, boolean canTukeys) {
@@ -258,7 +258,7 @@ public class Means {
                     probability,
                     1.0
                 },
-                // contains zeroes for each reject
+                // contains zero for each reject
                 values
                 };
             } else {
@@ -271,7 +271,7 @@ public class Means {
                     probability,
                     0.0
                 },
-                // contains zeroes for each reject
+                // contains zero for each reject
                 values
                 };
             }
