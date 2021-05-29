@@ -22,7 +22,7 @@ wrapper {
 }
 
 group = "org.cirdles"
-version = "1.1.1"
+version = "1.2.0"
 
 description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
@@ -31,23 +31,23 @@ targetCompatibility = 1.8
 
 dependencies {
     compile "org.apache.commons:commons-math3:3.6.1"
-    
+
     testCompile "junit:junit:4.12"
     testCompile "org.assertj:assertj-core:3.5.1"
 }
 
 repositories {
     mavenCentral()
-        
+
     maven {
         url "https://jitpack.io"
     }
-        
+
     maven {
         url "https://maven.repository.redhat.com/ga/"
     }
 }
-    
+
 javadoc {
     options.tags = [
             'pre:a:Precondition:',
@@ -58,7 +58,7 @@ javadoc {
             'note:a:Please Note:'
     ]
 }
-    
+
 if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
         tasks.withType(Javadoc) {
@@ -66,15 +66,13 @@ if (JavaVersion.current().isJava8Compatible()) {
         }
     }
 }
-    
-    
+
+
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -85,15 +83,15 @@ artifacts {
 
 // To specify a license in the pom:
 install {
-  repositories.mavenInstaller {
-    pom.project {
-      licenses {
-        license {
-          name 'The Apache Software License, Version 2.0'
-          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          distribution 'repo'
+    repositories.mavenInstaller {
+        pom.project {
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
         }
-      }
     }
-  }
 }

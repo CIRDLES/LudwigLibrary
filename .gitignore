@@ -3,6 +3,7 @@
 # Gradle
 .gradle/
 build/
+/LudwigLibrary/.nb-gradle/
 
 # Netbeans
 nb-configuration.xml

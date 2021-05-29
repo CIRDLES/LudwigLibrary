@@ -54,6 +54,8 @@ public class RobustReg {
         if ((n == yValues.length) && n > 2) {
             // proceed
             Random random = new Random();
+            // see Squid Issue: https://github.com/CIRDLES/Squid/issues/615
+            random.setSeed(2021l);
             int m = n * (n - 1) / 2;
             double[] slp = new double[m];
             double[] xInter = new double[m];
