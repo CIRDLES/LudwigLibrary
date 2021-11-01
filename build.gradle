@@ -21,10 +21,10 @@ wrapper {
     gradleVersion = '7.3-rc-2'
 }
 
-group = "org.cirdles"
-version = "1.2.0"
-
-description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
+//group = "org.cirdles"
+//version = "1.2.0"
+//
+//description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -101,22 +101,9 @@ publishing {
             groupId = 'org.cirdles'
             artifactId = 'ludwiglibrary'
             version = '1.2.0'
+            description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
             from components.java
         }
     }
 }
-
-//install {
-//    repositories.mavenInstaller {
-//        pom.project {
-//            licenses {
-//                license {
-//                    name 'The Apache Software License, Version 2.0'
-//                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    distribution 'repo'
-//                }
-//            }
-//        }
-//    }
-//}
