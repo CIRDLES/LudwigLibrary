@@ -84,22 +84,29 @@ artifacts {
     archives javadocJar
 }
 
-//// refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            pom {
-//                licenses {
-//                    license {
-//                        name = 'The Apache License, Version 2.0'
-//                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                        distribution 'repo'
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+// refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+            }
+        }
+        maven(MavenPublication) {
+            groupId = 'org.cirdles'
+            artifactId = 'ludwiglibrary'
+            version = '1.2.0'
+
+            from components.java
+        }
+    }
+}
+
 //install {
 //    repositories.mavenInstaller {
 //        pom.project {
