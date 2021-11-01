@@ -49,18 +49,18 @@ public class Resistant {
         int n = xValues.length;
 
         if (n > 0) {
-            int nN = Math.max(3, n);
+            int nN = StrictMath.max(3, n);
             double[] yR2 = new double[n];
 
             double median = median(xValues);
 
             for (int i = 0; i < n; i++) {
-                yR2[i] = Math.pow(xValues[i] - median, 2.0);
+                yR2[i] = StrictMath.pow(xValues[i] - median, 2.0);
             }
 
             double medianyR2 = median(yR2);
 
-            retVal = new double[]{1.4826 * (1.0 + 5.0 / (nN - 2)) * Math.sqrt(medianyR2)};
+            retVal = new double[]{1.4826 * (1.0 + 5.0 / (nN - 2)) * StrictMath.sqrt(medianyR2)};
         }
 
         return retVal;

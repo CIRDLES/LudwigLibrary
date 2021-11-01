@@ -1972,7 +1972,7 @@ Sub RobustReg2(xy As Variant, Slope#, Optional Lslope#, Optional Uslope#, _
 ' Robust linear regression using median of all pairwise slopes/intercepts,
 ' after Hoaglin, Mosteller & Tukey, Understanding Robust & Exploratory Data Analysis,
 ' John Wiley & Sons, 1983, p. 160, with errors from code in Rock & Duffy, 1986
-' (Comp. Geosci. 12, 807-818), derived from Vugrinovich (1981), J. Math. Geol. 13,
+' (Comp. Geosci. 12, 807-818), derived from Vugrinovich (1981), J. StrictMath. Geol. 13,
 '  443-454).
 ' Has simple, rapid solution for errors.
 Dim X#(), y#()

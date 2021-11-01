@@ -118,8 +118,8 @@ public class PbUTh_2 {
         double[] retVal = new double[]{0.0};
         
         try {
-            double numer = Math.expm1(age8corPb6U8 * lambda232);
-            double denom = Math.expm1(age8corPb6U8 * lambda238);
+            double numer = StrictMath.expm1(age8corPb6U8 * lambda232);
+            double denom = StrictMath.expm1(age8corPb6U8 * lambda238);
             double pb86rad = numer / denom * th2U8;
             retVal = new double[]{(pb86tot - pb86rad) / (gamma0 - pb86rad * alpha0)};
         } catch (Exception e) {
@@ -182,8 +182,8 @@ public class PbUTh_2 {
         double u = 1.0 / uRatio;
         double phi0 = beta0 / alpha0;
         
-        double exp5 = Math.exp(age7corPb6U8 * lambda235);
-        double exp8 = Math.exp(age7corPb6U8 * lambda238);
+        double exp5 = StrictMath.exp(age7corPb6U8 * lambda235);
+        double exp8 = StrictMath.exp(age7corPb6U8 * lambda238);
         double rStar = exp8 - 1.0;
         double sStar = exp5 - 1.0;
         double phiStar = sStar / rStar * u;
@@ -206,13 +206,13 @@ public class PbUTh_2 {
         double k5 = alphaPrime / d1;
         double k7 = (alpha0 * thetaStar7 - gamma0) / d1;
         
-        double varThetaStar7 = Math.pow(sigmaTheta / d1, 2)
-                + Math.pow(k1 * k3 * k4 * k7 * sigmaR, 2)
-                + Math.pow(k7 * (1.0 / d2 + k2 * k3 * k4) * sigmaPhi, 2);
+        double varThetaStar7 = StrictMath.pow(sigmaTheta / d1, 2)
+                + StrictMath.pow(k1 * k3 * k4 * k7 * sigmaR, 2)
+                + StrictMath.pow(k7 * (1.0 / d2 + k2 * k3 * k4) * sigmaPhi, 2);
         
         if (varThetaStar7 >= 0.0) {
-            double sigmaThetaStar7 = Math.sqrt(varThetaStar7);
-            retVal = new double[]{100.0 * sigmaThetaStar7 / Math.abs(thetaStar7)};
+            double sigmaThetaStar7 = StrictMath.sqrt(varThetaStar7);
+            retVal = new double[]{100.0 * sigmaThetaStar7 / StrictMath.abs(thetaStar7)};
         }
         
         return retVal;
@@ -273,14 +273,14 @@ public class PbUTh_2 {
         
         double age7corPb6U8
                 = age7corrWithErr(totPb206U238, 0.0, totPb76, 0.0, sComm0_76, lambda235, lambda238, uRatio)[0];
-        double radPb6U8 = Math.expm1(lambda238 * age7corPb6U8);
+        double radPb6U8 = StrictMath.expm1(lambda238 * age7corPb6U8);
         double term = totPb206U238 - radPb6U8;
         term = term == 0 ? SquidConstants.SQUID_VERY_SMALL_VALUE : term;
         double alpha = sComm0_64 * totPb206U238 / term;
         double gamma = totPb86 * alpha;
         double radfract8 = (gamma - gamma0) / gamma;
         double radPb8Th2 = totPb208Th232 * radfract8;
-        double age7corrPb8Th2 = Math.log(1.0 + radPb8Th2) / lambda232;
+        double age7corrPb8Th2 = StrictMath.log(1.0 + radPb8Th2) / lambda232;
         
         return new double[]{age7corrPb8Th2};
     }
@@ -384,10 +384,10 @@ public class PbUTh_2 {
         delta[4] = PbUTh_2.age7CorrPb8Th2(totPb206U238, totPb208Th232, totPb86, pphi, sComm0_64, sComm0_76, sComm0_86, lambda232, lambda235, lambda238, uRatio)[0];
         
         for (int i = 1; i < 5; i++) {
-            ageVariance += Math.pow(delta[i] - delta[0], 2);
+            ageVariance += StrictMath.pow(delta[i] - delta[0], 2);
         }
         
-        return new double[]{delta[0], Math.sqrt(ageVariance)};
+        return new double[]{delta[0], StrictMath.sqrt(ageVariance)};
         
     }
 
@@ -415,7 +415,7 @@ public class PbUTh_2 {
      */
     public static double[] pb206U238rad(double age, double lambda238)
             throws ArithmeticException {
-        return new double[]{Math.expm1(lambda238 * age)};
+        return new double[]{StrictMath.expm1(lambda238 * age)};
     }
 
     /**
@@ -503,19 +503,19 @@ public class PbUTh_2 {
         double h1 = radFract6 / m1 - q * k / m2;
         double h2 = 1.0 / (totPb6U8 / m1 - k * totPb6U8 * sComm0_86 / m2);
         
-        double Term1 = Math.pow(h1 * SigmaTotPb6U8, 2);
-        double Term2 = Math.pow(totPb6U8 / m2, 2);
-        double Term3 = Math.pow(q * SigmaK, 2);
-        double term4 = Math.pow(th2U8 * SigmaTotPb86, 2);
+        double Term1 = StrictMath.pow(h1 * SigmaTotPb6U8, 2);
+        double Term2 = StrictMath.pow(totPb6U8 / m2, 2);
+        double Term3 = StrictMath.pow(q * SigmaK, 2);
+        double term4 = StrictMath.pow(th2U8 * SigmaTotPb86, 2);
         
-        double sigmaCommfract6 = Math.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
+        double sigmaCommfract6 = StrictMath.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
         double covTotPb86CommFract6 = h1 * h2 * SigmaTotPb6U8 * SigmaTotPb6U8;
         
-        Term1 = Math.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
-        Term2 = Math.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + Math.pow(sComm0_76 * sigmaCommfract6, 2));
+        Term1 = StrictMath.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
+        Term2 = StrictMath.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + StrictMath.pow(sComm0_76 * sigmaCommfract6, 2));
         Term3 = -2.0 * radPb7U5 * u * sComm0_76 * covTotPb86CommFract6;
         
-        double sigmaRadPb7U5 = Math.sqrt(Term1 + Term2 + Term3);
+        double sigmaRadPb7U5 = StrictMath.sqrt(Term1 + Term2 + Term3);
         
         return new double[]{ratio, sigmaRadPb7U5 / radPb7U5 * 100.0};
     }
@@ -588,22 +588,22 @@ public class PbUTh_2 {
         double h1 = radFract6 / m1 - q * k / m2;
         double h2 = 1.0 / (totPb6U8 / m1 - k * totPb6U8 * sComm0_86 / m2);
         
-        double Term1 = Math.pow(h1 * SigmaTotPb6U8, 2);
-        double Term2 = Math.pow(totPb6U8 / m2, 2);
-        double Term3 = Math.pow(q * SigmaK, 2);
-        double term4 = Math.pow(k * SigmaTotPb86, 2);
+        double Term1 = StrictMath.pow(h1 * SigmaTotPb6U8, 2);
+        double Term2 = StrictMath.pow(totPb6U8 / m2, 2);
+        double Term3 = StrictMath.pow(q * SigmaK, 2);
+        double term4 = StrictMath.pow(k * SigmaTotPb86, 2);
         
-        double SigmaCommfract6 = Math.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
+        double SigmaCommfract6 = StrictMath.sqrt(h2 * h2 * (Term1 + Term2 * (Term3 + term4)));
         
         double CovTotPb86CommFract6 = h1 * h2 * SigmaTotPb6U8 * SigmaTotPb6U8;
-        double SigmaRadPb6U8 = Math.sqrt(Math.pow(radFract6 * SigmaTotPb6U8, 2) + totPb6U8 * totPb6U8
+        double SigmaRadPb6U8 = StrictMath.sqrt(StrictMath.pow(radFract6 * SigmaTotPb6U8, 2) + totPb6U8 * totPb6U8
                 * SigmaCommfract6 * SigmaCommfract6);
         
-        Term1 = Math.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
-        Term2 = Math.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + Math.pow(sComm0_76 * SigmaCommfract6, 2));
+        Term1 = StrictMath.pow(radPb7U5 / totPb6U8 * SigmaTotPb6U8, 2);
+        Term2 = StrictMath.pow(u * totPb6U8, 2) * (SigmaTotPb76 * SigmaTotPb76 + StrictMath.pow(sComm0_76 * SigmaCommfract6, 2));
         Term3 = -2.0 * radPb7U5 * u * sComm0_76 * CovTotPb86CommFract6;
         
-        double SigmaRadPb7U5 = Math.sqrt(Term1 + Term2 + Term3);
+        double SigmaRadPb7U5 = StrictMath.sqrt(Term1 + Term2 + Term3);
         
         Term1 = radFract6 * radPb7U5 / totPb6U8 * SigmaTotPb6U8 * SigmaTotPb6U8;
         Term2 = u * totPb6U8 * totPb6U8 * sComm0_76 * SigmaCommfract6 * SigmaCommfract6;
@@ -652,13 +652,13 @@ public class PbUTh_2 {
         double d2 = beta0 - alpha0 * phiStar;
         double k7 = (alpha0 * thetaStar7 - gamma0) / d1;
         
-        double varThetaStar7 = Math.pow((sigmaTheta / d1), 2) + Math.pow((k7 / d2 * sigmaPhi), 2);
+        double varThetaStar7 = StrictMath.pow((sigmaTheta / d1), 2) + StrictMath.pow((k7 / d2 * sigmaPhi), 2);
         
         if (varThetaStar7 < 0) {
             retVal = new double[]{999};
         } else {
-            double sigmaThetaStar7 = Math.sqrt(varThetaStar7);
-            retVal = new double[]{100.0 * sigmaThetaStar7 / Math.abs(thetaStar7)};
+            double sigmaThetaStar7 = StrictMath.sqrt(varThetaStar7);
+            retVal = new double[]{100.0 * sigmaThetaStar7 / StrictMath.abs(thetaStar7)};
         }
         
         return retVal;

@@ -76,7 +76,7 @@ public class Means {
             double[][] wRejected = new double[nPts][2];
 
             for (int i = 0; i < nPts; i++) {
-                inverseVar[i] = 1.0 / Math.pow(errors[i], 2);
+                inverseVar[i] = 1.0 / StrictMath.pow(errors[i], 2);
             }
 
             double intMean = 0.0;
@@ -110,7 +110,7 @@ public class Means {
                     if (values[i] * errors[i] != 0.0) {
                         weight += inverseVar[i];
                         sumWtdRatios += inverseVar[i] * values[i];
-                        q += inverseVar[i] * Math.pow(values[i], 2);
+                        q += inverseVar[i] * StrictMath.pow(values[i], 2);
                     }
                 }
 
@@ -118,8 +118,8 @@ public class Means {
                 TDistribution studentsT = new TDistribution(nU);
                 // see https://stackoverflow.com/questions/21730285/calculating-t-inverse
                 // for explanation of cutting the tail mass in two to get agreement with Excel two-tail
-                double t68 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0));
-                double t95 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2));
+                double t68 = StrictMath.abs(studentsT.inverseCumulativeProbability((1.0 - 0.6826) / 2.0));
+                double t95 = StrictMath.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2));
 
                 intMean = sumWtdRatios / weight;//  ' "Internal" error of wtd average
 
@@ -128,22 +128,22 @@ public class Means {
                     if (values[i] * errors[i] != 0.0) {
                         double resid = values[i] - intMean;//  ' Simple residual
                         wtdResid[i] = resid / errors[i];// ' Wtd residual
-                        double wtdR2 = Math.pow(wtdResid[i], 2);//' Square of wtd residual
+                        double wtdR2 = StrictMath.pow(wtdResid[i], 2);//' Square of wtd residual
                         sums += wtdR2;
                     }
                 }
-                sums = Math.max(sums, 0.0);
+                sums = StrictMath.max(sums, 0.0);
 
                 MSWD = sums / nU;//  ' Mean square of weighted deviates
-                intSigmaMean = Math.sqrt(1.0 / weight);
+                intSigmaMean = StrictMath.sqrt(1.0 / weight);
 
                 // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html
                 FDistribution fdist = new FDistribution(nU, 1E9);
                 probability = 1.0 - fdist.cumulativeProbability(MSWD);//     ChiSquare(.MSWD, (nU))
                 intMeanErr95 = intSigmaMean * (double) (probability >= 0.3 ? 1.96
-                        : t95 * Math.sqrt(MSWD));
+                        : t95 * StrictMath.sqrt(MSWD));
                 intErr68 = intSigmaMean * (double) (probability >= 0.3 ? 0.9998
-                        : t68 * Math.sqrt(MSWD));
+                        : t68 * StrictMath.sqrt(MSWD));
 
                 extMean = 0.0;
                 extMeanErr95 = 0.0;
@@ -172,16 +172,16 @@ public class Means {
                     // check for failure
                     if ((wtdExtRtsec[3] == 0.0) && (nPts > 2)) {
                         extMean = wtdExtRtsec[1];
-                        extSigma = Math.sqrt(wtdExtRtsec[0]);
+                        extSigma = StrictMath.sqrt(wtdExtRtsec[0]);
 
                         studentsT = new TDistribution(2 * nN - 2);
-                        extMeanErr95 = Math.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2.0)) * wtdExtRtsec[2];
+                        extMeanErr95 = StrictMath.abs(studentsT.inverseCumulativeProbability((1.0 - 0.95) / 2.0)) * wtdExtRtsec[2];
 
                     } else if (MSWD > 4.0) {  //Failure of RTSEC algorithm because of extremely high MSWD
                         DescriptiveStatistics stats = new DescriptiveStatistics(yy);
                         extSigma = stats.getStandardDeviation();
                         extMean = stats.getMean();
-                        extMeanErr95 = t95 * extSigma / Math.sqrt(nN);
+                        extMeanErr95 = t95 * extSigma / StrictMath.sqrt(nN);
                     } else {
                         extSigma = 0.0;
                         extMean = 0.0;
@@ -206,9 +206,9 @@ public class Means {
                     for (int i = 0; i < nPts; i++) {
                         if ((values[i] != 0.0) && (nN > 0.85 * nPts)) {   //  Reject no more than 30% of ratios
                             // Start rej. tolerance at 2-sigma, increase slightly each pass.
-                            double pointError = 2.0 * Math.sqrt(errors[i] * errors[i] + extSigma * extSigma);
+                            double pointError = 2.0 * StrictMath.sqrt(errors[i] * errors[i] + extSigma * extSigma);
                             // 2-sigma error of point being tested
-                            double totalError = Math.sqrt(pointError * pointError + (4.0 * extMeanErr68 * extMeanErr68));
+                            double totalError = StrictMath.sqrt(pointError * pointError + (4.0 * extMeanErr68 * extMeanErr68));
                             // 1st-pass tolerance is 2-sigma; 2nd is 2.25-sigma; 3rd is 2.5-sigma.
                             double tolerance = (1.0 + (double)(count - 1.0) / 4.0) * totalError;
                             if (hardRej) {
@@ -217,7 +217,7 @@ public class Means {
                             // 1st-pass tolerance is 2-sigma; 2nd is 2.5-sigma; 3rd is 3-sigma...
                             q = values[i] - wtdAvg;
 
-                            if ((Math.abs(q) > tolerance) && nN > 2) {
+                            if ((StrictMath.abs(q) > tolerance) && nN > 2) {
                                 nN--;
                                 wRejected[i][0] = values[i];
                                 values[i] = 0.0;
@@ -311,8 +311,8 @@ public class Means {
         
         double failedFlag = 0.0; // false as in did not fail
 
-        if (Math.abs(f[0] - fL[0]) > 1e-10) {
-            if (Math.abs(fL[0]) < Math.abs(f[0])) {
+        if (StrictMath.abs(f[0] - fL[0]) > 1e-10) {
+            if (StrictMath.abs(fL[0]) < StrictMath.abs(f[0])) {
                 rts = extVar1;
                 xl = extVar2;
                 double[] swap = f;
@@ -347,7 +347,7 @@ public class Means {
                     
                     rts = tmp;
                     f = wtdExtFunc(rts, x, intVar);
-                    if ((Math.abs(f[0]) >= facc) && (Math.abs(f[0]) != Math.abs(lastf2))) {
+                    if ((StrictMath.abs(f[0]) >= facc) && (StrictMath.abs(f[0]) != StrictMath.abs(lastf2))) {
                         lastf2 = lastf1;
                         lastf1 = f[0];
                     } else {
@@ -386,7 +386,7 @@ public class Means {
 
         double ff = sumW2resid2 - sumW;
 
-        double xBarSigma = Math.sqrt(Math.abs(1.0 / sumW));
+        double xBarSigma = StrictMath.sqrt(StrictMath.abs(1.0 / sumW));
         return new double[]{ff, xBar, xBarSigma};
     }
 
@@ -430,7 +430,7 @@ public class Means {
         int n = values.length;
         double u = 0.0;
         if (n > 25) {
-            u = 0.5 * (n + 1.0 - 1.96 * Math.sqrt(n));
+            u = 0.5 * (n + 1.0 - 1.96 * StrictMath.sqrt(n));
         } else if (n > 2) {
             u = uR[n - 3]; // because 0-based array
         }
@@ -457,7 +457,7 @@ public class Means {
         double u = 0.0;
         double l = 0.0;
         if (n > 25) {
-            u = 0.5 * (n + 1.0 - 1.96 * Math.sqrt(n));
+            u = 0.5 * (n + 1.0 - 1.96 * StrictMath.sqrt(n));
             l = n + 1 - u;
         } else if (n > 2) {
             l = lR[n - 3]; // because 0-based array

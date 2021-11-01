@@ -51,7 +51,7 @@ public class Pub {
      * slopes/intercepts, after Hoaglin, Mosteller & Tukey, Understanding Robust
      * & Exploratory Data Analysis, John Wiley & Sons, 1983, p. 160, with errors
      * from code in Rock & Duffy, 1986 (Comp. Geosci. 12, 807-818), derived from
-     * Vugrinovich (1981), J. Math. Geol. 13, 443-454). Has simple, rapid
+     * Vugrinovich (1981), J. StrictMath. Geol. 13, 443-454). Has simple, rapid
      * solution for errors. Ludwig used flags and our approach is to do all the
      * math and return all possible values available as if those flags were
      * true.
@@ -157,9 +157,9 @@ public class Pub {
             T = t2;
             double e5 = lambda235 * T;
 
-            if ((count < maxCount) && (Math.abs(e5) <= MAXEXP)) {
-                e5 = Math.exp(e5);
-                double e8 = Math.exp(lambda238 * T);
+            if ((count < maxCount) && (StrictMath.abs(e5) <= MAXEXP)) {
+                e5 = StrictMath.exp(e5);
+                double e8 = StrictMath.exp(lambda238 * T);
                 double Ee5 = e5 - 1.0;
                 double Ee8 = e8 - 1.0;
                 double Q5 = lambda235 * e5;
@@ -178,7 +178,7 @@ public class Pub {
                 double d2 = d2a + d2b;
                 if (d2 != 0.0) {
                     double Incr = d1 / d2;
-                    testTolerance = Math.abs(Incr / T);
+                    testTolerance = StrictMath.abs(Incr / T);
                     t2 = T + Incr;
                     // age8Corr in annum
                     retVal[0] = t2;
@@ -373,7 +373,7 @@ public class Pub {
         double tNLE;
 
         if ((trialAge >= MINLOG) && (trialAge <= MAXLOG) && (yConc > 0.0)) {
-            tNLE = Math.log(trialAge) / lambda238;
+            tNLE = StrictMath.log(trialAge) / lambda238;
 
             tNLE = Pub.ageNLE(xConc, yConc, vcXY, tNLE, lambda235, lambda238)[0];
             if (tNLE > 0.0) {
@@ -422,7 +422,7 @@ public class Pub {
         if (age == 0.0) {
             retVal = new double[]{lambda235 / lambda238 / uRatio};
         } else {
-            retVal = new double[]{Math.expm1(lambda235 * age) / Math.expm1(lambda238 * age) / uRatio};
+            retVal = new double[]{StrictMath.expm1(lambda235 * age) / StrictMath.expm1(lambda238 * age) / uRatio};
         }
 
         return retVal;
@@ -498,11 +498,11 @@ public class Pub {
             t = t1;
 
             e5 = lambda235 * t;
-            if (Math.abs(e5) > MAXEXP) {
+            if (StrictMath.abs(e5) > MAXEXP) {
                 throw new ArithmeticException();
             }
-            e8 = Math.exp(lambda238 * t);
-            e5 = Math.exp(e5);
+            e8 = StrictMath.exp(lambda238 * t);
+            e5 = StrictMath.exp(e5);
             double ee8 = e8 - 1.0;
             double ee5 = e5 - 1.0;
 
@@ -515,22 +515,22 @@ public class Pub {
             delta = -f / deriv;
             t1 = t + delta;
 
-        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
+        } while ((StrictMath.abs(delta) >= toler) && (iterations < iterationMax));
 
         // calculate error
         double totPb7U5var
-                = uRatio * uRatio * (Math.pow(totPb6U8 * totPb76err, 2) + Math.pow(totPb76 * totPb6U8err, 2));
-        e8 = Math.exp(lambda238 * t);
-        e5 = Math.exp(lambda235 * t);
+                = uRatio * uRatio * (StrictMath.pow(totPb6U8 * totPb76err, 2) + StrictMath.pow(totPb76 * totPb6U8err, 2));
+        e8 = StrictMath.exp(lambda238 * t);
+        e5 = StrictMath.exp(lambda235 * t);
         double ee8 = e8 - 1.0;
 
-        double denom = Math.pow(uRatio * commPb76 * lambda238 * e8 - lambda235 * e5, 2);
-        double numer1 = Math.pow(uRatio * (totPb6U8 - ee8) * commPb76err, 2);
+        double denom = StrictMath.pow(uRatio * commPb76 * lambda238 * e8 - lambda235 * e5, 2);
+        double numer1 = StrictMath.pow(uRatio * (totPb6U8 - ee8) * commPb76err, 2);
         double numer2 = uRatio * uRatio * commPb76 * (commPb76 - 2.0 * totPb76) * totPb6U8err * totPb6U8err;
         double numer3 = totPb7U5var;
         double numer = numer1 + numer2 + numer3;
 
-        return new double[]{t, Math.sqrt(numer / denom)};
+        return new double[]{t, StrictMath.sqrt(numer / denom)};
     }
 
     /**
@@ -658,11 +658,11 @@ public class Pub {
             t = t1;
 
             e8 = lambda238 * t;
-            if (Math.abs(e8) > MAXEXP) {
+            if (StrictMath.abs(e8) > MAXEXP) {
                 throw new ArithmeticException();
             }
-            e8 = Math.exp(e8);
-            e2 = Math.exp(lambda232 * t);
+            e8 = StrictMath.exp(e8);
+            e2 = StrictMath.exp(lambda232 * t);
 
             double f = totPb6U8 - e8 + 1.0 - th2U8 * commPb68 * (totPb8Th2 - e2 + 1);
             double deriv = th2U8 * commPb68 * lambda232 * e2 - lambda238 * e8;
@@ -673,7 +673,7 @@ public class Pub {
             delta = -f / deriv;
             t1 = t + delta;
 
-        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
+        } while ((StrictMath.abs(delta) >= toler) && (iterations < iterationMax));
 
         double age8Corr = t1;
         
@@ -688,20 +688,20 @@ public class Pub {
         double psiI = commPb68;
         double sigmaPsiI = commPb68err;
 
-        e2 = Math.exp(lambda232 * age8Corr);
-        e8 = Math.exp(lambda238 * age8Corr);
+        e2 = StrictMath.exp(lambda232 * age8Corr);
+        e8 = StrictMath.exp(lambda238 * age8Corr);
 
         double p = g + 1.0 - e2;
 
-        t1 = Math.pow(h * sigmaG, 2);
-        double t2 = Math.pow(p * sigmaH, 2);
-        double t3 = Math.pow(h * p * sigmaPsiI / psiI, 2);
+        t1 = StrictMath.pow(h * sigmaG, 2);
+        double t2 = StrictMath.pow(p * sigmaH, 2);
+        double t3 = StrictMath.pow(h * p * sigmaPsiI / psiI, 2);
         double k = lambda238 * e8 - h * psiI * lambda232 * e2;
 
-        double numer = Math.pow(sigmaA, 2) + Math.pow(psiI, 2) * (t1 + t2 + t3);
+        double numer = StrictMath.pow(sigmaA, 2) + StrictMath.pow(psiI, 2) * (t1 + t2 + t3);
         double denom = k * k;
         
-         double ageEr8Corr = Math.sqrt(numer / denom);
+         double ageEr8Corr = StrictMath.sqrt(numer / denom);
 
         return new double[]{age8Corr, ageEr8Corr};
     }
@@ -736,7 +736,7 @@ public class Pub {
             for (int i = 0; i < nPts; i++) {
                 xVar = xSigmaAbs[i] * xSigmaAbs[i];
                 yVar = ySigmaAbs[i] * ySigmaAbs[i];
-                cov = xyRho[i] * Math.sqrt(xVar * yVar);
+                cov = xyRho[i] * StrictMath.sqrt(xVar * yVar);
                 double[] inverted = inv2x2(xVar, yVar, cov);
                 a = a + inverted[0];
                 b = b + inverted[1];
@@ -766,8 +766,8 @@ public class Pub {
 
                 //  Now calculate the variance-covariance matrix of Xbar,Ybar
                 double[] vcXY = inv2x2(a, b, c);
-                double errX = Math.sqrt(vcXY[0]);
-                double errY = Math.sqrt(vcXY[1]);
+                double errX = StrictMath.sqrt(vcXY[0]);
+                double errY = StrictMath.sqrt(vcXY[1]);
                 double rhoXY = vcXY[2] / (errX * errY);
 
                 retVal = new double[]{xBar, yBar, sumsXY, errX, errY, rhoXY};

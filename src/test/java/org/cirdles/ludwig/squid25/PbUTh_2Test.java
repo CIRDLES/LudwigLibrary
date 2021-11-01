@@ -157,7 +157,7 @@ public class PbUTh_2Test {
         double totPb86percentErr = 1.38682396372;// / 100. * 0.0831580681678;
         double totPb76 = 0.0592518351787661;
         double totPb76percentErr = 0.688011049803;// / 100.0 * 0.0592518351787661;
-        double[] expResult = new double[]{553438043.974625, 11665992.0078184};
+        double[] expResult = new double[]{553438043.974625, 11665992.0078503};
         double[] result = PbUTh_2.age7CorrPb8Th2WithErr(totPb206U238, totPb206U238percentErr, totPb208Th232, totPb208Th232percentErr, totPb86, totPb86percentErr, totPb76, totPb76percentErr);
         assertEquals(Utilities.roundedToSize(expResult[0], 12), Utilities.roundedToSize(result[0], 12), SquidConstants.SQUID_EPSILON);
         assertEquals(Utilities.roundedToSize(expResult[1], 12), Utilities.roundedToSize(result[1], 12), SquidConstants.SQUID_EPSILON);
