@@ -1,7 +1,12 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
 
-group = 'com.github.CIRDLES'
+//apply plugin: 'java'
+//apply plugin: 'maven-publish'
+
+//group = 'com.github.CIRDLES'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
