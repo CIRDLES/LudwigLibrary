@@ -79,8 +79,8 @@ public class CMC {
             double uRatio) {
         double[] retVal;
 
-        double xP = Math.abs(ratioX_1SigmaAbs / ratioX);
-        double yP = Math.abs(ratioY_1SigmaAbs / ratioY);
+        double xP = StrictMath.abs(ratioX_1SigmaAbs / ratioX);
+        double yP = StrictMath.abs(ratioY_1SigmaAbs / ratioY);
 
         double xP2 = xP * xP;
 //        double yP2 = yP * yP;
@@ -94,7 +94,7 @@ public class CMC {
         double rAB = 2.0;
 
         try {
-            abP = Math.sqrt(xP2 + yP * yP - 2 * xP * yP * rhoXY);
+            abP = StrictMath.sqrt(xP2 + yP * yP - 2 * xP * yP * rhoXY);
         } catch (Exception e) {
             abP = 0.0;
         }
@@ -119,7 +119,7 @@ public class CMC {
             }
         }
 
-        if (Math.abs(rAB) > 1.0) {
+        if (StrictMath.abs(rAB) > 1.0) {
             // bad uncertainties
             retVal = new double[]{a, 0.0, b, 0.0, rAB};
         } else {

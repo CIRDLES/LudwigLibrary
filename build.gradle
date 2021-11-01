@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'com.github.CIRDLES'
 
@@ -18,7 +18,7 @@ if (!hasProperty('mainClass')) {
 }
 
 wrapper {
-    gradleVersion = '6.7.1'
+    gradleVersion = '7.3-rc-2'
 }
 
 group = "org.cirdles"
@@ -30,10 +30,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile "org.apache.commons:commons-math3:3.6.1"
+    implementation "org.apache.commons:commons-math3:3.6.1"
 
-    testCompile "junit:junit:4.12"
-    testCompile "org.assertj:assertj-core:3.5.1"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.assertj:assertj-core:3.5.1"
 }
 
 repositories {
@@ -69,11 +69,13 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveClassifier.set("sources")
     from sourceSets.main.allSource
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveClassifier.set("javadoc")
     from javadoc.destinationDir
 }
 
@@ -82,15 +84,16 @@ artifacts {
     archives javadocJar
 }
 
-// To specify a license in the pom:
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
+// refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
                 }
             }
         }

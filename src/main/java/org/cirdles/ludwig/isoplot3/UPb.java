@@ -88,8 +88,8 @@ public class UPb {
         // intialize Newton's method
         double test235 = lambda235 * t1;
         double test238 = lambda238 * t1;
-        double exp235t1 = Math.exp(test235);
-        double exp238t1 = Math.exp(test238);
+        double exp235t1 = StrictMath.exp(test235);
+        double exp238t1 = StrictMath.exp(test238);
 
         double deriv = 0.0;
 
@@ -98,12 +98,12 @@ public class UPb {
 
             test235 = lambda235 * t;
             test238 = lambda238 * t;
-            if ((Math.abs(test235) > MAXEXP) || (Math.abs(test238) > MAXEXP)) {
+            if ((StrictMath.abs(test235) > MAXEXP) || (StrictMath.abs(test238) > MAXEXP)) {
                 throw new ArithmeticException();
             }
 
-            double exp235 = Math.exp(test235);
-            double exp238 = Math.exp(test238);
+            double exp235 = StrictMath.exp(test235);
+            double exp238 = StrictMath.exp(test238);
             double numer = exp235t1 - exp235;
             double denom = exp238t1 - exp238;
             if (denom == 0.0) {
@@ -121,9 +121,9 @@ public class UPb {
             delta = (r207_206r - func) / deriv;
             t += delta;
 
-        } while ((Math.abs(delta) >= toler) && (iterations < iterationMax));
+        } while ((StrictMath.abs(delta) >= toler) && (iterations < iterationMax));
 
-        return new double[]{t, Math.abs(r207_206r_1sigmaAbs / deriv)};
+        return new double[]{t, StrictMath.abs(r207_206r_1sigmaAbs / deriv)};
     }
 
     public static void main(String[] args) {
@@ -176,9 +176,9 @@ public class UPb {
 
         double e5 = lambda235 * t;
 
-        if (Math.abs(e5) <= MAXEXP) {
-            e5 = Math.expm1(e5);
-            double e8 = Math.expm1(lambda238 * t);
+        if (StrictMath.abs(e5) <= MAXEXP) {
+            e5 = StrictMath.expm1(e5);
+            double e8 = StrictMath.expm1(lambda238 * t);
             double Ee5 = e5;// - 1.0;
             double Ee8 = e8;// - 1.0;
             double Rx = xConc - Ee5;
@@ -224,9 +224,9 @@ public class UPb {
         double[] retVal = new double[]{0.0};
 
         double e5 = lambda235 * t;
-        if (Math.abs(e5) <= MAXEXP) {
-            e5 = Math.exp(e5);
-            double e8 = Math.exp(lambda238 * t);
+        if (StrictMath.abs(e5) <= MAXEXP) {
+            e5 = StrictMath.exp(e5);
+            double e8 = StrictMath.exp(lambda238 * t);
             double Q5 = lambda235 * e5;
             double Q8 = lambda238 * e8;
 
@@ -237,7 +237,7 @@ public class UPb {
             double Fisher = Q5 * Q5 * inverted[0] + Q8 * Q8 * inverted[1] + 2.0 * Q5 * Q8 * inverted[2];
 
             if (Fisher > 0.0) {
-                retVal[0] = Math.sqrt(1.0 / Fisher);
+                retVal[0] = StrictMath.sqrt(1.0 / Fisher);
             }
         }
 

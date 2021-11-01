@@ -93,7 +93,7 @@ public class RobustReg {
     /**
      * Finds sorting-indexes to get 95%-conf. limits for repeated pairwise
      * slope/inter medians using algorithm coded in Rock & Duffy, 1986 (Comp.
-     * Geosci. 12, 807-818), derived from Vugorinovich (1981, J. Math. Geol. 13,
+     * Geosci. 12, 807-818), derived from Vugorinovich (1981, J. StrictMath. Geol. 13,
      * 443-454).
      *
      * @param nPts number of points
@@ -112,7 +112,7 @@ public class RobustReg {
                 String c$ = "0081012141719222528";
                 star95 = Integer.parseInt(c$.substring(2 * nPts - 9, 2 * nPts - 7));
             } else {
-                double x = Math.sqrt(nPts * (nPts - 1.0) * (2.0 * nPts + 5.0) / 18.0);
+                double x = StrictMath.sqrt(nPts * (nPts - 1.0) * (2.0 * nPts + 5.0) / 18.0);
                 star95 = (int) (1.96 * x);
             }
             lowInd = (nMedians - star95) / 2;

@@ -289,7 +289,7 @@ Sub Conf95(ByVal Npts&, ByVal Nmedians&, LowInd&, UpprInd&)
 Attribute Conf95.VB_ProcData.VB_Invoke_Func = " \n14"
 ' Finds sorting-indexes to get 95%-conf. limits for repeated pairwise slope/inter medians using
 ' algorithm coded in Rock & Duffy, 1986 (Comp. Geosci. 12, 807-818), derived from Vugorinovich
-' (1981, J. Math. Geol. 13, 443-454).
+' (1981, J. StrictMath. Geol. 13, 443-454).
 Dim i&, c$, X#, Star95&
 Select Case Npts
   Case Is < 5

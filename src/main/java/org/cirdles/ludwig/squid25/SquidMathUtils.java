@@ -67,10 +67,10 @@ public final class SquidMathUtils {
         // initial sigma is median absolute deviation from mean = median (MAD)
         double deviations[] = new double[n];
         for (int i = 0; i < values.length; i++) {
-            deviations[i] = Math.abs(values[i] - mean);
+            deviations[i] = StrictMath.abs(values[i] - mean);
         }
 
-        double sigma = Math.max(Utilities.median(deviations), SQUID_TINY_VALUE);
+        double sigma = StrictMath.max(Utilities.median(deviations), SQUID_TINY_VALUE);
 
         double previousMean;
         double previousSigma;
@@ -91,25 +91,25 @@ public final class SquidMathUtils {
 
             for (int i = 0; i < n; i++) {
                 deltas[i] = values[i] - mean;
-                if (tee > Math.abs(deltas[i])) {
+                if (tee > StrictMath.abs(deltas[i])) {
                     deltas[i] = values[i] - mean;
                     u[i] = deltas[i] / tee;
                     double uSquared = u[i] * u[i];
 
-                    sa += Math.pow(deltas[i] * (1.0 - uSquared) * (1.0 - uSquared), 2);
+                    sa += StrictMath.pow(deltas[i] * (1.0 - uSquared) * (1.0 - uSquared), 2);
                     sb += (1.0 - uSquared) * (1.0 - 5.0 * uSquared);
                     sc += u[i] * (1.0 - uSquared) * (1.0 - uSquared);
                 }
             }
 
-            sigma = Math.sqrt(sa * n) / Math.abs(sb);
-            sigma = Math.max(sigma, SQUID_TINY_VALUE);
+            sigma = StrictMath.sqrt(sa * n) / StrictMath.abs(sb);
+            sigma = StrictMath.max(sigma, SQUID_TINY_VALUE);
             mean = previousMean + (tee * sc / sb);
 
         } // both tests against epsilon must pass OR iterations top out
         // april 2016 Simon B discovered we need 101 iterations possible, hence the "<=" below
-        while (((Math.abs(sigma - previousSigma) / sigma > SQUID_EPSILON)//
-                || (Math.abs(mean - previousMean) / mean > SQUID_EPSILON))//
+        while (((StrictMath.abs(sigma - previousSigma) / sigma > SQUID_EPSILON)//
+                || (StrictMath.abs(mean - previousMean) / mean > SQUID_EPSILON))//
                 && (iterationCounter <= iterationMax));
 
         if (sigma <= SQUID_TINY_VALUE) {
@@ -131,10 +131,10 @@ public final class SquidMathUtils {
                 break;
             default:
                 w = n - 4.358;
-                t = 1.96 + (0.401 / Math.sqrt(w)) + (1.17 / w) + (0.0185 / (w * w));
+                t = 1.96 + (0.401 / StrictMath.sqrt(w)) + (1.17 / w) + (0.0185 / (w * w));
         }
 
-        double err95 = t * sigma / Math.sqrt(n);
+        double err95 = t * sigma / StrictMath.sqrt(n);
 
         return new double[]{mean, sigma, err95};
     }

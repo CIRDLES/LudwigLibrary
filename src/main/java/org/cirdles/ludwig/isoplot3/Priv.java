@@ -47,14 +47,14 @@ public class Priv {
         if (n > 0) {
             double[] absDev = new double[n];
             for (int i = 0; i < n; i++) {
-                absDev[i] = Math.abs(xValues[i] - medianVal);
+                absDev[i] = StrictMath.abs(xValues[i] - medianVal);
 
             }
 
             double madd = median(absDev);
 
             // KRL-derived numerical approx., valid for normal distr. w. Tuning=9
-            double[] tStar = new double[]{0.0, 0.0, 12.7, 15.3, 3.54 / Math.sqrt(n) - 3.92 / n + 70.9 / (n * n) - 60.6 / (n * n * n)};
+            double[] tStar = new double[]{0.0, 0.0, 12.7, 15.3, 3.54 / StrictMath.sqrt(n) - 3.92 / n + 70.9 / (n * n) - 60.6 / (n * n * n)};
 
             double err95 = ((n < 4) ? tStar[n] : tStar[4]) * madd;
 
