@@ -20,8 +20,8 @@ targetCompatibility = 1.8
 dependencies {
     implementation "org.apache.commons:commons-math3:3.6.1"
 
-    testImplementation "junit:junit:4.12"
-    testImplementation "org.assertj:assertj-core:3.5.1"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.assertj:assertj-core:3.21.0"
 }
 
 repositories {
@@ -70,12 +70,13 @@ artifacts {
 }
 
 // refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
+// refer to https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'org.cirdles'
-            artifactId = 'ludwiglibrary'
-            version = '1.2.0'
+            artifactId = 'LudwigLibrary'
+            version = '2.0.0'
             description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
             from components.java
