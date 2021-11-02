@@ -3,21 +3,9 @@ plugins {
     id 'maven-publish'
 }
 
-//apply plugin: 'java'
-//apply plugin: 'maven-publish'
-
-//group = 'com.github.CIRDLES'
-
 sourceCompatibility = '1.8'
-//[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-// NetBeans will automatically add "run" and "debug" tasks relying on the
-// "mainClass" property. You may however define the property prior executing
-// tasks by passing a "-PmainClass=<QUALIFIED_CLASS_NAME>" argument.
-//
-// Note however, that you may define your own "run" and "debug" task if you
-// prefer. In this case NetBeans will not add these tasks but you may rely on
-// your own implementation.
 if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
@@ -25,11 +13,6 @@ if (!hasProperty('mainClass')) {
 wrapper {
     gradleVersion = '7.3-rc-2'
 }
-
-//group = "org.cirdles"
-//version = "1.2.0"
-//
-//description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -43,11 +26,9 @@ dependencies {
 
 repositories {
     mavenCentral()
-
     maven {
         url "https://jitpack.io"
     }
-
     maven {
         url "https://maven.repository.redhat.com/ga/"
     }
@@ -72,36 +53,25 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveClassifier.set("javadoc")
+    from javadoc.destinationDir
+}
 
-//task sourcesJar(type: Jar, dependsOn: classes) {
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-//    archiveClassifier.set("sources")
-//    from sourceSets.main.allSource
-//}
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-//    archiveClassifier.set("javadoc")
-//    from javadoc.destinationDir
-//}
-//
-//artifacts {
-//    archives sourcesJar
-//    archives javadocJar
-//}
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 
 // refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
 publishing {
     publications {
-//        mavenJava(MavenPublication) {
-//            pom {
-//                licenses {
-//                    license {
-//                        name = 'The Apache License, Version 2.0'
-//                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//            }
-//        }
         maven(MavenPublication) {
             groupId = 'org.cirdles'
             artifactId = 'ludwiglibrary'
@@ -109,6 +79,15 @@ publishing {
             description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
 
             from components.java
+
+            pom {
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+            }
         }
     }
 }
