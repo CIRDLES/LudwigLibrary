@@ -1,18 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
-group = 'com.github.CIRDLES'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-// NetBeans will automatically add "run" and "debug" tasks relying on the
-// "mainClass" property. You may however define the property prior executing
-// tasks by passing a "-PmainClass=<QUALIFIED_CLASS_NAME>" argument.
-//
-// Note however, that you may define your own "run" and "debug" task if you
-// prefer. In this case NetBeans will not add these tasks but you may rely on
-// your own implementation.
 if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
@@ -21,28 +14,21 @@ wrapper {
     gradleVersion = '7.3-rc-2'
 }
 
-group = "org.cirdles"
-version = "1.2.0"
-
-description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
     implementation "org.apache.commons:commons-math3:3.6.1"
 
-    testImplementation "junit:junit:4.12"
-    testImplementation "org.assertj:assertj-core:3.5.1"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.assertj:assertj-core:3.21.0"
 }
 
 repositories {
     mavenCentral()
-
     maven {
         url "https://jitpack.io"
     }
-
     maven {
         url "https://maven.repository.redhat.com/ga/"
     }
@@ -67,7 +53,6 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-
 task sourcesJar(type: Jar, dependsOn: classes) {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     archiveClassifier.set("sources")
@@ -85,9 +70,17 @@ artifacts {
 }
 
 // refer to https://github.com/renatoathaydes/rawhttp/blob/master/rawhttp-core/build.gradle#L72
+// refer to https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
+            groupId = 'org.cirdles'
+            artifactId = 'LudwigLibrary'
+            version = '2.0.0'
+            description = "Ludwig's Algorithms ported from Squid2.5 and Isoplot3"
+
+            from components.java
+
             pom {
                 licenses {
                     license {
